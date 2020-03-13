@@ -11,11 +11,13 @@ audio = [
 // enum kinda thing for game states
 var states = {
     titleScreen:0,
-    exampleState:1
+    world:1,
+    battle:2,
+    cutscene:3
 }
 
 // current state
-var globalState = states.titleScreen;
+var globalState = states.world;
 // last state
 var lastGlobalState;
 
@@ -35,8 +37,8 @@ function update() {
             handleTitleScreen(newState);
             break;
         // TODO remove
-        case states.exampleState:
-            handleExample(newState);
+        case states.world:
+            handleWorld(newState);
             break;
         // if state is set to something that doesn't exist
         default:
@@ -52,8 +54,8 @@ function draw() {
             drawTitleScreen();
             break;
         // TODO remove
-        case states.exampleState:
-            drawExample();
+        case states.world:
+            drawWorld();
             break;
     }
 }
