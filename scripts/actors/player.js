@@ -33,7 +33,8 @@ class Player {
         if(keyDown[k.d]) {
             this.x += 4;
         }
+        centerCameraOn(this.x,this.y);
     }
 }
 
-player = new Player(400,300);
+player = new Player(0,0);

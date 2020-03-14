@@ -308,7 +308,8 @@ function addFont() {
     canvases.ctx.textBaseline = "hanging";
     canvases.ctx.textAlign = "left";
 }
-function img(img,x,y,angle=0,sx=1,sy=1) {
+var scaleDefault = 1;
+function img(img,x,y,angle=0,sx=scaleDefault,sy=scaleDefault) {
     var half = img.drawLimitSize;
     if((x+half>drawLimitLeft&&x-half<drawLimitRight&&y+half>drawLimitTop&&y-half<drawLimitBottom)||absDraw) {
         let spr = img.spr;

@@ -6,30 +6,49 @@
         <title>RPG</title>
         <meta name="description" content="RPG by marshmarlows">
         <style>
-            html {
-                background-color: #1e1e1e;
-                color: white;
-            }
-            canvas {
-                position:absolute;
-                top:0;bottom:0;right:0;left:0;
-                margin:auto;
-                border: 1px solid rgb(63, 63, 63);
-                box-shadow: 0px 5px 5px 0px black;
-            }
+            html {background-color: #1e1e1e;color: #4de1f5;}
+            canvas {position:absolute;top:0;bottom:0;right:0;left:0;margin:auto;border: 1px solid rgb(63, 63, 63);box-shadow: 0px 5px 5px 0px black;}
+            div {border: 1px solid rgb(63, 63, 63);box-shadow: 0px 5px 5px 0px black;padding: 2px; margin: 2px; font-family: monospace;}
+            input, select{background-color: #181818;border: 1px solid #101010;border-top-color: #000000;border-bottom-color: #333333; border-radius: 2px;color: #4de1f5;width: 50px;}
+            button {background-color: #353535;border-color: #555555;color: #4de1f5; margin: 5px;border-style: outset;cursor: pointer;}
+            button:hover {background-color: #555555;}
+            button:active {border-style: inset;}
         </style>
     </head>
     <body>
         <canvas width="800" height="600" id="game"></canvas>
+
+        <div id="buildGUI" style="display: none;">
+            <div style="width: 15%;">
+                <p>add room</p>
+                <span>width: </span><input type="number" value="25" min="3" id="width"><br>
+                <span>height:</span><input type="number" value="19" min="3" id="height"><br>
+                <button onclick="addRoom()">create</button>
+            </div>
+            <div style="width: 15%;">
+                <p>download room</p>
+                <button onclick="downloadRoom()">download</button>
+            </div>
+        </div>
+
+        <!-- to get script soruces, run copyScriptSrcsToClipBoard.jar, then paste here. Make sure to move index to the bottom -->
         <script src="scripts/game.js"></script>
-        <script src="scripts/actors/player.js"></script>
+        <script src="scripts/utils.js"></script>
         <script src="scripts/actors/enemy.js"></script>
         <script src="scripts/actors/npc.js"></script>
-        <script src="scripts/managers/titleScreen.js"></script>
+        <script src="scripts/actors/player.js"></script>
         <script src="scripts/managers/battle.js"></script>
+        <script src="scripts/managers/build.js"></script>
+        <script src="scripts/managers/titleScreen.js"></script>
         <script src="scripts/managers/world.js"></script>
+        <script src="scripts/ui/titleScreen.js"></script>
+        <script src="scripts/world/rooms.js"></script>
+        <script src="scripts/world/load.js"></script>
+        <script src="scripts/world/tileDefinitions.js"></script>
+        <script src="scripts/world/tiles/baseTile.js"></script>
+        <script src="scripts/world/tiles/baseWall.js"></script>
+        <script src="scripts/world/tiles/tileGrass.js"></script>
+        <script src="scripts/world/tiles/tilePath.js"></script>
         <script src="scripts/index.js"></script>
-        
-        <!-- copypasta: <script src="scripts/"></script> -->
     </body>
 </html>
