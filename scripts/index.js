@@ -1,6 +1,12 @@
 // files paths of image files
 images = [
-    ""
+    "assets/images/",
+    [
+        "tiles/",
+        "grass0.png",
+        "grass1.png",
+        "path0.png"
+    ]
 ];
 
 // files paths of audio files
@@ -13,7 +19,8 @@ var states = {
     titleScreen:0,
     world:1,
     battle:2,
-    cutscene:3
+    cutscene:3,
+    build:99
 }
 
 // current state
@@ -36,9 +43,13 @@ function update() {
         case states.titleScreen:
             handleTitleScreen(newState);
             break;
-        // TODO remove
+        // in world
         case states.world:
             handleWorld(newState);
+            break;
+        // build mode
+        case states.build:
+            handleBuild(newState);
             break;
         // if state is set to something that doesn't exist
         default:
@@ -53,9 +64,13 @@ function draw() {
         case states.titleScreen:
             drawTitleScreen();
             break;
-        // TODO remove
+        // in world
         case states.world:
             drawWorld();
+            break;
+        // build mode
+        case states.build:
+            drawBuild();
             break;
     }
 }
@@ -65,11 +80,15 @@ function absoluteDraw() {
         // title state
         case states.titleScreen:
             break;
+        // build mode
+        case states.build:
+            drawBuildAbsolute();
+            break;
     }
 }
 
 function onAssetsLoaded() {
-
+    loadRoom(rooms.default);
 }
 
 setup(60);
