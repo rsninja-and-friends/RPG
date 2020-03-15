@@ -48,6 +48,10 @@ function update() {
         case states.world:
             handleWorld(newState);
             break;
+        //in a battle
+        case states.battle:
+            handleBattle(newState);
+            break;
         // build mode
         case states.build:
             handleBuild(newState);
