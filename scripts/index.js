@@ -6,7 +6,8 @@ images = [
         "grass0.png",
         "grass1.png",
         "path0.png"
-    ]
+    ],
+    "tempPlayer.png"
 ];
 
 // files paths of audio files

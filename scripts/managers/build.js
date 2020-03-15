@@ -52,9 +52,9 @@ function handleBuild(isNewState) {
     if(mouseDown[0]) {
         var xpos = mPos.x/16;
         var ypos = mPos.y/16;
-        xpos = clamp(xpos,0,tiles[0].length-1);
-        ypos = clamp(ypos,0,tiles.length-1);
-        tiles[ypos][xpos] = tileDefinitions[buildData.position](mPos.x,mPos.y,buildData.type);
+        if(xpos === clamp(xpos,0,tiles[0].length-1) && ypos === clamp(ypos,0,tiles.length-1)) {
+            tiles[ypos][xpos] = tileDefinitions[buildData.position](mPos.x,mPos.y,buildData.type);
+        }
     }
 }
 

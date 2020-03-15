@@ -12,6 +12,7 @@ function handleWorld(isNewState) {
 }
 
 function drawWorld() {
+    rect(-camera.x + cw/2,-camera.y + ch/2,cw,ch,"#000000");
     drawRoomLimits();
     drawTiles();
     player.draw();

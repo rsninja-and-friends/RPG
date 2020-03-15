@@ -1,6 +1,6 @@
 class tileGrass extends BaseTile {
-    constructor(x,y,type) {
-        super(x,y,type,layer.ground);
+    constructor(x,y,type,tileID) {
+        super(x,y,type,tileID,layer.ground);
     }
 }
 tileGrass.prototype.typesAmount = 2;

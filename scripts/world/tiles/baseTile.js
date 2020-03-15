@@ -13,11 +13,12 @@ var layer = {
 }
 
 class BaseTile {
-    constructor(x,y,type,layer) {
+    constructor(x,y,type,tileID,layer) {
         this.x = x;
         this.y = y;
         this.w = 16;
         this.h = 16;
+        this.tileID  = tileID;
         this.type = type;
         this.layer = layer;
     }
