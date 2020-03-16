@@ -1,6 +1,5 @@
 function handleWorld(isNewState) {
     if(isNewState) {
-        buildModeTiles = [];
         camera.zoom = 2;
         
         worldEnemies.push(new Enemy(600,200,32,32,50));
@@ -15,9 +14,10 @@ function handleWorld(isNewState) {
 }
 
 function drawWorld() {
-    rect(-camera.x + cw/2,-camera.y + ch/2,cw,ch,"#000000");
+    // rect(-camera.x + cw/2,-camera.y + ch/2,cw,ch,"#000000");
     drawRoomLimits();
-    drawTiles();
+    drawTileLayers();
     drawEnemies();
     player.draw();
+    drawBlack();
 }

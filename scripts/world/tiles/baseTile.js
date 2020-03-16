@@ -1,16 +1,16 @@
 var tiles = [];
-var buildModeTiles = [];
+var tilePalette = [];
 
-var affect = {
+var effects = {
     none:0,
     colliding:1,
     speedUp:2
-}
+};
 
 var layer = {
     ground:0,
     wall:1
-}
+};
 
 class BaseTile {
     constructor(x,y,type,tileID,layer) {
@@ -21,17 +21,17 @@ class BaseTile {
         this.tileID  = tileID;
         this.type = type;
         this.layer = layer;
+        this.imageName = "debug";
     }
 }
 
 BaseTile.prototype.typesAmount = 1;
+BaseTile.prototype.mergesWith = [];
 
-BaseTile.prototype.affect = function(entity) {
-
-}
+BaseTile.prototype.effect = effects.none;
 
 BaseTile.prototype.draw = function() {
-    rect(this.x,this.y,this.w,this.h,"white");
+    img(sprites[`${this.imageName}${this.type}`],this.x,this.y);
 }
 
 function drawTiles() {
@@ -40,4 +40,8 @@ function drawTiles() {
             tiles[y][x].draw();
         }
     }
+}
+
+function drawTileLayers() {
+    imgIgnoreCutoff({spr:roomInfo.layers.floor},roomInfo.width*8-8,roomInfo.height*8-8);
 }

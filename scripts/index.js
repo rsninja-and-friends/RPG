@@ -3,9 +3,14 @@ images = [
     "assets/images/",
     [
         "tiles/",
+        "debug0.png",
         "grass0.png",
         "grass1.png",
-        "path0.png"
+        "path0.png",
+        "brick0.png",
+        "brick1.png",
+        "brick2.png",
+        "brick3.png" 
     ],
     "tempPlayer.png"
 ];
@@ -93,6 +98,9 @@ function absoluteDraw() {
 }
 
 function onAssetsLoaded() {
+    for (var i = 0; i < tileDefinitions.length; i++) {
+        tilePalette.push(tileDefinitions[i](0, 0, 0));
+    }
     loadRoom(rooms.default);
 }
 

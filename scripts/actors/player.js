@@ -7,6 +7,8 @@ class Player {
     constructor(x, y) {
         this.x = x;
         this.y = y;
+        this.w = 10;
+        this.h = 10;
         this.angle = 0;
         this.vel = 0;
         this.accel = 0.1;
@@ -65,7 +67,7 @@ class Player {
 
         // turn towards target angle
         if (wasInput) {
-            this.angle = turn(this.angle, angle, 0.2);
+            this.angle = turn(this.angle, angle, 0.175);
         }
 
         // limit speed
@@ -76,9 +78,17 @@ class Player {
             this.vel = friction(this.vel, this.friction);
         }
 
-        // move
+        // move x
+        var cols = getColliisons(this);
         this.x += Math.sin(this.angle) * this.vel;
+        if(colliding(this,cols)) {
+            this.x -= Math.sin(this.angle) * this.vel;
+        }
+        // move y
         this.y += Math.cos(this.angle) * this.vel;
+        if(colliding(this,cols)) {
+            this.y -= Math.cos(this.angle) * this.vel;
+        }
 
         // camera movement
         var cameraTargetPosition = { x: this.x, y: this.y };
