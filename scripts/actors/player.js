@@ -1,23 +1,24 @@
 //hp, atk, mp, def, spd
 
 var player;
-var playerStats = {
-    hp:20,
-    atk:2,
-    mp:5,
-    def:1,
-    spd:1
-}
 
 class Player {
     
     constructor(x,y) {
         this.x = x;
         this.y = y;
+        this.w = 16
+        this.h = 16;
+
+        this.hp = 20;
+        this.atk = 3;
+        this.mp = 5;
+        this.def = 1;
+        this.spd = 1;
     }
 
     draw() {
-        rect(this.x,this.y,16,16,"red");
+        rect(this.x,this.y,this.w,this.h,"red");
     }
 
     update() {
@@ -34,6 +35,11 @@ class Player {
             this.x += 4;
         }
         centerCameraOn(this.x,this.y);
+    }
+
+    move(x,y) {
+        this.x = x;
+        this.y = y;
     }
 }
 

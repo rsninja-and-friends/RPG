@@ -2,8 +2,10 @@ function handleWorld(isNewState) {
     if(isNewState) {
         buildModeTiles = [];
         camera.zoom = 2;
-        
-        worldEnemies.push(new Enemy(600,200,32,32,50));
+
+
+        //test enemy
+        worldEnemies.push(new Enemy(250,50,24,24,50,[0,0]));
     }
     updateEnemies();
     player.update();
