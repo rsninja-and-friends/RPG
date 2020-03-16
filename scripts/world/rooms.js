@@ -10,7 +10,8 @@ var roomInfo = {
     width: 0,
     height: 0,
     layers: { // images for each layer
-        floor: null
+        floor: null,
+        walls: null
     }
 }
 

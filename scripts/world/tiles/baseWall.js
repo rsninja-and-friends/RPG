@@ -1,6 +1,6 @@
 class BaseWall extends BaseTile { 
-    constructor(x,y,type,tileID,layer) {
-        super(x,y,type,tileID,layer);
+    constructor(x,y,type,tileID) {
+        super(x,y,type,tileID,layer.wall);
     } 
 }
 

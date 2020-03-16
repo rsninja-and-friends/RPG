@@ -41,7 +41,3 @@ function drawTiles() {
         }
     }
 }
-
-function drawTileLayers() {
-    imgIgnoreCutoff({spr:roomInfo.layers.floor},roomInfo.width*8-8,roomInfo.height*8-8);
-}

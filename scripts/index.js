@@ -98,6 +98,7 @@ function absoluteDraw() {
 }
 
 function onAssetsLoaded() {
+    generateShadows();
     for (var i = 0; i < tileDefinitions.length; i++) {
         tilePalette.push(tileDefinitions[i](0, 0, 0));
     }
