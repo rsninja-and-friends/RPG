@@ -9,7 +9,7 @@ var room = rooms.default;
 var roomInfo = {
     width: 0,
     height: 0,
-    layers: {
+    layers: { // images for each layer
         floor: null
     }
 }
@@ -20,13 +20,13 @@ function drawRoomLimits() {
 }
 
 function drawBlack() {
-    rect( - cw/4 - 8, roomInfo.height * 8 - 8,cw/2,ch,"#000000");
-    rect( (roomInfo.width-1) * 16 + cw/4 + 8, roomInfo.height * 8 - 8,cw/2,ch,"#000000");
-    rect( roomInfo.width * 8 - 8, - ch/4 - 8,cw,ch/2,"#000000");
-    rect( roomInfo.width * 8 - 8, (roomInfo.height-1) * 16 + ch/4 + 8,cw,ch/2,"#000000");
+    rect(- cw / 4 - 8, roomInfo.height * 8 - 8, cw / 2, ch, "#000000");
+    rect((roomInfo.width - 1) * 16 + cw / 4 + 8, roomInfo.height * 8 - 8, cw / 2, ch, "#000000");
+    rect(roomInfo.width * 8 - 8, - ch / 4 - 8, cw, ch / 2, "#000000");
+    rect(roomInfo.width * 8 - 8, (roomInfo.height - 1) * 16 + ch / 4 + 8, cw, ch / 2, "#000000");
 }
 
-// creates a room of 0.0 with size set in html GUI
+// creates a room of 0.0s with size set in html GUI
 function addRoom() {
     tiles = [];
     roomInfo.width = document.getElementById("width").value;

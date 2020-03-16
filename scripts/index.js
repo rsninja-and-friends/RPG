@@ -10,7 +10,7 @@ images = [
         "brick0.png",
         "brick1.png",
         "brick2.png",
-        "brick3.png" 
+        "brick3.png"
     ],
     "tempPlayer.png"
 ];
@@ -22,11 +22,11 @@ audio = [
 
 // enum kinda thing for game states
 var states = {
-    titleScreen:0,
-    world:1,
-    battle:2,
-    cutscene:3,
-    build:99
+    titleScreen: 0,
+    world: 1,
+    battle: 2,
+    cutscene: 3,
+    build: 99
 }
 
 // current state
@@ -37,14 +37,14 @@ var lastGlobalState;
 function update() {
     // if this is the first time updating in this state
     var newState = false;
-    
-    if(lastGlobalState !== globalState) {
+
+    if (lastGlobalState !== globalState) {
         newState = true;
     }
     lastGlobalState = globalState;
 
     // run code depending on what state the game is in
-    switch(globalState) {
+    switch (globalState) {
         // title state
         case states.titleScreen:
             handleTitleScreen(newState);
@@ -69,7 +69,7 @@ function update() {
 }
 
 function draw() {
-    switch(globalState) {
+    switch (globalState) {
         // title state
         case states.titleScreen:
             drawTitleScreen();
@@ -86,7 +86,7 @@ function draw() {
 }
 
 function absoluteDraw() {
-    switch(globalState) {
+    switch (globalState) {
         // title state
         case states.titleScreen:
             break;

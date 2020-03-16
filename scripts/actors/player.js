@@ -1,5 +1,3 @@
-//hp, atk, mp, def, spd
-
 var player;
 
 class Player {
@@ -29,9 +27,8 @@ class Player {
     }
 
     update() {
-        // apply force in a direction
+        // movement
         var wasInput = false;
-
         var angle = 0;
         var divisor = 0;
         // up
@@ -81,20 +78,22 @@ class Player {
         // move x
         var cols = getColliisons(this);
         this.x += Math.sin(this.angle) * this.vel;
-        if(colliding(this,cols)) {
+        if (colliding(this, cols)) {
             this.x -= Math.sin(this.angle) * this.vel;
         }
         // move y
         this.y += Math.cos(this.angle) * this.vel;
-        if(colliding(this,cols)) {
+        if (colliding(this, cols)) {
             this.y -= Math.cos(this.angle) * this.vel;
         }
 
         // camera movement
         var cameraTargetPosition = { x: this.x, y: this.y };
+        // if room smaller than screne, set camera to center
         if (roomInfo.width <= 25 && roomInfo.height <= 19) {
             cameraTargetPosition.x = roomInfo.width * 8 - 8;
             cameraTargetPosition.y = roomInfo.height * 8 - 8;
+        // else limit camera from going off screen
         } else {
             if (cameraTargetPosition.x < cw / 2 / camera.zoom) { cameraTargetPosition.x = cw / 2 / camera.zoom; }
             if (cameraTargetPosition.y < ch / 2 / camera.zoom) { cameraTargetPosition.y = ch / 2 / camera.zoom; }
@@ -102,6 +101,7 @@ class Player {
             if (cameraTargetPosition.y > roomInfo.height * 16 - ch / 2 / camera.zoom - 8) { cameraTargetPosition.y = roomInfo.height * 16 - ch / 2 / camera.zoom - 8; }
         }
 
+        // move camera towards player
         this.cameraTarget.x = lerp(this.cameraTarget.x, cameraTargetPosition.x, 0.1);
         this.cameraTarget.y = lerp(this.cameraTarget.y, cameraTargetPosition.y, 0.1);
         centerCameraOn(this.cameraTarget.x, this.cameraTarget.y);

@@ -10,14 +10,15 @@ function makeTileLayers() {
     absDraw = true;
 
     // draw tiles once
-    //  = new Image(roomInfo.width*16,roomInfo.height*16);
 
+    // create canvas to draw layer to
     var tempCanv = document.createElement("canvas");
     tempCanv.width = roomInfo.width * 16;
     tempCanv.height = roomInfo.height * 16;
     var tempCtx = tempCanv.getContext("2d");
     curCtx = tempCtx;
 
+    // create canvas to draw a tile to
     var mergeCanvas = document.createElement("canvas");
     mergeCanvas.width = 16;
     mergeCanvas.height = 16;
@@ -105,6 +106,7 @@ function makeTileLayers() {
         }
     }
 
+    // cache layer image, so drawing every frame will be faster
     roomInfo.layers.floor = tempCanv;
 
     // reset drawing info

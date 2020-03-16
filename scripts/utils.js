@@ -2,10 +2,12 @@
 function roundToGrid(number) {
     return Math.round(number / 16) * 16;
 }
+
 // clamps a value between min and max
 function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
 }
+
 // linear interpolation towards somewhere
 function lerp(start, end, amt) { return (1 - amt) * start + amt * end; }
 
@@ -16,7 +18,8 @@ function friction(value, amount) {
     if (Math.abs(value) < amount * 2) { value = 0; }
     return value;
 }
-var tau = Math.PI*2;
+
+var tau = Math.PI * 2;
 var pi = Math.PI;
 // returns a new angle that gets closer to the target angle
 function turn(cur, target, speed) {

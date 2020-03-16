@@ -24,11 +24,11 @@ class BaseTile {
         this.imageName = "debug";
     }
 }
+BaseTile.prototype.typesAmount = 1; // amount of tile visual variations
 
-BaseTile.prototype.typesAmount = 1;
-BaseTile.prototype.mergesWith = [];
+BaseTile.prototype.mergesWith = []; // what tile this with visually merge with
 
-BaseTile.prototype.effect = effects.none;
+BaseTile.prototype.effect = effects.none; // what effect this tile does
 
 BaseTile.prototype.draw = function() {
     img(sprites[`${this.imageName}${this.type}`],this.x,this.y);
