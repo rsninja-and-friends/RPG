@@ -41,6 +41,7 @@ function addRoom() {
 }
 
 function loadRoom(room) {
+    globalState = states.loading;
     // get link of json file
     var link = "assets/roomFiles/" + Object.keys(rooms)[room] + ".json";
     // get room file and load from it 

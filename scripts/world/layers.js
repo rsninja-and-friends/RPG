@@ -156,6 +156,8 @@ function makeTileLayers() {
     drawMode = drawModeCache;
     curCtx = ctxCache;
     absDraw = false;
+
+    globalState = states.world;
 }
 
 var shadowColor = "#000022";

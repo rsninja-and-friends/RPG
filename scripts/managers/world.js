@@ -2,8 +2,12 @@ function handleWorld(isNewState) {
     if (isNewState) {
         camera.zoom = 2;
 
+        player.setCamera();
+
         worldEnemies.push(new Enemy(600, 200, 32, 32, 50));
     }
+    updateComponents();
+
     updateEnemies();
     player.update();
 
@@ -24,4 +28,8 @@ function drawWorld() {
     //walls
     if(roomInfo.layers.walls !== null) {imgIgnoreCutoff({spr:roomInfo.layers.walls},roomInfo.width*8-8,roomInfo.height*8-8);}
     drawBlack();
+}
+
+function drawWorldAbsolute() {
+    drawUI();
 }

@@ -26,6 +26,7 @@ var states = {
     world: 1,
     battle: 2,
     cutscene: 3,
+    loading:4,
     build: 99
 }
 
@@ -56,6 +57,8 @@ function update() {
         //in a battle
         case states.battle:
             handleBattle(newState);
+            break;
+        case states.loading:
             break;
         // build mode
         case states.build:
@@ -90,6 +93,10 @@ function absoluteDraw() {
         // title state
         case states.titleScreen:
             break;
+        // in world
+        case states.world:
+            drawWorldAbsolute();
+            break;
         // build mode
         case states.build:
             drawBuildAbsolute();
@@ -102,7 +109,30 @@ function onAssetsLoaded() {
     for (var i = 0; i < tileDefinitions.length; i++) {
         tilePalette.push(tileDefinitions[i](0, 0, 0));
     }
-    loadRoom(rooms.default);
-}
 
+    // ui testing
+    // var layoutComponent = new HorizontalLayout(10,50,0,70);
+    // layoutComponent.padding = 6;
+    // layoutComponent.addChild(new Component(0,55,20,20));
+    // var layoutComponent2 = new HorizontalLayout(10,50,0,60);
+    // layoutComponent2.spacing = 10;
+    // layoutComponent2.showBorder = false;
+    // layoutComponent2.showShadow = false;
+    // layoutComponent2.addChild(new Component(0,60,30,30));
+    // var but = new Button(0,60,function(){console.log(true);});
+    // but.id = "button";
+    // but.addChild(new ImageComponent(0,0,sprites.grass0));
+    // but.addChild(new TextComponent(0,0,30,"white",1,function(){return "click me!";}));
+    // but.addChild(new Component(0,0,40,20));
+    // layoutComponent2.addChild(but);
+    // layoutComponent2.addChild(new HorizontalLayout(0,60,100,30));
+    // layoutComponent2.addChild(new ImageComponent(0,40,sprites.tempPlayer));
+    // layoutComponent2.children[2].addChild(new TextComponent(0,70,90,"white",1,function(){return "this is a test lol";}));
+    // layoutComponent.addChild(layoutComponent2);
+    // components.push(layoutComponent);
+
+    loadRoom(rooms.test);
+
+    
+}
 setup(60);

@@ -106,6 +106,24 @@ class Player {
         this.cameraTarget.y = lerp(this.cameraTarget.y, cameraTargetPosition.y, 0.1);
         centerCameraOn(this.cameraTarget.x, this.cameraTarget.y);
     }
+
+    setCamera() {
+        var cameraTargetPosition = { x: this.x, y: this.y };
+        // if room smaller than screne, set camera to center
+        if (roomInfo.width <= 25 && roomInfo.height <= 19) {
+            cameraTargetPosition.x = roomInfo.width * 8 - 8;
+            cameraTargetPosition.y = roomInfo.height * 8 - 8;
+        // else limit camera from going off screen
+        } else {
+            if (cameraTargetPosition.x < cw / 2 / camera.zoom) { cameraTargetPosition.x = cw / 2 / camera.zoom; }
+            if (cameraTargetPosition.y < ch / 2 / camera.zoom) { cameraTargetPosition.y = ch / 2 / camera.zoom; }
+            if (cameraTargetPosition.x > roomInfo.width * 16 - cw / 2 / camera.zoom - 8) { cameraTargetPosition.x = roomInfo.width * 16 - cw / 2 / camera.zoom - 8; }
+            if (cameraTargetPosition.y > roomInfo.height * 16 - ch / 2 / camera.zoom - 8) { cameraTargetPosition.y = roomInfo.height * 16 - ch / 2 / camera.zoom - 8; }
+        }
+        this.cameraTarget.x = cameraTargetPosition.x;
+        this.cameraTarget.y = cameraTargetPosition.y;
+        centerCameraOn(cameraTargetPosition.x, cameraTargetPosition.y);
+    }
 }
 
 player = new Player(0, 0);
