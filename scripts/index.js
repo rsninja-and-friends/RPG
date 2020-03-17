@@ -81,6 +81,10 @@ function draw() {
         case states.world:
             drawWorld();
             break;
+        //in a battle
+        case states.battle:
+            drawBattle();
+            break;
         // build mode
         case states.build:
             drawBuild();
@@ -102,6 +106,8 @@ function absoluteDraw() {
             drawBuildAbsolute();
             break;
     }
+
+    text(`HP: ${player.hp}`,5,5,"red",4);
 }
 
 function onAssetsLoaded() {
