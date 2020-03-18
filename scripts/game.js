@@ -488,9 +488,9 @@ function scaleCanvases() { //scales canvas by canvas scale, if scale is 0, canva
         var tempScale = Math.min(Math.floor(window.innerWidth/canvases.cvs.width),Math.floor(window.innerHeight/canvases.cvs.height));
         tempScale=tempScale<1?1:tempScale;
         autoScale=tempScale;
-        style.innerHTML = `#game {image-rendering:pixelated;image-rendering: crisp-edges;width:${tempScale*canvases.cvs.width}px;cursor: ${cursor.show?"crosshair":"none"};}`;
+        // style.innerHTML = `#game {image-rendering:pixelated;image-rendering: crisp-edges;width:${tempScale*canvases.cvs.width}px;cursor: ${cursor.show?"crosshair":"none"};}`;
     } else {
-        style.innerHTML = `#game {image-rendering:pixelated;image-rendering: crisp-edges;width:${Math.floor(canvasScale*canvases.cvs.width)}px;cursor: ${cursor.show?"crosshair":"none"};}`;
+        // style.innerHTML = `#game {image-rendering:pixelated;image-rendering: crisp-edges;width:${Math.floor(canvasScale*canvases.cvs.width)}px;cursor: ${cursor.show?"crosshair":"none"};}`;
     }
 }
 

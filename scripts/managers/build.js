@@ -1,22 +1,29 @@
 var buildData = {
-    inventory: false,
-    hotBarPosition: 0,
-    position: 0,
-    type: 0
+    inventory: false, // looking at inventory of tiles
+    hotBarPosition: 0, // what hotbar is being veiwed
+    position: 0, // position horizontally in hotbar
+    type: 0, // visuals of the tile
+    select: false, // if changed tile selection this frame
+    dropDown: { showing: false, x: 0, y: 0, w: 0, h: 0 }, // info/collider for type dropdown
+    mouseTile: null // what tile to display at cursor
 };
+
+var roomJSON; // json data for the current room, used when swapping global states
 
 function handleBuild(isNewState) {
     if (isNewState) {
-        // put one of every tile in the inventory
-        for (var i = 0; i < tileDefinitions.length; i++) {
-            buildModeTiles.push(tileDefinitions[i](0, 17, 0));
-        }
+        // show html gui
         document.getElementById("buildGUI").style.display = "flex";
     }
 
     // play mode
     if (keyPress[k.BACKSLASH]) {
+        // remake room from what is in the editor
+        roomJSON = getRoomJSON();
+        parseRoom(roomJSON);
+        // hide html gui
         document.getElementById("buildGUI").style.display = "none";
+
         globalState = states.world;
     }
 
@@ -36,26 +43,85 @@ function handleBuild(isNewState) {
     }
 
     // hotbar manipulation
-    if(keyDown[k.LEFT]) {buildData.position--;} 
-    if(keyDown[k.RIGHT]) {buildData.position++;} 
-    if(keyDown[k.UP]) {buildData.type--;}
-    if(keyDown[k.DOWN]) {buildData.type++;}
-    buildData.position = clamp(buildData.position,0,tileDefinitions.length-1);
-    buildData.type = clamp(buildData.type,0,buildModeTiles[buildData.position].typesAmount-1);  
-    
+    // position movement
+    if (keyPress[k.LEFT]) { buildData.position--; }
+    if (keyPress[k.RIGHT]) { buildData.position++; }
+    // type selecting
+    if (keyPress[k.UP]) { buildData.type--; }
+    if (keyPress[k.DOWN]) { buildData.type++; }
+    // limit values to what tiles exist
+    buildData.position = clamp(buildData.position, 0, tileDefinitions.length - 1);
+    buildData.type = clamp(buildData.type, 0, tilePalette[buildData.position].typesAmount - 1);
+
     // find mouse position in grid
     var mPos = mousePosition();
     mPos.x = roundToGrid(mPos.x);
     mPos.y = roundToGrid(mPos.y);
 
-    // place block
-    if(mouseDown[0]) {
-        var xpos = mPos.x/16;
-        var ypos = mPos.y/16;
-        xpos = clamp(xpos,0,tiles[0].length-1);
-        ypos = clamp(ypos,0,tiles.length-1);
-        tiles[ypos][xpos] = tileDefinitions[buildData.position](mPos.x,mPos.y,buildData.type);
+
+    // select tile from hotbar
+    if (mousePress[0]) {
+        for (var i = 0; i < 20; i++) {
+            if (rectpoint({ x: 18 + 34 * i, y: 18, w: 33, h: 33 }, mousePos)) {
+                buildData.position = clamp(i + buildData.hotBarPosition * 20, 0, tileDefinitions.length - 1);
+                buildData.select = true;
+            }
+        }
     }
+
+    // show dropDown on hover 
+    if (rectpoint({ x: 18 + 34 * buildData.position, y: 18, w: 33, h: 33 }, mousePos)) {
+        var amount = tilePalette[buildData.position].typesAmount;
+        if (amount > 1) {
+            buildData.dropDown.showing = true;
+            buildData.dropDown.x = (18 + buildData.position * 34);
+            buildData.dropDown.y = 34 + (34 * amount) / 2;
+            buildData.dropDown.w = 36;
+            buildData.dropDown.h = amount * 34 + 4;
+        }
+    } else if (!rectpoint(buildData.dropDown, mousePos)) {
+        buildData.dropDown.showing = false;
+    }
+
+    // select type from dropdown
+    if (buildData.dropDown.showing && mousePress[0]) {
+        for (var i = 0; i < tilePalette[buildData.position].typesAmount; i++) {
+            if (rectpoint({ x: buildData.dropDown.x, y: 52 + i * 34, w: 33, h: 33 }, mousePos)) {
+                buildData.type = i;
+                buildData.select = true;
+            }
+        }
+    }
+
+    // place tile
+    if (mouseDown[0]) {
+        // if a tile wasn't just picked from the hotbar
+        if (!buildData.select) {
+            var xpos = mPos.x / 16;
+            var ypos = mPos.y / 16;
+            if (xpos === clamp(xpos, 0, tiles[0].length - 1) && ypos === clamp(ypos, 0, tiles.length - 1)) {
+                tiles[ypos][xpos] = tileDefinitions[buildData.position](mPos.x, mPos.y, buildData.type);
+            }
+        }
+    } else {
+        buildData.select = false;
+    }
+
+    // pick block from world
+    if (mousePress[2]) {
+        var xpos = mPos.x / 16;
+        var ypos = mPos.y / 16;
+        if (xpos === clamp(xpos, 0, tiles[0].length - 1) && ypos === clamp(ypos, 0, tiles.length - 1)) {
+            buildData.position = tiles[ypos][xpos].tileID;
+            buildData.type = tiles[ypos][xpos].type;
+        }
+    }
+
+    // limit values to what tiles exist again becuase hotbar stuff
+    buildData.position = clamp(buildData.position, 0, tileDefinitions.length - 1);
+    buildData.type = clamp(buildData.type, 0, tilePalette[buildData.position].typesAmount - 1);
+    // set tile to display at cursor
+    buildData.mouseTile = tileDefinitions[buildData.position](mPos.x, mPos.y, buildData.type);
 }
 
 function drawBuild() {
@@ -63,32 +129,41 @@ function drawBuild() {
     drawTiles();
     player.draw();
 
-    // find mouse position in grid
-    var mPos = mousePosition();
-    mPos.x = roundToGrid(mPos.x);
-    mPos.y = roundToGrid(mPos.y);
-
-    // make tile at mouse position
-    mouseTile = tileDefinitions[buildData.position](mPos.x, mPos.y, buildData.type);
-
-    // draw it
-    mouseTile.draw();
+    if (buildData.mouseTile !== null) {
+        buildData.mouseTile.draw();
+    }
 }
 
 function drawBuildAbsolute() {
     scaleDefault = 2;
     if (buildData.inventory) {
-
+        // show inventory here
     } else {
         // go through the tiles in the current hotbar, and draw them to the ui
         for (var i = buildData.hotBarPosition * 20; i < buildData.hotBarPosition * 20 + 20; i++) {
-            if (buildModeTiles[i] !== undefined) {
-                buildModeTiles[i].x = 17 + i * 33;
-                if(i === buildData.position) {
-                    rect(17 + i * 33,17,18,18,"#555555");
-                    buildModeTiles[i].type = buildData.type;
+            if (tilePalette[i] !== undefined) {
+                
+                if (i === buildData.position) {
+                    // highlight selected tile
+                    rect(18 + i * 34, 18, 36, 36, "#999999");
+                    if (buildData.dropDown.showing) {
+                        // draw dropdown background
+                        rect(buildData.dropDown.x, buildData.dropDown.y, buildData.dropDown.w, buildData.dropDown.h, "#999999");
+                        // draw tile variations in background
+                        for (var j = 0; j < tilePalette[i].typesAmount; j++) {
+                            tilePalette[i].y = 18 + (j + 1) * 34;
+                            tilePalette[i].type = j;
+                            tilePalette[i].draw();
+                        }
+                    }
+                    tilePalette[i].type = buildData.type;
                 }
-                buildModeTiles[i].draw();
+
+                // draw tile in pallette
+                tilePalette[i].x = 18 + i * 34;
+                tilePalette[i].y = 18;
+                tilePalette[i].draw();
+                tilePalette[i].type = 0;
             }
         }
     }

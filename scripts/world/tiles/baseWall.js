@@ -1,11 +1,7 @@
-
-
 class BaseWall extends BaseTile { 
-    constructor(x,y,w,h,c) {
-        super(x,y,w,h,c);
+    constructor(x,y,type,tileID) {
+        super(x,y,type,tileID,layer.wall);
     } 
 }
 
-BaseWall.prototype.affect = function(entity) {
-    return affect.colliding;
-}
+BaseWall.prototype.effect = effects.colliding;
