@@ -8,7 +8,11 @@ var room = rooms.default;
 
 var roomInfo = {
     width: 0,
-    height: 0
+    height: 0,
+    layers: { // images for each layer
+        floor: null,
+        walls: null
+    }
 }
 
 // draws a rectangle of the room size
@@ -16,7 +20,14 @@ function drawRoomLimits() {
     rect(roomInfo.width * 8 - 8, roomInfo.height * 8 - 8, roomInfo.width * 16, roomInfo.height * 16, "#303030");
 }
 
-// creates a room of 0.0 with size set in html GUI
+function drawBlack() {
+    rect(- cw / 4 - 8, roomInfo.height * 8 - 8, cw / 2, ch, "#000000");
+    rect((roomInfo.width - 1) * 16 + cw / 4 + 8, roomInfo.height * 8 - 8, cw / 2, ch, "#000000");
+    rect(roomInfo.width * 8 - 8, - ch / 4 - 8, cw, ch / 2, "#000000");
+    rect(roomInfo.width * 8 - 8, (roomInfo.height - 1) * 16 + ch / 4 + 8, cw, ch / 2, "#000000");
+}
+
+// creates a room of 0.0s with size set in html GUI
 function addRoom() {
     tiles = [];
     roomInfo.width = document.getElementById("width").value;
@@ -30,40 +41,15 @@ function addRoom() {
 }
 
 function loadRoom(room) {
+    globalState = states.loading;
     // get link of json file
     var link = "assets/roomFiles/" + Object.keys(rooms)[room] + ".json";
     // get room file and load from it 
     fetch(link).then((response) => response.json().then((data) => { parseRoom(data); }));
 }
 
-// load room from json
-function parseRoom(json) {
-    tiles = [];
-    roomInfo.width = json.width;
-    roomInfo.height = json.height;
-    var t = json.tiles;
-    // go through array of strings
-    for (var y = 0; y < t.length; y++) {
-        tiles.push([]);
-        // spilt string on commas to get tiles
-        tt = t[y].split(",");
-        // go through tiles
-        for (var x = 0; x < tt.length; x++) {
-            // get tileId and type component of string
-            var ttt = tt[x].split(".");
-            // add tile tileID at x,y with type type
-            tiles[y].push(tileDefinitions[parseInt(ttt[0])](x * 16, y * 16, parseInt(ttt[1])));
-        }
-    }
-}
-
-// download rooms
-document.getElementById("name").onkeydown = function (e) {
-    if (e.keyCode === k.ENTER) {
-        downloadRoom();
-    }
-}
-function downloadRoom() {
+// export room to json
+function getRoomJSON() {
     var roomObj = {};
 
     // set width and height
@@ -86,10 +72,44 @@ function downloadRoom() {
     // add objects
     roomObj.roomObjects = [];
 
+    return roomObj;
+}
+
+// load room from json
+function parseRoom(json) {
+    tiles = [];
+    roomInfo.width = json.width;
+    roomInfo.height = json.height;
+    var t = json.tiles;
+    // go through array of strings
+    for (var y = 0; y < t.length; y++) {
+        tiles.push([]);
+        // spilt string on commas to get tiles
+        tt = t[y].split(",");
+        // go through tiles
+        for (var x = 0; x < tt.length; x++) {
+            // get tileId and type component of string
+            var ttt = tt[x].split(".");
+            // add tile tileID at x,y with type type
+            tiles[y].push(tileDefinitions[parseInt(ttt[0])](x * 16, y * 16, parseInt(ttt[1])));
+        }
+    }
+    makeTileLayers();
+}
+
+// download rooms
+document.getElementById("name").onkeydown = function (e) {
+    if (e.keyCode === k.ENTER) {
+        downloadRoom();
+    }
+}
+function downloadRoom() {
+    var exportObj = getRoomJSON();
+
     // create download link
     var link = document.createElement("a");
     link.download = document.getElementById("name").value;
-    var blob = new Blob([JSON.stringify(roomObj, null, "\t")], { type: 'application/json' });
+    var blob = new Blob([JSON.stringify(roomObj, null, "\t")], { type: "application/json" });
     link.href = URL.createObjectURL(blob);
 
     // click the link
