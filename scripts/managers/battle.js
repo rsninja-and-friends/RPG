@@ -66,7 +66,8 @@ function handleBattle(isNewState) {
 
         case bStates.eTurn:
             player.move(defaultPos.x,defaultPos.y);
-            fightEnemies[curEnemy].selAttack = 0 //fightEnemies[i].attacks[rand(0,fightEnemies[i].length-1)]
+
+            fightEnemies[curEnemy].selAttack = eAttacks.basic; //fightEnemies[i].attacks[rand(0,fightEnemies[i].length-1)]
             curBattleState = bStates.eAnimate;
             
         break;
@@ -83,6 +84,12 @@ function handleAnimations() {
         case attacks.basic:
             basicAttack(target);
         break;
+    }
+}
+
+function handleEnemyAnimations() {
+    switch(fightEnemies[curEnemy].selAttack) {
+
     }
 }
 
