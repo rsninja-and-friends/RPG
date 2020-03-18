@@ -1,10 +1,10 @@
 function handleWorld(isNewState) {
     if (isNewState) {
+        toggleBattleUI(false);
         camera.zoom = 2;
         player.setCamera();
 
         worldEnemies.push(new Enemy(250,50,24,24,50,[0,0]));
-
     }
     updateComponents();
 

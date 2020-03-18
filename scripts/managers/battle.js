@@ -17,44 +17,47 @@ var worldEnemies = [];
 var fightEnemies = [];
 
 var curBattleState; 
+var lastBattleState;
 var curAttack;
 var curEnemy = 0;
 var target;
 
 function handleBattle(isNewState) {
     if(isNewState) {
+        toggleBattleUI(true);
         camera.x = 0;
         camera.y = 0;
 
         player.move(defaultPos.x,defaultPos.y);
 
         curBattleState = bStates.pTurn;
+
+        player.angle = pi/2;
     }
+
+    updateComponents();
+    
+    isNewBattleState = false;
+    if(curBattleState !== lastBattleState) {
+        isNewBattleState = true;
+    }
+    lastBattleState = curBattleState;
 
     switch(curBattleState) {
         case bStates.pTurn:
-            //basic attack (to be replaced with ui)
-            if(keyPress[k.x]) {
-                curAttack = attacks.basic;
-                curBattleState = bStates.pSelect;
+            if(isNewBattleState) {
+                battleUI.mainBar.show = true;
+                battleUI.pSelect.show = false;
             }
-        
-
-
         break;
 
         case bStates.pSelect:
-            //to be replaced with ui
-            if(keyPress[k["1"]]) {
-                setTarget(0);
+            if(isNewBattleState) {
+                battleUI.mainBar.show = false;
+                battleUI.pSelect.show = true;
+                battleUI.attackSelect.show = false;
             }
-
-            if(keyPress[k["2"]] && fightEnemies.length >= 2) {
-                setTarget(1);
-            }
-
-
-
+            updateFightEnemies();
         break;
 
         case bStates.pAnimate:
@@ -92,4 +95,8 @@ function setTarget(targ) {
 function drawBattle() {
     player.draw();
     drawEnemies();
+}
+
+function drawBattleAbsolute() {
+    drawUI();
 }

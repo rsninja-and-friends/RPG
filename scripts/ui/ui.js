@@ -52,6 +52,17 @@ function drawUI() {
     imgIgnoreCutoff({ spr: UICanvas }, UICanvas.width / 2, UICanvas.height / 2, 0, 1, 1);
 }
 
+function makeStatsUI() {
+    var bar = new HorizontalLayout(0,0,cw,75);
+    bar.addChild(new TextComponent(0,6,100,"#ba5956",2,function(){return `hp: ${player.hp}`;}));
+    bar.id = "statsBar";
+    bar.adaptWidth = false;
+    bar.adaptHeight = false;
+    bar.showShadow = false;
+    bar.backgroundColor = colors.background + "cc";
+    components.push(bar);
+}
+
 // rectangle
 function UIRect(x, y, w, h, c) {
     UICtx.fillStyle = c;

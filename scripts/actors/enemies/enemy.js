@@ -8,28 +8,57 @@ class Enemy {
         this.loadout = loadout;
         
         this.selAttack;
+
+        this.hovered = false;
     }
 }
 
 Enemy.prototype.draw = function() {
-    rect(this.x,this.y,this.w,this.h,"blue");
+    // selection circle
+    if(curBattleState === bStates.pSelect) {
+        var pulse = Math.abs(15-(updateCount%30))/4;
+        pulse = this.hovered ? 7 : pulse;
+        circle(this.x,this.y,Math.max(this.w,this.h)/2 + pulse,"#99999955");
+    }
+    // rect(this.x,this.y,this.w,this.h,"blue");
+    img(sprites.tempEnemy,this.x,this.y);
 }
 
-Enemy.prototype.update = function() {
-    if(dist(this,player) < this.range) {
-        //move towards player
-    }
-
-    if(rectrect(this,player)) {
-        //initiate battle
-        let enemyXPos = 400;
-        for(let i = 0;i < this.loadout.length;i++) {
-            fightEnemies.push(enemyDefinitions[this.loadout[i]](enemyXPos,300));
-            enemyXPos += 50;
+Enemy.prototype.baseUpdate = function(index) {
+    // battle
+    if(globalState === states.battle) {
+        if(curBattleState === bStates.pSelect) {
+            // hovering over enemy
+            if(rectpoint(this,mousePosition())) {
+                this.hovered = true;
+            } else {
+                this.hovered = false;
+            }
+            if(this.hovered && mousePress[0]) {
+                setTarget(index);
+            }
         }
-        globalState = states.battle;
+    // world
+    } else {
+
+        if(dist(this,player) < this.range) {
+            //move towards player
+        }
+
+        if(rectrect(this,player)) {
+            //initiate battle
+            let enemyXPos = 400;
+            for(let i = 0;i < this.loadout.length;i++) {
+                fightEnemies.push(enemyDefinitions[this.loadout[i]](enemyXPos,300));
+                enemyXPos += 50;
+            }
+            globalState = states.battle;
+        }
     }
 }
+
+Enemy.prototype.worldUpdate = function(){};
+Enemy.prototype.fightUpdate = function(){};
 
 Enemy.prototype.move = function(x,y) {
     this.x = x;
@@ -83,7 +112,14 @@ function drawEnemies() {
 
 function updateEnemies() {
     for(let i=0;i<worldEnemies.length;i++) {
-        worldEnemies[i].update();
+        worldEnemies[i].baseUpdate(i);
+        worldEnemies[i].worldUpdate();
     }
 }
 
+function updateFightEnemies() {
+    for(let i=0;i<fightEnemies.length;i++) {
+        fightEnemies[i].baseUpdate(i);
+        fightEnemies[i].fightUpdate();
+    }
+}

@@ -12,7 +12,8 @@ images = [
         "brick2.png",
         "brick3.png"
     ],
-    "tempPlayer.png"
+    "tempPlayer.png",
+    "tempEnemy.png"
 ];
 
 // files paths of audio files
@@ -26,9 +27,12 @@ var states = {
     world: 1,
     battle: 2,
     cutscene: 3,
-    loading:4,
+    loading: 4,
     build: 99
 }
+
+var drawCount = 0;
+var updateCount = 0;
 
 // current state
 var globalState = states.world;
@@ -69,6 +73,7 @@ function update() {
             console.warn("in unknown state");
             break;
     }
+    updateCount++;
 }
 
 function draw() {
@@ -81,7 +86,7 @@ function draw() {
         case states.world:
             drawWorld();
             break;
-        //in a battle
+        // in a battle
         case states.battle:
             drawBattle();
             break;
@@ -90,6 +95,7 @@ function draw() {
             drawBuild();
             break;
     }
+    drawCount++;
 }
 
 function absoluteDraw() {
@@ -101,13 +107,15 @@ function absoluteDraw() {
         case states.world:
             drawWorldAbsolute();
             break;
+        // in a battle
+        case states.battle:
+            drawBattleAbsolute();
+            break;
         // build mode
         case states.build:
             drawBuildAbsolute();
             break;
     }
-
-    text(`HP: ${player.hp}`,5,5,"red",4);
 }
 
 function onAssetsLoaded() {
@@ -137,8 +145,13 @@ function onAssetsLoaded() {
     // layoutComponent.addChild(layoutComponent2);
     // components.push(layoutComponent);
 
-    loadRoom(rooms.test);
+    cw = canvases.cvs.width;
+    ch = canvases.cvs.height;
 
-    
+    makeStatsUI();
+
+    makeBattleUI();
+
+    loadRoom(rooms.default);
 }
 setup(60);

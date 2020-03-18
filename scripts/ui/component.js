@@ -23,6 +23,8 @@ class Component {
         this.id = "";
 
         this.ignoreChildUpdate = false;
+
+        this.absolutePosition = false;
     }
 }
 Component.prototype.update = function() {}
@@ -118,8 +120,10 @@ function drawChildren(component) {
 function updateComponents() {
     focusedComponent = null;
     for(var i=0;i<components.length;i++) {
-        components[i].handleFocus();
-        handleFocusChild(components[i]);
+        if(components[i].show) {
+            components[i].handleFocus();
+            handleFocusChild(components[i]);
+        }
     }
     for(var i=0;i<components.length;i++) {
         components[i].update();
@@ -129,8 +133,10 @@ function updateComponents() {
 function handleFocusChild(component) {
     if(!component.ignoreChildUpdate) {
         for(let i=0;i<component.children.length;i++) {
-            component.children[i].handleFocus();
-            handleFocusChild(component.children[i]);
+            if(component.children[i].show) {
+                component.children[i].handleFocus();
+                handleFocusChild(component.children[i]);
+            }
         }
     }
 }

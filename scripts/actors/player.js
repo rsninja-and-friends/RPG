@@ -11,15 +11,14 @@ class Player {
         this.vel = 0;
         this.accel = 0.1;
         this.friction = 0.3;
-        this.maxVel = 1.5;
+        this.maxVel = 2.5;
         this.cameraTarget = { x: x, y: y };
-        this.stats = {
-            hp: 20,
-            atk: 2,
-            mp: 5,
-            def: 1,
-            spd: 1
-        }
+        
+        this.hp = 20; 
+        this.atk = 3; 
+        this.mp = 5; 
+        this.def = 1; 
+        this.spd = 1; 
     }
 
     draw() {
@@ -123,6 +122,11 @@ class Player {
         this.cameraTarget.x = cameraTargetPosition.x;
         this.cameraTarget.y = cameraTargetPosition.y;
         centerCameraOn(cameraTargetPosition.x, cameraTargetPosition.y);
+    }
+
+    move(x,y) {
+        this.x = x;
+        this.y = y;
     }
 }
 
