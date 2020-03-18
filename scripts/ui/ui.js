@@ -1,14 +1,18 @@
+// array of parentless components
 var components = [];
 
-var colors = {
+// color constants for ui
+const colors = {
     border: "#555555",
     background: "#1e1e1e",
     hover:"#333333",
     click:"#111111"
 };
 
+// id of focused component
 var focusedComponent = null;
 
+// every new ui component gets an id incremented from the last
 var idCount = 0;
 
 // canvas for drawing ui
@@ -17,6 +21,7 @@ var UICtx = UICanvas.getContext("2d");
 UICtx.textAlign = "left";
 UICtx.textBaseline = "top";
 
+// add pixel font
 document.getElementsByTagName("style")[0].innerHTML += `@font-face {
     font-family: "pixelmix";
     src: url("./scripts/ui/font/pixelmix.ttf") format("ttf");
@@ -53,7 +58,9 @@ function drawUI() {
 }
 
 function makeStatsUI() {
+    // top bar
     var bar = new HorizontalLayout(0,0,cw,75);
+    // hp
     bar.addChild(new TextComponent(0,6,100,"#ba5956",2,function(){return `hp: ${player.hp}`;}));
     bar.id = "statsBar";
     bar.adaptWidth = false;
@@ -77,10 +84,12 @@ function UIBorder(x, y, w, h, c) {
     UICtx.stroke();
 }
 
+// image
 function UIImage(img,x,y) {
    UICtx.drawImage(img,x,y);
 }
 
+// draw text
 function UIText(txt,x,y,color="white",size=1,maxWidth=cw) {
     txt = txt.toString();
     UICtx.fillStyle = color;

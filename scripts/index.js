@@ -12,6 +12,10 @@ images = [
         "brick2.png",
         "brick3.png"
     ],
+    [
+        "objects/",
+        "tree0.png"
+    ],
     "tempPlayer.png",
     "tempEnemy.png"
 ];
@@ -122,6 +126,10 @@ function onAssetsLoaded() {
     generateShadows();
     for (var i = 0; i < tileDefinitions.length; i++) {
         tilePalette.push(tileDefinitions[i](0, 0, 0));
+    }
+
+    for (var i = 0; i < objDefKeys.length; i++) {
+        // tilePalette.push(objectDefinitions[objDefKeys[i]](0, 0, 0));
     }
 
     // ui testing

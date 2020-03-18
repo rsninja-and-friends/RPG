@@ -94,6 +94,14 @@ function parseRoom(json) {
             tiles[y].push(tileDefinitions[parseInt(ttt[0])](x * 16, y * 16, parseInt(ttt[1])));
         }
     }
+
+    var o = json.roomObjects;
+    // go through array of strings
+    for (var i = 0;i < o.length; i++) {
+        var oo = o[i];
+        worldObjects.push(objectDefinitions[oo[0]](oo[1]*16,oo[2]*16,oo[3]));
+    }
+
     makeTileLayers();
 }
 
@@ -109,7 +117,7 @@ function downloadRoom() {
     // create download link
     var link = document.createElement("a");
     link.download = document.getElementById("name").value;
-    var blob = new Blob([JSON.stringify(roomObj, null, "\t")], { type: "application/json" });
+    var blob = new Blob([JSON.stringify(exportObj, null, "\t")], { type: "application/json" });
     link.href = URL.createObjectURL(blob);
 
     // click the link

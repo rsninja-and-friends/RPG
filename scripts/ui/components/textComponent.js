@@ -12,13 +12,16 @@ class TextComponent extends Component {
 }
 
 TextComponent.prototype.update = function() {
+    // get the string from the function passed into constructor that returns a string
     this.string = this.txtFunc();
 }
 
 TextComponent.prototype.draw = function() {
+    // draw text, and adapt height to accommodate text wrapping
     this.h = UIText(this.string,this.x,this.y,this.color,this.size,this.w);
 }
 
+// if you want to type less to make a text component that has a constant string
 function returnStr(str) {
     return function(){return str;};
 }

@@ -140,6 +140,13 @@ function makeTileLayers() {
                 }
             }
         }
+
+        // object pass
+        for (var i = 0; i < worldObjects.length; i++) {
+            if(worldObjects[i].layer === l) {
+                worldObjects[i].draw();
+            }
+        }
         
 
         // cache layer image, so drawing every frame will be faster
