@@ -1,8 +1,8 @@
 
 
 class BasicEnemy extends Enemy {
-    constructor(x,y) {
-        super(x,y,24,24);
+    constructor(x,y,id) {
+        super(x,y,24,24,0,0,id);
 
         this.defaultX = x;
         this.defaultY = y;
@@ -12,5 +12,6 @@ class BasicEnemy extends Enemy {
         this.def = 0;
         this.spd = 0;
         this.attacks = [0];
+        this.value = 3; 
     }
 }

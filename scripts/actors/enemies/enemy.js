@@ -1,11 +1,12 @@
 class Enemy {
-    constructor(x,y,w,h,range,loadout) {
+    constructor(x,y,w,h,range,loadout,id) {
         this.x = x;
         this.y = y;
         this.w = w;
         this.h = h;
         this.range = range;
         this.loadout = loadout;
+        this.id = id;
         
         this.selAttack;
 
@@ -48,8 +49,9 @@ Enemy.prototype.baseUpdate = function(index) {
         if(rectrect(this,player)) {
             //initiate battle
             let enemyXPos = 400;
+            fightId = this.id;
             for(let i = 0;i < this.loadout.length;i++) {
-                fightEnemies.push(enemyDefinitions[this.loadout[i]](enemyXPos,300));
+                fightEnemies.push(enemyDefinitions[this.loadout[i]](enemyXPos,300,i));
                 enemyXPos += 50;
             }
             globalState = states.battle;
@@ -65,32 +67,20 @@ Enemy.prototype.move = function(x,y) {
     this.y = y;
 }
 
-Enemy.prototype.attack = function(type) {
-    switch(type) {
-        case eAttacks.basic:
-            this.x -= 5;
-            if(rectrect(player,this)) {
-                player.hp -= this.atk - player.def; 
-                this.move(this.defaultX,this.defaultY);
-
-                if(curEnemy == fightEnemies.length - 1) {
-                    curEnemy = 0;
-                    curBattleState = bStates.pTurn;
-                } else {
-                    curEnemy++;
-                    curBattleState = bStates.eTurn;
-                }
-            }   
-
-        break;
-
-
-    }
-}
-
 Enemy.prototype.checkDead = function() {
     if(this.hp <= 0) {
-        //dead stuff
+        income += rand(this.value - (this.value / 2),this.value + (this.value / 2));
+        fightEnemies.splice(this.id,1);
+
+        for(let i = 0;i < fightEnemies.length;i++) {
+            if(fightEnemies[i].id > this.id) {
+                fightEnemies[i].id--;
+            }
+        }
+
+        if(fightEnemies.length == 0) {
+            winBattle();
+        }
     }
 }
 
