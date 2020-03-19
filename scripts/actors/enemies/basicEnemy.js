@@ -10,7 +10,6 @@ class BasicEnemy extends Enemy {
         this.hp = 5;
         this.atk = 2;
         this.def = 0;
-        this.spd = 0;
         this.attacks = [0];
         this.value = 3; 
     }
