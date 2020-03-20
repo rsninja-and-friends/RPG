@@ -1,4 +1,4 @@
 var enemyDefinitions = [
     //0 - basic enemy
-    function(x,y) {return new BasicEnemy(x,y)}
+    function(x,y,id) {return new BasicEnemy(x,y,id)}
 ]

@@ -1,5 +1,7 @@
 var player;
 
+var income = 0;
+
 class Player {
 
     constructor(x, y) {
@@ -11,14 +13,16 @@ class Player {
         this.vel = 0;
         this.accel = 0.1;
         this.friction = 0.3;
-        this.maxVel = 2.5;
+        this.maxVel = 1.5;
         this.cameraTarget = { x: x, y: y };
         
         this.hp = 20; 
         this.atk = 3; 
         this.mp = 5; 
         this.def = 1; 
-        this.spd = 1; 
+        
+        this.money = 100;
+        this.xp = 0;
     }
 
     draw() {

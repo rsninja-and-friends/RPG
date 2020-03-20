@@ -16,6 +16,8 @@ const defaultPos = {
 var worldEnemies = [];
 var fightEnemies = [];
 
+var fightId;
+
 var curBattleState; 
 var lastBattleState;
 var curAttack;
@@ -73,12 +75,13 @@ function handleBattle(isNewState) {
         break;
 
         case bStates.eAnimate:
-            fightEnemies[curEnemy].attack(fightEnemies[curEnemy].selAttack);
+            handleEnemyAnimations();
         break;
     }
 
 }
 
+//performs player's animations. the targeted enemy is passed in
 function handleAnimations() {
     switch(curAttack) {
         case attacks.basic:
@@ -87,10 +90,32 @@ function handleAnimations() {
     }
 }
 
+//performs current enemy's animations. the current enemy is passed in
 function handleEnemyAnimations() {
     switch(fightEnemies[curEnemy].selAttack) {
-
+        case eAttacks.basic:
+            eBasicAttack(curEnemy);
+        break;
     }
+}
+
+function winBattle() {
+    
+    //some sort of win animation/screen will go here
+
+    player.money += income;
+    player.xp += income;
+    income = 0;
+
+    let tempPos = {
+        x:worldEnemies[fightId].x,
+        y:worldEnemies[fightId].y
+    };
+
+    worldEnemies.splice(fightId,1);
+    player.move(tempPos.x,tempPos.y);
+    
+    globalState = states.world;
 }
 
 //sets attack's target and advanced the battle

@@ -12,6 +12,12 @@ images = [
         "brick2.png",
         "brick3.png"
     ],
+    [
+        "objects/",
+        "tree0.png",
+        "tree1.png",
+        "link0.png"
+    ],
     "tempPlayer.png",
     "tempEnemy.png"
 ];
@@ -122,6 +128,16 @@ function onAssetsLoaded() {
     generateShadows();
     for (var i = 0; i < tileDefinitions.length; i++) {
         tilePalette.push(tileDefinitions[i](0, 0, 0));
+    }
+
+    tilePaletteObjectStartPos = tilePalette.length;
+
+    for (var i = 0; i < objDefKeys.length; i++) {
+        if(objectDefinitions[objDefKeys[i]].length === 3) {
+            tilePalette.push(objectDefinitions[objDefKeys[i]](0, 0, 0));
+        } else {
+            tilePalette.push(objectDefinitions[objDefKeys[i]](0, 0, 0,[]));
+        }
     }
 
     // ui testing

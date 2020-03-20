@@ -7,24 +7,30 @@ class Component {
 
         this.parent = null;
         this.children = [];
+        // position in parent's children array
         this.position;
 
+        // what parts should be drawn
         this.showBorder = true;
         this.showShadow = true;
         this.show = true;
 
+        // colors
         this.backgroundColor = colors.background;
         this.borderColor = colors.border;
 
+        // if children should be able to be focused
+        this.ignoreChildUpdate = false;
+
+        // if this shouldn't be moved by parent component
+        this.absolutePosition = false;
         // index of when added
         this.idNumber = idCount++;
 
         // id name set by user
         this.id = "";
 
-        this.ignoreChildUpdate = false;
-
-        this.absolutePosition = false;
+        
     }
 }
 Component.prototype.update = function() {}
@@ -35,8 +41,10 @@ Component.prototype.handleFocus = function() {
     }
 }
 
+// draws overtop base draw
 Component.prototype.draw = function() {}
 
+// draw for every component, draws a box
 Component.prototype.baseDraw = function() {
     if(this.showShadow) {UICtx.toggleShadow(true);}
     UICtx.fillStyle = this.backgroundColor;
@@ -147,6 +155,7 @@ function updateChildren(component) {
     }
 }
 
+// rect point collision for ui
 function componentPoint(rect,point) {
     if(rect.x + rect.w >= point.x &&
        rect.x <= point.x &&

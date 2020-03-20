@@ -4,12 +4,18 @@ function handleWorld(isNewState) {
         camera.zoom = 2;
         player.setCamera();
 
-        worldEnemies.push(new Enemy(250,50,24,24,50,[0,0]));
+        //temporary test enemy stuff dont worry about it :)
+        worldEnemies.push(new Enemy(250,50,24,24,50,[0,0],0));
+        if(rectrect(worldEnemies[0],player)) {
+            worldEnemies = [];
+        }
     }
     updateComponents();
 
     updateEnemies();
     player.update();
+
+    updateObjects();
 
     // build mode
     if (keyPress[k.BACKSLASH]) {
