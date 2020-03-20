@@ -14,7 +14,9 @@ images = [
     ],
     [
         "objects/",
-        "tree0.png"
+        "tree0.png",
+        "tree1.png",
+        "link0.png"
     ],
     "tempPlayer.png",
     "tempEnemy.png"
@@ -128,8 +130,14 @@ function onAssetsLoaded() {
         tilePalette.push(tileDefinitions[i](0, 0, 0));
     }
 
+    tilePaletteObjectStartPos = tilePalette.length;
+
     for (var i = 0; i < objDefKeys.length; i++) {
-        // tilePalette.push(objectDefinitions[objDefKeys[i]](0, 0, 0));
+        if(objectDefinitions[objDefKeys[i]].length === 3) {
+            tilePalette.push(objectDefinitions[objDefKeys[i]](0, 0, 0));
+        } else {
+            tilePalette.push(objectDefinitions[objDefKeys[i]](0, 0, 0,[]));
+        }
     }
 
     // ui testing

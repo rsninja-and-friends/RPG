@@ -11,6 +11,8 @@ function handleWorld(isNewState) {
     updateEnemies();
     player.update();
 
+    updateObjects();
+
     // build mode
     if (keyPress[k.BACKSLASH]) {
         globalState = states.build;

@@ -37,5 +37,12 @@ function colliding(entity, tilesArray) {
             
         }
     }
+
+    for(var o=0;o<worldObjects.length;o++) {
+        if(rectrect(entity,worldObjects[o])) {
+            return true;
+        }
+    }
+
     return false;
 }

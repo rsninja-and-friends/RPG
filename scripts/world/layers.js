@@ -1,5 +1,6 @@
 // make tile layers
 function makeTileLayers() {
+    globalState = states.world;
     // store drawing info
     var camCache = { x: camera.x, y: camera.y };
     var drawModeCache = drawMode;
@@ -164,7 +165,7 @@ function makeTileLayers() {
     curCtx = ctxCache;
     absDraw = false;
 
-    globalState = states.world;
+    document.getElementById("load").style.display = "none";
 }
 
 var shadowColor = "#000022";

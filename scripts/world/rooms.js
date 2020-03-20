@@ -40,12 +40,13 @@ function addRoom() {
     }
 }
 
-function loadRoom(room) {
+function loadRoom(room,id=undefined) {
+    document.getElementById("load").style.display = "block";
     globalState = states.loading;
     // get link of json file
     var link = "assets/roomFiles/" + Object.keys(rooms)[room] + ".json";
     // get room file and load from it 
-    fetch(link).then((response) => response.json().then((data) => { parseRoom(data); }));
+    fetch(link).then((response) => response.json().then((data) => { parseRoom(data,id); }));
 }
 
 // export room to json
@@ -69,15 +70,27 @@ function getRoomJSON() {
     }
     roomObj.tiles = tilesArray;
 
+    var roomObjcts = [];
+
+    for(var i=0;i<worldObjects.length;i++) {
+        var wo = worldObjects[i];
+        if(wo.exportArgs !== undefined) {
+            roomObjcts.push([wo.definitionKey,wo.x/16,wo.y/16,wo.type,wo.exportArgs()]);
+        } else {
+            roomObjcts.push([wo.definitionKey,wo.x/16,wo.y/16,wo.type]);
+        }
+    }
+
     // add objects
-    roomObj.roomObjects = [];
+    roomObj.roomObjects = roomObjcts;
 
     return roomObj;
 }
 
 // load room from json
-function parseRoom(json) {
+function parseRoom(json,id) {
     tiles = [];
+    worldObjects = [];
     roomInfo.width = json.width;
     roomInfo.height = json.height;
     var t = json.tiles;
@@ -99,10 +112,28 @@ function parseRoom(json) {
     // go through array of strings
     for (var i = 0;i < o.length; i++) {
         var oo = o[i];
-        worldObjects.push(objectDefinitions[oo[0]](oo[1]*16,oo[2]*16,oo[3]));
+        if(oo.length === 4) {
+            worldObjects.push(objectDefinitions[oo[0]](oo[1]*16,oo[2]*16,oo[3]));
+        } else {
+            worldObjects.push(objectDefinitions[oo[0]](oo[1]*16,oo[2]*16,oo[3],oo[4]));
+        }
     }
 
     makeTileLayers();
+
+    player.x = 0;
+    player.y = 0;
+
+    if(id !== undefined) {
+        for(var i=0;i<worldObjects.length;i++) {
+            if(worldObjects[i].constructor.name === "objectRoomLink") {
+                if(worldObjects[i].id === id) {
+                    player.x = worldObjects[i].x;
+                    player.y = worldObjects[i].y;
+                }
+            }
+        }
+    }
 }
 
 // download rooms

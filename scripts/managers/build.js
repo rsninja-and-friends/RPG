@@ -8,12 +8,27 @@ var buildData = {
     mouseTile: null // what tile to display at cursor
 };
 
+
+var tilePalette = [];
+var tilePaletteObjectStartPos;
+
 var roomJSON; // json data for the current room, used when swapping global states
 
 function handleBuild(isNewState) {
     if (isNewState) {
         // show html gui
         document.getElementById("buildGUI").style.display = "flex";
+
+        // generate room link id inputs
+        var htmlElem = document.getElementById("linkIDs");
+        htmlElem.innerHTML = "";
+        for(var i=0;i<worldObjects.length;i++) {
+            if(worldObjects[i].constructor.name === "objectRoomLink") {
+                addLinkUI(worldObjects[i],i);
+                document.getElementById("linkID" + i).value = worldObjects[i].id;
+                document.getElementById("linkRoom" + i).value = worldObjects[i].room;
+            }
+        }
     }
 
     // play mode
@@ -38,9 +53,9 @@ function handleBuild(isNewState) {
     camera.zoom += scroll;
 
     // inventory toggle
-    if (keyPress[k.e]) {
-        buildData.inventory = !buildData.inventory;
-    }
+    // if (keyPress[k.e]) {
+    //     buildData.inventory = !buildData.inventory;
+    // }
 
     // hotbar manipulation
     // position movement
@@ -50,7 +65,7 @@ function handleBuild(isNewState) {
     if (keyPress[k.UP]) { buildData.type--; }
     if (keyPress[k.DOWN]) { buildData.type++; }
     // limit values to what tiles exist
-    buildData.position = clamp(buildData.position, 0, tileDefinitions.length - 1);
+    buildData.position = clamp(buildData.position, 0, tilePalette.length - 1);
     buildData.type = clamp(buildData.type, 0, tilePalette[buildData.position].typesAmount - 1);
 
     // find mouse position in grid
@@ -63,7 +78,7 @@ function handleBuild(isNewState) {
     if (mousePress[0]) {
         for (var i = 0; i < 20; i++) {
             if (rectpoint({ x: 18 + 34 * i, y: 18, w: 33, h: 33 }, mousePos)) {
-                buildData.position = clamp(i + buildData.hotBarPosition * 20, 0, tileDefinitions.length - 1);
+                buildData.position = clamp(i + buildData.hotBarPosition * 20, 0, tilePalette.length - 1);
                 buildData.select = true;
             }
         }
@@ -100,7 +115,22 @@ function handleBuild(isNewState) {
             var xpos = mPos.x / 16;
             var ypos = mPos.y / 16;
             if (xpos === clamp(xpos, 0, tiles[0].length - 1) && ypos === clamp(ypos, 0, tiles.length - 1)) {
-                tiles[ypos][xpos] = tileDefinitions[buildData.position](mPos.x, mPos.y, buildData.type);
+                if(buildData.position < tilePaletteObjectStartPos) {
+                    tiles[ypos][xpos] = tileDefinitions[buildData.position](mPos.x, mPos.y, buildData.type);
+                } else {
+                    if(mousePress[0]) {
+                        var func  = objectDefinitions[objDefKeys[buildData.position-tilePaletteObjectStartPos]];
+                        if(func.length === 3) {
+                            worldObjects.push(func(mPos.x, mPos.y, buildData.type));
+                        } else {
+                            worldObjects.push(func(mPos.x, mPos.y, buildData.type,[]));
+                            // link id inputs
+                            if(worldObjects[worldObjects.length-1].constructor.name === "objectRoomLink") {
+                                addLinkUI(worldObjects[worldObjects.length-1],worldObjects.length-1);
+                            }
+                        }
+                    }
+                }
             }
         }
     } else {
@@ -117,16 +147,33 @@ function handleBuild(isNewState) {
         }
     }
 
-    // limit values to what tiles exist again becuase hotbar stuff
-    buildData.position = clamp(buildData.position, 0, tileDefinitions.length - 1);
+    // limit values to what tiles exist again because hotbar stuff
+    buildData.position = clamp(buildData.position, 0, tilePalette.length - 1);
     buildData.type = clamp(buildData.type, 0, tilePalette[buildData.position].typesAmount - 1);
     // set tile to display at cursor
-    buildData.mouseTile = tileDefinitions[buildData.position](mPos.x, mPos.y, buildData.type);
+    if(buildData.position < tilePaletteObjectStartPos) {
+        buildData.mouseTile = tileDefinitions[buildData.position](mPos.x, mPos.y, buildData.type);
+    } else {
+        var func  = objectDefinitions[objDefKeys[buildData.position-tilePaletteObjectStartPos]];
+        if(func.length === 3) {
+            buildData.mouseTile = func(mPos.x, mPos.y, buildData.type);
+        } else {
+            buildData.mouseTile = func(mPos.x, mPos.y, buildData.type,[]);
+        }
+    }
+
+    for(var i=0;i<worldObjects.length;i++) {
+        if(worldObjects[i].constructor.name === "objectRoomLink") {
+            worldObjects[i].id = parseInt(document.getElementById("linkID" + i).value);
+            worldObjects[i].room = document.getElementById("linkRoom" + i).value; 
+        }
+    }
 }
 
 function drawBuild() {
     drawRoomLimits();
     drawTiles();
+    drawObjects();
     player.draw();
 
     if (buildData.mouseTile !== null) {
@@ -139,6 +186,7 @@ function drawBuildAbsolute() {
     if (buildData.inventory) {
         // show inventory here
     } else {
+        rect(cw/2, 18, cw, 36, "#555555");
         // go through the tiles in the current hotbar, and draw them to the ui
         for (var i = buildData.hotBarPosition * 20; i < buildData.hotBarPosition * 20 + 20; i++) {
             if (tilePalette[i] !== undefined) {
@@ -153,7 +201,11 @@ function drawBuildAbsolute() {
                         for (var j = 0; j < tilePalette[i].typesAmount; j++) {
                             tilePalette[i].y = 18 + (j + 1) * 34;
                             tilePalette[i].type = j;
-                            tilePalette[i].draw();
+                            if(i<tilePaletteObjectStartPos) {
+                                tilePalette[i].draw();
+                            } else {
+                                tilePalette[i].compressedDraw();
+                            }
                         }
                     }
                     tilePalette[i].type = buildData.type;
@@ -162,7 +214,11 @@ function drawBuildAbsolute() {
                 // draw tile in pallette
                 tilePalette[i].x = 18 + i * 34;
                 tilePalette[i].y = 18;
-                tilePalette[i].draw();
+                if(i<tilePaletteObjectStartPos) {
+                    tilePalette[i].draw();
+                } else {
+                    tilePalette[i].compressedDraw();
+                }
                 tilePalette[i].type = 0;
             }
         }
