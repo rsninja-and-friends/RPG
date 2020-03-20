@@ -1,5 +1,7 @@
 var player;
 
+var income = 0;
+
 class Player {
 
     constructor(x, y) {
@@ -18,7 +20,9 @@ class Player {
         this.atk = 3; 
         this.mp = 5; 
         this.def = 1; 
-        this.spd = 1; 
+        
+        this.money = 100;
+        this.xp = 0;
     }
 
     draw() {
