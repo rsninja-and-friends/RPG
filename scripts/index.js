@@ -16,7 +16,9 @@ images = [
         "objects/",
         "tree0.png",
         "tree1.png",
-        "link0.png"
+        "link0.png",
+        "link1.png",
+        "houseSmall0.png"
     ],
     "tempPlayer.png",
     "tempEnemy.png"
@@ -140,6 +142,7 @@ function onAssetsLoaded() {
         }
     }
 
+
     // ui testing
     // var layoutComponent = new HorizontalLayout(10,50,0,70);
     // layoutComponent.padding = 6;
@@ -168,6 +171,6 @@ function onAssetsLoaded() {
 
     makeBattleUI();
 
-    loadRoom(rooms.default);
+    loadRoom(rooms.starterVillage);
 }
 setup(60);

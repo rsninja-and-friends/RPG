@@ -1,7 +1,8 @@
 // enum for rooms, each room key name is the name of its JSON file without .json, and its value is its position in the object
 var rooms = {
     test: 0,
-    default: 1
+    default: 1,
+    starterVillage: 2
 }
 
 var room = rooms.default;
@@ -38,6 +39,9 @@ function addRoom() {
             tiles[i].push(tileDefinitions[0](j * 16, i * 16, 0));
         }
     }
+    var htmlElem = document.getElementById("linkIDs");
+    htmlElem.innerHTML = "";
+    worldObjects = [];
 }
 
 function loadRoom(room,id=undefined) {
@@ -75,9 +79,9 @@ function getRoomJSON() {
     for(var i=0;i<worldObjects.length;i++) {
         var wo = worldObjects[i];
         if(wo.exportArgs !== undefined) {
-            roomObjcts.push([wo.definitionKey,wo.x/16,wo.y/16,wo.type,wo.exportArgs()]);
+            roomObjcts.push([wo.definitionKey,(wo.x-wo.offSetX)/16 ,(wo.y-wo.offSetY)/16,wo.type,wo.exportArgs()]);
         } else {
-            roomObjcts.push([wo.definitionKey,wo.x/16,wo.y/16,wo.type]);
+            roomObjcts.push([wo.definitionKey,(wo.x-wo.offSetX)/16 ,(wo.y-wo.offSetY)/16,wo.type]);
         }
     }
 
