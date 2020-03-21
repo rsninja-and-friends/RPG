@@ -26,7 +26,11 @@ images = [
 
 // files paths of audio files
 audio = [
-    ""
+    "assets/audio/",
+    [
+        "music/",
+        "loop1.mp3"
+    ]
 ];
 
 // enum kinda thing for game states
@@ -170,6 +174,10 @@ function onAssetsLoaded() {
     makeStatsUI();
 
     makeBattleUI();
+
+    setType(sounds.loop1,"bgm");
+
+    play(sounds.loop1);
 
     loadRoom(rooms.starterVillage);
 }
