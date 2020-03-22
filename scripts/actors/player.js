@@ -16,13 +16,37 @@ class Player {
         this.maxVel = 1.5;
         this.cameraTarget = { x: x, y: y };
         
-        this.hp = 20; 
-        this.atk = 3; 
-        this.mp = 5; 
-        this.def = 1; 
+        this.trueStatsMax = {
+            hp:20,
+            mp:5
+        };
+        
+        this.statsMax = {
+            hp:this.trueStatsMax.hp,
+            mp:this.trueStatsMax.mp
+        };
+        
+        this.trueStats = {
+            hp:20,
+            mp:5,
+            atk:3,
+            int:1,
+            def:1
+        };
+
+        this.stats = {
+            atk:this.trueStats.atk,
+            int:this.trueStats.int,
+            def:this.trueStats.def
+        };
+
         
         this.money = 100;
         this.xp = 0;
+
+        this.inventory = [];
+        this.specialInventory = [];
+        this.equipped = [];
     }
 
     draw() {

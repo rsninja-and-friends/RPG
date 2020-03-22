@@ -61,7 +61,7 @@ function makeStatsUI() {
     // top bar
     var bar = new HorizontalLayout(0,0,cw,75);
     // hp
-    bar.addChild(new TextComponent(0,6,100,"#ba5956",2,function(){return `hp: ${player.hp}`;}));
+    bar.addChild(new TextComponent(0,6,100,"#ba5956",2,function(){return `hp: ${player.trueStats.hp}`;}));
     bar.addChild(new TextComponent(0,22,100,"#e3d449",2,function(){return `$ ${player.money}`;}));
     bar.addChild(new TextComponent(0,40,100,"#63e693",2,function(){return `XP: ${player.xp}`;}));
     bar.id = "statsBar";
