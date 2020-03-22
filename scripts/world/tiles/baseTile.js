@@ -1,5 +1,4 @@
 var tiles = [];
-var tilePalette = [];
 
 var effects = {
     none:0,

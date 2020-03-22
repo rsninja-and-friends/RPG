@@ -13,7 +13,7 @@ class Player {
         this.vel = 0;
         this.accel = 0.1;
         this.friction = 0.3;
-        this.maxVel = 2.5;
+        this.maxVel = 1.5;
         this.cameraTarget = { x: x, y: y };
         
         this.hp = 20; 

@@ -1,5 +1,6 @@
 // make tile layers
 function makeTileLayers() {
+    globalState = states.world;
     // store drawing info
     var camCache = { x: camera.x, y: camera.y };
     var drawModeCache = drawMode;
@@ -140,6 +141,13 @@ function makeTileLayers() {
                 }
             }
         }
+
+        // object pass
+        for (var i = 0; i < worldObjects.length; i++) {
+            if(worldObjects[i].layer === l) {
+                worldObjects[i].draw();
+            }
+        }
         
 
         // cache layer image, so drawing every frame will be faster
@@ -157,7 +165,7 @@ function makeTileLayers() {
     curCtx = ctxCache;
     absDraw = false;
 
-    globalState = states.world;
+    document.getElementById("load").style.display = "none";
 }
 
 var shadowColor = "#000022";
