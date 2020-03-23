@@ -24,6 +24,7 @@ class Component {
 
         // if this shouldn't be moved by parent component
         this.absolutePosition = false;
+
         // index of when added
         this.idNumber = idCount++;
 

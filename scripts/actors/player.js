@@ -54,6 +54,11 @@ class Player {
     }
 
     update() {
+        // inventory toggle
+        if(keyPress[k.e]) {
+            inventory.mainComponent.show = !inventory.mainComponent.show; 
+        }
+
         // movement
         var wasInput = false;
         var angle = 0;

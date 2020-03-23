@@ -175,6 +175,8 @@ function onAssetsLoaded() {
 
     makeBattleUI();
 
+    makeInventoryUI();
+
     setType(sounds.loop1,"bgm");
 
     play(sounds.loop1);

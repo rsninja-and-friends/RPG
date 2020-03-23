@@ -123,7 +123,7 @@ function UIText(txt,x,y,color="white",size=1,maxWidth=cw) {
     }
 
     for(let i=0;i<txtList.length;i++) {
-        UICtx.fillText(txtList[i],x+0.5,y+((i+1)*8*size+(size*i)));
+        UICtx.fillText(txtList[i],x,y+((i+1)*8*size+(size*i)));
     }
 
     return txtList.length*8*size + size*4;

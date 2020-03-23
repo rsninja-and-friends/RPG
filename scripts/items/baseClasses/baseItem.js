@@ -8,6 +8,7 @@ const rarities = {
 };
 
 const catagories = {
+    all:-2,
     none:-1,
     weapon:0,
     singleUse:1,
