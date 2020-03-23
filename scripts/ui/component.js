@@ -5,6 +5,10 @@ class Component {
         this.w = w;
         this.h = h;
 
+        this.originalX = x;
+        this.originalY = y;
+        this.relativePosition = false;
+
         this.parent = null;
         this.children = [];
         // position in parent's children array
@@ -13,6 +17,7 @@ class Component {
         // what parts should be drawn
         this.showBorder = true;
         this.showShadow = true;
+        this.showBackground = true;
         this.show = true;
 
         // colors
@@ -47,10 +52,14 @@ Component.prototype.draw = function() {}
 
 // draw for every component, draws a box
 Component.prototype.baseDraw = function() {
-    if(this.showShadow) {UICtx.toggleShadow(true);}
-    UICtx.fillStyle = this.backgroundColor;
-    UICtx.fillRect(this.x,this.y,this.w,this.h);
-    if(this.showShadow) {UICtx.toggleShadow(false);}
+    
+    if(this.showBackground) {
+        if(this.showShadow) {UICtx.toggleShadow(true);}
+        UICtx.fillStyle = this.backgroundColor;
+        UICtx.fillRect(this.x,this.y,this.w,this.h); 
+        if(this.showShadow) {UICtx.toggleShadow(false);}
+    }
+   
     if(this.showBorder) {
         UICtx.strokeStyle = this.borderColor;
         UICtx.beginPath();

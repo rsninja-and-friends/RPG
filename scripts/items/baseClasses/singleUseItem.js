@@ -4,6 +4,14 @@ const effectTargets = {
     enemyAOE:2
 };
 
+const effectTargetsKeys = Object.keys(effectTargets);
+
+var effects = {
+    heal5:function(target) {
+        target.trueStats.hp += 5;
+    }
+}
+
 // pass a function that takes an entity into effect
 class SingleUseItem extends BaseItem {
     constructor(name,toolTip,rarity,effect,effectType) {
@@ -13,4 +21,4 @@ class SingleUseItem extends BaseItem {
     }
 }
 
-SingleUseItem.prototype.catagory = catagories.singleUse;
+SingleUseItem.prototype.category = catagories.singleUse;

@@ -1,9 +1,11 @@
 const weaponTypes = {
     melee:0,
     ranged:1,
-    magic:3,
-    shield:4
+    magic:2,
+    shield:3
 };
+
+const weaponTypesKeys = Object.keys(weaponTypes);
 
 // pass array of attacks into attackUnlocks
 class WeaponItem extends BaseItem {
@@ -15,4 +17,5 @@ class WeaponItem extends BaseItem {
     }
 }
 
-WeaponItem.prototype.catagory = catagories.weapon;
+WeaponItem.prototype.category = catagories.weapon;
+WeaponItem.prototype.sell = 10;

@@ -26,8 +26,14 @@ HorizontalLayout.prototype.update = function() {
                 maxH = c.h;
             }
             // position child
-            c.x = finalW + this.x;
-            c.y = this.y + this.padding;
+            if(c.relativePosition) {
+                c.x = finalW + this.x + c.originalX;
+                c.y = this.y + this.padding + c.originalY;
+                finalH += c.originalX;
+            } else {
+                c.x = finalW + this.x;
+                c.y = this.y + this.padding;
+            }
             // increase width
             finalW += c.w + this.spacing;
         }

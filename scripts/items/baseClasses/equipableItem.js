@@ -7,6 +7,8 @@ const equipTypes = {
     accessory:5
 }
 
+const equipTypesKeys = Object.keys(equipTypes);
+
 var applyOneOffEffects = false;
 
 class EquipableItem extends BaseItem {
@@ -26,4 +28,4 @@ EquipableItem.prototype.effectCondition = function() {
     }
 }
 
-EquipableItem.prototype.catagory = catagories.armourAndEquipable;
+EquipableItem.prototype.category = catagories.armourAndEquipable;

@@ -6,4 +6,4 @@ class LootItem extends BaseItem {
     }
 }
 
-LootItem.prototype.catagory = catagories.loot;
+LootItem.prototype.category = catagories.loot;

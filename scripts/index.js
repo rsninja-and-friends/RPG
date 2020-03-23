@@ -21,7 +21,9 @@ images = [
         "houseSmall0.png"
     ],
     "tempPlayer.png",
-    "tempEnemy.png"
+    "tempEnemy.png",
+    "slotAccesory.png",
+    "slotWeapon.png"
 ];
 
 // files paths of audio files
@@ -180,6 +182,16 @@ function onAssetsLoaded() {
     setType(sounds.loop1,"bgm");
 
     play(sounds.loop1);
+
+    // test items
+    player.inventory.push(new WeaponItem("test","this is a tooltip",rarities.epic,weaponTypes.melee,2,[attacks.basic]));
+    player.inventory.push(new WeaponItem("sdaf lkj hgsafdolih fdsa lkjhsadfl kjfhdsalkjhs afdlkuhfd salkusauhf","this is a tooltip",rarities.uncommon,weaponTypes.magic,5465452,[attacks.basic,attacks.test]));
+    player.inventory[1].imageName = "tempEnemy";
+    player.inventory.push(new LootItem("loot item","tooltips yall",rarities.common));
+    player.inventory.push(new EquipableItem("EquipableItem item","According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible. Yellow, black. Yellow, black. Yellow, black. Yellow, black. Ooh, black and yellow! Let's shake it up a little. Barry! Breakfast is ready! Ooming! Hang on a second. Hello?",rarities.rare,equipTypes.boots));
+    player.inventory.push(new SingleUseItem("SingleUseItem item","!@#$%^&*()_+{|}::<>?[\\];',/.`~",rarities.mystical,effects.heal5,effectTargets.player));
+    player.inventory[4].imageName = "path0";
+    player.inventory.push(new SpecialItem("AAAAAAAAAAA","eh",rarities.special));
 
     loadRoom(rooms.starterVillage);
 }
