@@ -6,4 +6,4 @@ class SpecialItem extends BaseItem {
     }
 }
 
-SpecialItem.prototype.catagory = catagories.special;
+SpecialItem.prototype.category = catagories.special;

@@ -26,8 +26,14 @@ VerticalLayout.prototype.update = function() {
                 maxW = c.w;
             }
             // position child
-            c.y = finalH + this.y;
-            c.x = this.x + this.padding;
+            if(c.relativePosition) {
+                c.y = finalH + this.y + c.originalY;
+                c.x = this.x + this.padding + c.originalX;
+                finalH += c.originalY;
+            } else {
+                c.y = finalH + this.y;
+                c.x = this.x + this.padding;
+            }
             // increase height
             finalH += c.h + this.spacing;
         }

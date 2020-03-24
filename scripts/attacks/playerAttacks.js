@@ -1,7 +1,10 @@
 
 const attacks = {
     basic:0,
+    test:1
 }
+
+const attacksKeys = Object.keys(attacks);
 
 
 function basicAttack(target) {

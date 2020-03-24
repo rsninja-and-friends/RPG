@@ -165,6 +165,7 @@ function makeTileLayers() {
     curCtx = ctxCache;
     absDraw = false;
 
+    player.setCamera();
     document.getElementById("load").style.display = "none";
 }
 

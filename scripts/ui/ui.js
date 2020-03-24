@@ -90,6 +90,9 @@ function UIBorder(x, y, w, h, c) {
 function UIImage(img,x,y) {
    UICtx.drawImage(img,x,y);
 }
+function UIImageScaled(img,x,y,scale) {
+    UICtx.drawImage(img,0,0,img.width,img.height,x,y,scale*img.width,scale*img.height);
+}
 
 // draw text
 function UIText(txt,x,y,color="white",size=1,maxWidth=cw) {
@@ -123,8 +126,8 @@ function UIText(txt,x,y,color="white",size=1,maxWidth=cw) {
     }
 
     for(let i=0;i<txtList.length;i++) {
-        UICtx.fillText(txtList[i],x+0.5,y+((i+1)*8*size+(size*i)));
+        UICtx.fillText(txtList[i],x,y+((i+1)*8*size+(size*i)));
     }
 
-    return txtList.length*8*size + size*4;
+    return txtList.length*8*size + size*txtList.length;
 }

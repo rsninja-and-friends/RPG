@@ -8,6 +8,8 @@ class objectRoomLink extends baseObject {
     }
 }
 
+objectRoomLink.prototype.typesAmount = 2;
+
 objectRoomLink.prototype.update = function() {
     if(dist(this,player) < 10) {
         if(this.playerOn === false) {

@@ -7,7 +7,7 @@ class TextComponent extends Component {
         this.string = "";
         this.showShadow = false;
         this.showBorder = false;
-        this.backgroundColor = "#00000000";
+        this.showBackground = false;
     }
 }
 

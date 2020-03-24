@@ -2,8 +2,8 @@ var worldObjects = [];
 
 class baseObject {
     constructor(x,y,w,h,type,definitionKey) {
-        this.x = x;
-        this.y = y;
+        this.x = x + this.offSetX;
+        this.y = y + this.offSetY;
         this.h = h;
         this.w = w;
         this.imageName = "debug";
@@ -17,11 +17,14 @@ baseObject.prototype.typesAmount = 1; // amount of object visual variations
 
 baseObject.prototype.exportArgs = undefined;
 
+baseObject.prototype.offSetX = 0;
+baseObject.prototype.offSetY = 0;
+
 baseObject.prototype.draw = function() {
     img(sprites[`${this.imageName}${this.type}`],this.x,this.y);
 }
 
-baseObject.prototype.compressedDraw = function(ctx,x,y,w,h) {
+baseObject.prototype.compressedDraw = function() {
     var spr = sprites[`${this.imageName}${this.type}`].spr;
     canvases.ctx.drawImage(spr,0,0,spr.width,spr.height,this.x-16,this.y-16,32,32);
 } 
