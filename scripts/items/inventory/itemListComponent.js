@@ -3,17 +3,18 @@ class ItemListComponent extends Component {
         super(x, y, w, h);
         this.backgroundColor = "#00000000";
         this.canv = document.createElement("canvas");
-        this.canv.width = w/2;
-        this.canv.height = h/2;
+        this.canv.width = w;
+        this.canv.height = h;
         this.ctx = this.canv.getContext("2d");
+        this.ctx.imageSmoothingEnabled = false;
         this.currentItems = [];
-        this.spacing = 18;
+        this.spacing = 34;
     }
 }
 
 ItemListComponent.prototype.draw = function() {
     var items = this.currentItems;
-    this.ctx.clearRect(0,0,this.w/2,this.h/2);
+    this.ctx.clearRect(0,0,this.w,this.h);
     this.ctx.fillStyle = "#999999";
     this.ctx.font = `8px pixelmix`;
 
@@ -21,23 +22,23 @@ ItemListComponent.prototype.draw = function() {
         // draw hover when hovered
         if(inventory.hoveredItem === i || inventory.selectedItem === i) {
             this.ctx.fillStyle = inventory.selectedItem === i ? colors.click :colors.hover;
-            this.ctx.fillRect(0,i*this.spacing,this.w/2,this.spacing+2);
+            this.ctx.fillRect(0,i*this.spacing,this.w,this.spacing+2);
             this.ctx.fillStyle = "#999999";
         }
         // draw image
-        items[i].draw(this.ctx,2,i*this.spacing + 2);
+        items[i].draw(this.ctx,2,i*this.spacing + 2,32,32);
         // draw name
-        if(items[i].name.length > 13) {
+        if(items[i].name.length > 26) {
             // if name is long, split to 2 lines
-            this.ctx.fillText(items[i].name.substring(0,13),19,(i+1)*this.spacing - 8);
-            this.ctx.fillText(items[i].name.substring(13,items[i].name.length),19,(i+1)*this.spacing);
+            this.ctx.fillText(items[i].name.substring(0,30),40,(i+1)*this.spacing - 16);
+            this.ctx.fillText(items[i].name.substring(30,items[i].name.length),40,(i+1)*this.spacing-8);
         } else {
             // if name is short, just draw
-            this.ctx.fillText(items[i].name,19,(i+1)*this.spacing - 4);
+            this.ctx.fillText(items[i].name,40,(i+1)*this.spacing - 12);
         }
     }
     // draw list of items to component
-    UICtx.drawImage(this.canv,0,0,this.w/2,this.h/2,this.x,this.y,this.w,this.h);
+    UICtx.drawImage(this.canv,this.x,this.y);
 }
 
 ItemListComponent.prototype.update = function() {
@@ -65,7 +66,7 @@ ItemListComponent.prototype.update = function() {
         // find if items are hovered over
         inventory.hoveredItem = null;
         for(var i=0;i<items.length;i++) {
-            if(componentPoint({x:this.x*2,y:this.y + (i*this.spacing*2) + 1,w:this.w,h:this.spacing*2},mousePos)) {
+            if(componentPoint({x:this.x,y:this.y + (i*this.spacing) + 1,w:this.w,h:this.spacing},mousePos)) {
                 inventory.hoveredItem = i;
                 // handle click
                 if(mousePress[0]) {
@@ -90,12 +91,21 @@ ItemListComponent.prototype.update = function() {
                 }
             }
         }
+
         // show/hide equip
         getComponentById("equipButton").show = false;
         if(inventory.equipSelect !== null && inventory.selectedItem !== null) {
             var slot = inventory.equipSlots.children[inventory.equipSelect];
             if(slot.slotType === this.currentItems[inventory.selectedItem].category) {
                 getComponentById("equipButton").show = true;
+            }
+        }
+        // show/hide unequip
+        getComponentById("unequipButton").show = false;
+        if(inventory.equipSelect !== null) {
+            var slot = inventory.equipSlots.children[inventory.equipSelect];
+            if(slot.item !== null) {
+                getComponentById("unequipButton").show = true;
             }
         }
     }

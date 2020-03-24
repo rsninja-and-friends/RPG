@@ -54,6 +54,12 @@ BaseItem.prototype.buy = 0;
 
 BaseItem.prototype.category = catagories.none;
 
-BaseItem.prototype.draw = function(ctx,x,y) {
-    ctx.drawImage(sprites[this.imageName].spr,x,y);
+BaseItem.prototype.draw = function(ctx,x,y,sx=16,sy=16) {
+    if(sx !== 16 || sy !== 16) {
+        let tempImg = sprites[this.imageName].spr;
+        ctx.drawImage(tempImg,0,0,tempImg.width,tempImg.height,x,y,sx,sy);
+    } else {
+        ctx.drawImage(sprites[this.imageName].spr,x,y);
+    }
+    
 }

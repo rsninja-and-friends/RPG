@@ -109,7 +109,7 @@ function makeInventoryUI() {
             itemListAndViewer.showBackground = false;
 
                 // list of items
-                var itemList = new ItemListComponent(0,0,200,400);
+                var itemList = new ItemListComponent(0,0,207,400);
                 itemList.id = "itemList";
                 itemList.showBackground = false;
                 itemListAndViewer.addChild(itemList);
@@ -134,15 +134,17 @@ function makeInventoryUI() {
             inventory.equipSlots = new Component(0,0,300,300);
             inventory.equipSlots.showBackground = false;
             inventory.equipSlots.update = function() {
-                if(mousePress[0] && mousePos.x > 380 && !componentPoint(getComponentById("equipButton"),mousePos)) {
+                if(mousePress[0] && mousePos.x > 380 && mousePos.y < 380 && !componentPoint(getComponentById("equipButton"),mousePos)) {
                     inventory.equipSelect = null;
                 }
             }
 
                 // accessory slot 1
                 inventory.equipSlots.addChild(new equipmentSquare(10,30,32,32,slotTypes.equipable,sprites.slotAccesory));
-                // weapon slot
-                inventory.equipSlots.addChild(new equipmentSquare(50,40,32,32,slotTypes.weapon,sprites.slotWeapon));
+                // weapon slot 1
+                inventory.equipSlots.addChild(new equipmentSquare(10,100,32,32,slotTypes.weapon,sprites.slotWeapon));
+                // weapon slot 2
+                inventory.equipSlots.addChild(new equipmentSquare(10,140,32,32,slotTypes.weapon,sprites.slotWeapon));
 
             slots.addChild(inventory.equipSlots);
 
@@ -168,6 +170,21 @@ function makeInventoryUI() {
             });
             but.id = "equipButton";
             but.addChild(new TextComponent(0,0,100,"white",2,function(){return `equip`}));
+            slots.addChild(but);
+
+            // unequip button
+            but = new Button(0,0,function() {
+                // get item in slot
+                var slotItemCache = inventory.equipSlots.children[inventory.equipSelect].item;
+
+                // put in list
+                player.inventory.push(slotItemCache);
+
+                // remove from slot
+                inventory.equipSlots.children[inventory.equipSelect].item = null;
+            });
+            but.id = "unequipButton";
+            but.addChild(new TextComponent(0,0,100,"white",2,function(){return `unequip`}));
             slots.addChild(but);
 
         inventory.mainComponent.addChild(slots);
