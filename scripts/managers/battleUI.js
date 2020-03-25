@@ -18,7 +18,7 @@ function makeBattleUI() {
 
         // attack button
         var attackAction = new Button(0,ch-75,function(){battleUI.attackSelect.show = !battleUI.attackSelect.show;});
-        attackAction.addChild(new TextComponent(0,0,75,"#ba302b",2,returnStr("attack")));
+        attackAction.addChild(new TextComponent(0,0,75,"#ba302b",2,returnStr("Attack")));
         battleUI.mainBar.addChild(attackAction);
 
         // attack select
@@ -27,15 +27,28 @@ function makeBattleUI() {
         battleUI.attackSelect.adaptHeight = false;
         battleUI.attackSelect.absolutePosition = true;
         battleUI.attackSelect.show = false;
+        battleUI.attackSelect.id = "attackSelect";
         battleUI.mainBar.addChild(battleUI.attackSelect);
+        
 
             // basic attack
             var basicAttack = new Button(0,0,function(){
                 curAttack = attacks.basic;
                 curBattleState = bStates.pSelect;
             });
-            basicAttack.addChild(new TextComponent(0,0,100,"white",1,returnStr("basic attack")));
+            basicAttack.addChild(new TextComponent(0,0,100,"white",1,returnStr("Punch")));
+            basicAttack.id = attacksKeys[attacks.basic];
             battleUI.attackSelect.addChild(basicAttack);
+
+            //slash
+            var slash = new Button(0,30,function(){
+                curAttack = attacks.slash;
+                curBattleState = bStates.pSelect;
+            });
+            slash.addChild(new TextComponent(0,0,100,"white",1,returnStr("Slash")));
+            slash.id = attacksKeys[attacks.slash];
+            battleUI.attackSelect.addChild(slash);
+            
 
     battleUI.div.addChild(battleUI.mainBar);
     

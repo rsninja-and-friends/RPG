@@ -35,6 +35,13 @@ function handleBattle(isNewState) {
         curBattleState = bStates.pTurn;
 
         player.angle = pi/2;
+
+        var attackSelect = getComponentById("attackSelect").children;
+        for(let i = 0;i < attackSelect.length;i++) {
+            attackSelect[i].show = false;
+        }
+        attackSelect[0].show = true;
+        checkEquips();
     }
 
     updateComponents();
@@ -44,6 +51,7 @@ function handleBattle(isNewState) {
         isNewBattleState = true;
     }
     lastBattleState = curBattleState;
+
 
     switch(curBattleState) {
         case bStates.pTurn:
@@ -87,6 +95,10 @@ function handleAnimations() {
         case attacks.basic:
             basicAttack(target);
         break;
+
+        case attacks.slash:
+            slash(target);
+        break
     }
 }
 
@@ -116,6 +128,22 @@ function winBattle() {
     player.move(tempPos.x,tempPos.y);
     
     globalState = states.world;
+}
+
+//checks the player's equipped items to show any unlocked attacks
+function checkEquips() {
+    let equips = inventory.equipSlots.children;
+    for(let i = 0;i < equips.length;i++) {
+        if(equips[i].slotType == catagories.weapon) {
+            showAttacks(equips[i].item.attackUnlocks);
+        }
+    }
+}
+
+function showAttacks(unlocks) {
+    for(let i = 0;i < unlocks.length;i++) {
+        getComponentById(attacksKeys[unlocks[i]]).show = true;
+    }
 }
 
 //sets attack's target and advanced the battle

@@ -46,7 +46,6 @@ class Player {
 
         this.inventory = [];
         this.specialInventory = [];
-        this.equipped = [];
     }
 
     draw() {

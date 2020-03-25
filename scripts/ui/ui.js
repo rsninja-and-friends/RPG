@@ -24,7 +24,7 @@ UICtx.textBaseline = "top";
 // add pixel font
 document.getElementsByTagName("style")[0].innerHTML += `@font-face {
     font-family: "pixelmix";
-    src: url("./scripts/ui/font/pixelmix.ttf") format("ttf");
+    src: url("./scripts/ui/font/pixelmix.ttf") format("truetype");
 }`;
 
 UICtx.font = "6px pixelmix";
