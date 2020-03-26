@@ -34,10 +34,6 @@ function handleSelectedItemUI(item) {
     comp.addChild(new TextComponent(0,0,125,"white",2,returnStr(item.name)));
     // sell price
     comp.addChild(new TextComponent(0,0,125,"#ded700",1,returnStr(`sell price: ${item.sell} currency`)));
-    // tooltip
-    var tt = new TextComponent(0,0,125,"white",1,returnStr(item.toolTip));
-    tt.showBorder = true;
-    comp.addChild(tt);
 
     // type specific info
     switch(item.category) {
@@ -72,6 +68,11 @@ function handleSelectedItemUI(item) {
             comp.addChild(new TextComponent(0,0,125,"white",1,returnStr("affects: " + effectTargetsKeys[item.effectType])));
             break;
     }
+
+    // tooltip
+    var tt = new TextComponent(0,0,125,"white",1,returnStr(item.toolTip));
+    tt.showBorder = true;
+    comp.addChild(tt);
 }
 
 // creates inventory
@@ -140,11 +141,25 @@ function makeInventoryUI() {
             }
 
                 // accessory slot 1
-                inventory.equipSlots.addChild(new equipmentSquare(10,30,32,32,slotTypes.equipable,sprites.slotAccesory));
+                inventory.equipSlots.addChild(new equipmentSquare(248,8,48,48,slotTypes.equipable,sprites.slotAccessory));
+                // accessory slot 2
+                inventory.equipSlots.addChild(new equipmentSquare(248,68,48,48,slotTypes.equipable,sprites.slotAccessory));
+                // accessory slot 3
+                inventory.equipSlots.addChild(new equipmentSquare(248,128,48,48,slotTypes.equipable,sprites.slotAccessory));
                 // weapon slot 1
-                inventory.equipSlots.addChild(new equipmentSquare(10,100,32,32,slotTypes.weapon,sprites.slotWeapon));
+                inventory.equipSlots.addChild(new equipmentSquare(8,8,48,48,slotTypes.weapon,sprites.slotWeapon));
                 // weapon slot 2
-                inventory.equipSlots.addChild(new equipmentSquare(10,140,32,32,slotTypes.weapon,sprites.slotWeapon));
+                inventory.equipSlots.addChild(new equipmentSquare(8,68,48,48,slotTypes.weapon,sprites.slotWeapon));
+                // head slot
+                inventory.equipSlots.addChild(new equipmentSquare(126,38,48,48,slotTypes.equipable,sprites.slotHead,equipTypes.helmet));
+                // body slot
+                inventory.equipSlots.addChild(new equipmentSquare(126,98,48,48,slotTypes.equipable,sprites.slotBody,equipTypes.chestpiece));
+                // legs slot
+                inventory.equipSlots.addChild(new equipmentSquare(126,158,48,48,slotTypes.equipable,sprites.slotPants,equipTypes.pants));
+                // boots slot
+                inventory.equipSlots.addChild(new equipmentSquare(126,218,48,48,slotTypes.equipable,sprites.slotBoots,equipTypes.boots));
+                // hands slot
+                inventory.equipSlots.addChild(new equipmentSquare(66,128,48,48,slotTypes.equipable,sprites.slotHand,equipTypes.gloves));
 
             slots.addChild(inventory.equipSlots);
 

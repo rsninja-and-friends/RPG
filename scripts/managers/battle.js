@@ -135,7 +135,9 @@ function checkEquips() {
     let equips = inventory.equipSlots.children;
     for(let i = 0;i < equips.length;i++) {
         if(equips[i].slotType == catagories.weapon) {
-            showAttacks(equips[i].item.attackUnlocks);
+            if(equips[i].item !== null) {
+                showAttacks(equips[i].item.attackUnlocks);
+            }
         }
     }
 }

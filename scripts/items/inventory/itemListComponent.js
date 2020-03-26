@@ -96,7 +96,13 @@ ItemListComponent.prototype.update = function() {
         getComponentById("equipButton").show = false;
         if(inventory.equipSelect !== null && inventory.selectedItem !== null) {
             var slot = inventory.equipSlots.children[inventory.equipSelect];
-            if(slot.slotType === this.currentItems[inventory.selectedItem].category) {
+            var curItem = this.currentItems[inventory.selectedItem];
+            if(curItem.category === catagories.armourAndEquipable && slot.slotType === catagories.armourAndEquipable) {
+                
+                if(slot.equipType === curItem.equipType) {
+                    getComponentById("equipButton").show = true;
+                }
+            } else if(slot.slotType === curItem.category) {
                 getComponentById("equipButton").show = true;
             }
         }

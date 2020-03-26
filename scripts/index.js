@@ -20,19 +20,25 @@ images = [
         "link1.png",
         "houseSmall0.png"
     ],
+    [
+        "UI/slot",
+        "Accessory.png",
+        "Weapon.png",
+        "Select.png",
+        "Frame.png",
+        "Head.png",
+        "Body.png",
+        "Pants.png",
+        "Boots.png",
+        "Hand.png"
+    ],
     "tempPlayer.png",
-    "tempEnemy.png",
-    "slotAccesory.png",
-    "slotWeapon.png"
+    "tempEnemy.png"
 ];
 
 // files paths of audio files
 audio = [
-    "assets/audio/",
-    [
-        "music/",
-        "loop1.mp3"
-    ]
+    "assets/audio/"
 ];
 
 // enum kinda thing for game states
@@ -179,16 +185,12 @@ function onAssetsLoaded() {
 
     makeInventoryUI();
 
-    setType(sounds.loop1,"bgm");
-
-    play(sounds.loop1);
-
     // test items
     player.inventory.push(new WeaponItem("test","this is a tooltip",rarities.epic,weaponTypes.melee,2,[attacks.basic]));
     player.inventory.push(new WeaponItem("sdaf lkj hgsafdolih fdsa lkjhsadfl kjfhdsalkjhs afdlkuhfd salkusauhf","this is a tooltip",rarities.uncommon,weaponTypes.magic,5465452,[attacks.basic,attacks.slash]));
     player.inventory[1].imageName = "tempEnemy";
     player.inventory.push(new LootItem("loot item","tooltips yall",rarities.common));
-    player.inventory.push(new EquipableItem("EquipableItem item","According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible. Yellow, black. Yellow, black. Yellow, black. Yellow, black. Ooh, black and yellow! Let's shake it up a little. Barry! Breakfast is ready! Ooming! Hang on a second. Hello?",rarities.rare,equipTypes.boots));
+    player.inventory.push(new EquipableItem("definitely boots","According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible. Yellow, black. Yellow, black. Yellow, black. Yellow, black. Ooh, black and yellow! Let's shake it up a little. Barry! Breakfast is ready! Ooming! Hang on a second. Hello?",rarities.rare,equipTypes.boots));
     player.inventory.push(new SingleUseItem("SingleUseItem item","!@#$%^&*()_+{|}::<>?[\\];',/.`~",rarities.mystical,effects.heal5,effectTargets.player));
     player.inventory[4].imageName = "path0";
     player.inventory.push(new SpecialItem("AAAAAAAAAAA","eh",rarities.special));
