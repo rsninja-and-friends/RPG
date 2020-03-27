@@ -184,7 +184,8 @@ function onAssetsLoaded() {
     play(sounds.loop1);
 
     // test items
-    player.inventory.push(new WeaponItem("test","this is a tooltip",rarities.epic,weaponTypes.melee,2,[attacks.basic]));
+    player.inventory.push(new WeaponItem("test","this is a tooltip",rarities.epic,weaponTypes.melee,2,[]));
+    player.inventory.push(new WeaponItem("GAMER SHIELD","shield of gaming. gamers only",rarities.mystical,weaponTypes.shield,0,[attacks.block]));
     player.inventory.push(new WeaponItem("sdaf lkj hgsafdolih fdsa lkjhsadfl kjfhdsalkjhs afdlkuhfd salkusauhf","this is a tooltip",rarities.uncommon,weaponTypes.magic,5465452,[attacks.basic,attacks.slash]));
     player.inventory[1].imageName = "tempEnemy";
     player.inventory.push(new LootItem("loot item","tooltips yall",rarities.common));

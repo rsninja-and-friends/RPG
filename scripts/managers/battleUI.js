@@ -48,6 +48,15 @@ function makeBattleUI() {
             slash.addChild(new TextComponent(0,0,100,"white",1,returnStr("Slash")));
             slash.id = attacksKeys[attacks.slash];
             battleUI.attackSelect.addChild(slash);
+
+            //block
+            var block = new Button(0,60,function(){
+                curAttack = attacks.block;
+                curBattleState = bStates.pSelect;
+            });
+            block.addChild(new TextComponent(0,0,100,"white",1,returnStr("Block")));
+            block.id = attacksKeys[attacks.block];
+            battleUI.attackSelect.addChild(block);
             
 
     battleUI.div.addChild(battleUI.mainBar);

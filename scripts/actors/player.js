@@ -40,6 +40,12 @@ class Player {
             def:this.trueStats.def
         };
 
+        this.boosts = {
+            atk:0,
+            int:0,
+            def:0,
+        }
+
         
         this.money = 100;
         this.xp = 0;

@@ -59,6 +59,7 @@ function handleBattle(isNewState) {
                 battleUI.mainBar.show = true;
                 battleUI.pSelect.show = false;
             }
+            handleBoosts();
         break;
 
         case bStates.pSelect:
@@ -98,7 +99,11 @@ function handleAnimations() {
 
         case attacks.slash:
             slash(target);
-        break
+        break;
+
+        case attacks.block:
+            block();
+        break;
     }
 }
 
@@ -126,6 +131,10 @@ function winBattle() {
 
     worldEnemies.splice(fightId,1);
     player.move(tempPos.x,tempPos.y);
+
+    player.boosts.atk = 0;
+    player.boosts.int = 0;
+    player.boosts.def = 0;
     
     globalState = states.world;
 }
@@ -134,7 +143,7 @@ function winBattle() {
 function checkEquips() {
     let equips = inventory.equipSlots.children;
     for(let i = 0;i < equips.length;i++) {
-        if(equips[i].slotType == catagories.weapon) {
+        if(equips[i].slotType == catagories.weapon && equips[i].item !== null) {
             showAttacks(equips[i].item.attackUnlocks);
         }
     }
@@ -143,6 +152,29 @@ function checkEquips() {
 function showAttacks(unlocks) {
     for(let i = 0;i < unlocks.length;i++) {
         getComponentById(attacksKeys[unlocks[i]]).show = true;
+    }
+}
+
+function handleBoosts() {
+    if(player.boosts.atk > 0) {
+        player.boosts.atk--;
+        if(player.boosts.atk == 0){
+            player.stats.atk = player.trueStats.atk;
+        }
+    }
+    
+    if(player.boosts.int > 0) {
+        player.boosts.int--;
+        if(player.boosts.int == 0){
+            player.stats.int = player.trueStats.int;
+        }
+    }
+    
+    if(player.boosts.def > 0) {
+        player.boosts.def--;
+        if(player.boosts.def == 0){
+            player.stats.def = player.trueStats.def;
+        }
     }
 }
 

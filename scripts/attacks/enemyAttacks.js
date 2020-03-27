@@ -6,7 +6,7 @@ const eAttacks = {
 function eBasicAttack(enemy) {
     fightEnemies[enemy].x -= 5;
     if(rectrect(player,fightEnemies[enemy])) {
-        player.trueStats.hp -= fightEnemies[enemy].atk - player.stats.def; 
+        player.trueStats.hp -= checkNegative(fightEnemies[enemy].atk - player.stats.def); 
         fightEnemies[enemy].move(fightEnemies[enemy].defaultX,fightEnemies[enemy].defaultY);
 
         curEnemyCheck();
