@@ -5,10 +5,10 @@ function handleWorld(isNewState) {
         player.setCamera();
 
         //temporary test enemy stuff dont worry about it :)
-        worldEnemies.push(new Enemy(250,50,24,24,50,[0,0],0));
-        if(rectrect(worldEnemies[0],player)) {
-            worldEnemies = [];
-        }
+        // worldEnemies.push(new Enemy(250,50,24,24,50,[0,0],0));
+        // if(rectrect(worldEnemies[0],player)) {
+        //     worldEnemies = [];
+        // }
     }
     updateComponents();
 

@@ -29,7 +29,7 @@ objectRoomLink.prototype.draw = function() {
 
 
 objectRoomLink.prototype.exportArgs = function() {
-    return [this.id,this.room]
+    return [this.id,this.room];
 }
 
 function addLinkUI(obj,index) {

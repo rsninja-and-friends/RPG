@@ -124,9 +124,16 @@ function handleBuild(isNewState) {
                             worldObjects.push(func(mPos.x, mPos.y, buildData.type));
                         } else {
                             worldObjects.push(func(mPos.x, mPos.y, buildData.type,[]));
-                            // link id inputs
-                            if(worldObjects[worldObjects.length-1].constructor.name === "objectRoomLink") {
-                                addLinkUI(worldObjects[worldObjects.length-1],worldObjects.length-1);
+                            var curObj = worldObjects[worldObjects.length-1];
+                            switch(worldObjects[worldObjects.length-1].constructor.name) {
+                                // link id inputs
+                                case "objectRoomLink":
+                                    addLinkUI(curObj,worldObjects.length-1);
+                                    break;
+                                case "objectEnemy":
+                                    curObj.enemyType = document.getElementById("enemySelectList").value;
+                                    curObj.setSprite();
+                                    break;
                             }
                         }
                     }
@@ -162,12 +169,16 @@ function handleBuild(isNewState) {
         }
     }
 
+    // link ids
     for(var i=0;i<worldObjects.length;i++) {
         if(worldObjects[i].constructor.name === "objectRoomLink") {
             worldObjects[i].id = parseInt(document.getElementById("linkID" + i).value);
             worldObjects[i].room = document.getElementById("linkRoom" + i).value; 
         }
     }
+
+    // show/hide enemy select
+    // enemySelect
 }
 
 function drawBuild() {

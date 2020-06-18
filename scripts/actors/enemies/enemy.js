@@ -1,5 +1,5 @@
 class Enemy {
-    constructor(x,y,w,h,range,loadout,id) {
+    constructor(x,y,w,h,range,loadout,id,variation) {
         this.x = x;
         this.y = y;
         this.w = w;
@@ -7,12 +7,18 @@ class Enemy {
         this.range = range;
         this.loadout = loadout;
         this.id = id;
+        this.variation = variation;
         
         this.selAttack;
 
         this.hovered = false;
+
+        this.spriteName = "tempEnemy";
+        this.animState = 0;
     }
 }
+
+Enemy.prototype.name = "name is undefined";
 
 Enemy.prototype.draw = function() {
     // selection circle
@@ -21,8 +27,13 @@ Enemy.prototype.draw = function() {
         pulse = this.hovered ? 7 : pulse;
         circle(this.x,this.y,Math.max(this.w,this.h)/2 + pulse,"#99999955");
     }
-    // rect(this.x,this.y,this.w,this.h,"blue");
-    img(sprites.tempEnemy,this.x,this.y);
+
+    // image
+    img(this.getSprite(),this.x,this.y);
+}
+
+Enemy.prototype.getSprite = function() {
+    return sprites[`${this.spriteName}${this.variation}${this.animState}`];
 }
 
 Enemy.prototype.baseUpdate = function(index) {

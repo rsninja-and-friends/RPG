@@ -2,7 +2,8 @@
 var rooms = {
     test: 0,
     default: 1,
-    starterVillage: 2
+    starterVillage: 2,
+    a: 3
 }
 
 var room = rooms.default;
@@ -123,6 +124,14 @@ function parseRoom(json,id) {
         }
     }
 
+    // enemies
+    for(var i=0;i<worldObjects.length;i++) {
+        if(worldObjects[i].constructor.name === "objectEnemy") {
+            worldEnemies.push(enemyDefinitions[worldObjects[i].enemyType](worldObjects[i].x,worldObjects[i].y,worldEnemies.length,worldObjects[i].variation));
+            worldObjects.splice(i--,1);
+        }
+    }
+
     makeTileLayers();
 
     player.x = 0;
@@ -152,7 +161,7 @@ function downloadRoom() {
     // create download link
     var link = document.createElement("a");
     link.download = document.getElementById("name").value;
-    var blob = new Blob([JSON.stringify(exportObj, null, "\t")], { type: "application/json" });
+    var blob = new Blob([JSON.stringify(exportObj)], { type: "application/json" });
     link.href = URL.createObjectURL(blob);
 
     // click the link

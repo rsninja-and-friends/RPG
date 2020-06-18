@@ -7,3 +7,5 @@ class tilePath extends BaseTile {
 tilePath.prototype.typesAmount = 1;
 
 tilePath.prototype.effect = effects.speedUp;
+
+tilePath.prototype.mergesWith = [3];

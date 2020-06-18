@@ -182,6 +182,8 @@ function makeInventoryUI() {
                 while(comp.children.length>0) {
                     comp.children[0].delete();
                 }
+
+                inventory.selectedItem = null;
             });
             but.id = "equipButton";
             but.addChild(new TextComponent(0,0,100,"white",2,function(){return `equip`}));

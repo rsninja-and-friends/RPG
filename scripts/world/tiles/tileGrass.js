@@ -5,4 +5,5 @@ class tileGrass extends BaseTile {
     }
 }
 tileGrass.prototype.typesAmount = 2;
-tileGrass.prototype.mergesWith = [0,1];
+
+tileGrass.prototype.mergesWith = [0,1,3];

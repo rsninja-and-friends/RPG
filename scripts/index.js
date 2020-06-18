@@ -10,7 +10,10 @@ images = [
         "brick0.png",
         "brick1.png",
         "brick2.png",
-        "brick3.png"
+        "brick3.png",
+        "brickPath0.png",
+        "brickPath1.png",
+        "brickPath2.png"
     ],
     [
         "objects/",
@@ -32,8 +35,9 @@ images = [
         "Boots.png",
         "Hand.png"
     ],
+    "preview0.png",
     "tempPlayer.png",
-    "tempEnemy.png"
+    "tempEnemy00.png"
 ];
 
 // files paths of audio files
@@ -154,28 +158,6 @@ function onAssetsLoaded() {
         }
     }
 
-
-    // ui testing
-    // var layoutComponent = new HorizontalLayout(10,50,0,70);
-    // layoutComponent.padding = 6;
-    // layoutComponent.addChild(new Component(0,55,20,20));
-    // var layoutComponent2 = new HorizontalLayout(10,50,0,60);
-    // layoutComponent2.spacing = 10;
-    // layoutComponent2.showBorder = false;
-    // layoutComponent2.showShadow = false;
-    // layoutComponent2.addChild(new Component(0,60,30,30));
-    // var but = new Button(0,60,function(){console.log(true);});
-    // but.id = "button";
-    // but.addChild(new ImageComponent(0,0,sprites.grass0));
-    // but.addChild(new TextComponent(0,0,30,"white",1,function(){return "click me!";}));
-    // but.addChild(new Component(0,0,40,20));
-    // layoutComponent2.addChild(but);
-    // layoutComponent2.addChild(new HorizontalLayout(0,60,100,30));
-    // layoutComponent2.addChild(new ImageComponent(0,40,sprites.tempPlayer));
-    // layoutComponent2.children[2].addChild(new TextComponent(0,70,90,"white",1,function(){return "this is a test lol";}));
-    // layoutComponent.addChild(layoutComponent2);
-    // components.push(layoutComponent);
-
     cw = canvases.cvs.width;
     ch = canvases.cvs.height;
 
@@ -185,16 +167,18 @@ function onAssetsLoaded() {
 
     makeInventoryUI();
 
+    addEnemiesToBuildUI();
+
     // test items
     player.inventory.push(new WeaponItem("test","this is a tooltip",rarities.epic,weaponTypes.melee,2,[attacks.basic]));
     player.inventory.push(new WeaponItem("sdaf lkj hgsafdolih fdsa lkjhsadfl kjfhdsalkjhs afdlkuhfd salkusauhf","this is a tooltip",rarities.uncommon,weaponTypes.magic,5465452,[attacks.basic,attacks.slash]));
-    player.inventory[1].imageName = "tempEnemy";
+    player.inventory[1].imageName = "tempEnemy00";
     player.inventory.push(new LootItem("loot item","tooltips yall",rarities.common));
     player.inventory.push(new EquipableItem("definitely boots","According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible. Yellow, black. Yellow, black. Yellow, black. Yellow, black. Ooh, black and yellow! Let's shake it up a little. Barry! Breakfast is ready! Ooming! Hang on a second. Hello?",rarities.rare,equipTypes.boots));
     player.inventory.push(new SingleUseItem("SingleUseItem item","!@#$%^&*()_+{|}::<>?[\\];',/.`~",rarities.mystical,effects.heal5,effectTargets.player));
     player.inventory[4].imageName = "path0";
     player.inventory.push(new SpecialItem("AAAAAAAAAAA","eh",rarities.special));
 
-    loadRoom(rooms.starterVillage);
+    loadRoom(rooms.a);
 }
 setup(60);
