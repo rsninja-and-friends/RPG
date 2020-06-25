@@ -247,21 +247,6 @@ function stop(sound) {
 function handleOptionsInput() {
     let ImTierdMakemenuwork=true;
     if(optionsMenu) {
-        if(mousePress[0]) {
-            if(rectpoint(optionsButtons.screenSize,mousePos)) {
-                if(screenSize=="1:1") {
-                    screenSize = "fit";
-                    canvasScale=0;
-                } else {
-                    screenSize = "1:1";
-                    canvasScale=1;
-                }
-            }
-            if(!rectpoint({x:cw/2,y:ch/2,w:200,h:200},mousePos)) {
-                optionsMenu=false;
-                ImTierdMakemenuwork=false;
-            }
-        }
         if(mouseDown[0]) {
             if(rectpoint(optionsButtons.sfx,mousePos)) {
                 volume.sfx = (mousePos.x-(optionsButtons.sfx.x-60))/120;
@@ -466,6 +451,9 @@ function switchDrawMode() {
 }
 
 function resizeBuffers() {
+    maxCvsSize=Math.max(canvases.cvs.width,canvases.cvs.height);
+    sizeDif=maxCvsSize-Math.min(canvases.cvs.width,canvases.cvs.height);
+
     var tempSize = maxCvsSize/camera.zoom;
     var tempSizeAndPadding = tempSize + (tempSize/2)
 
@@ -525,10 +513,6 @@ function drawOptionsMenu() {
     if(optionsMenu) {
         let pos = {x:cw/2-100,y:ch/2-100};
         rect(cw/2,ch/2,200,200,"#242424");
-        text("Screen Size:",pos.x+2,pos.y+2,"white",2);
-            let b = optionsButtons.screenSize;
-            rect(b.x,b.y,b.w,b.h,"#444444");
-            text(screenSize,pos.x+145,pos.y+4,"white",2);
         text("sfx",pos.x+2,pos.y+30,"white",2);
             b = optionsButtons.sfx;
             rect(b.x,b.y,b.w,b.h-10,"#444444");
@@ -958,6 +942,10 @@ function setup(physicsFPS) {
     updateFPS = physicsFPS;
     
     canvases.cvs = document.getElementById("game");
+    canvases.cvs.width = document.body.clientWidth;
+    canvases.cvs.height = document.body.offsetHeight < window.innerHeight ? window.innerHeight : document.body.offsetHeight;
+    cw = canvases.cvs.width;
+    ch = canvases.cvs.height;
     canvases.ctx = canvases.cvs.getContext("2d", { alpha: false });
 
     canvases.cvs.onmousedown = function () {if(!gameStarted){loadImagesAndSounds();gameStarted=true;}}
@@ -994,8 +982,10 @@ function setup(physicsFPS) {
 }
 
 function drawLoop() {
-    cw=canvases.cvs.width;
-    ch=canvases.cvs.height;
+    canvases.cvs.width = document.body.clientWidth;
+    canvases.cvs.height = (document.body.offsetHeight < window.innerHeight ? window.innerHeight : document.body.offsetHeight) - 1;
+    cw = canvases.cvs.width;
+    ch = canvases.cvs.height;
     scaleCanvases();
 
     switchDrawMode();
@@ -1024,6 +1014,10 @@ function drawLoop() {
     absDraw=true;
     try{absoluteDraw();} catch (err){}
     absDraw=false;
+
+    let pos = {x:cw/2-100,y:ch/2-100};
+    optionsButtons.sfx = {x:pos.x+125,y:pos.y+40,w:120,h:20};
+    optionsButtons.bmg = {x:pos.x+125,y:pos.y+70,w:120,h:20};
 
     drawButtons();
     drawOptionsMenu();

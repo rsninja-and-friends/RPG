@@ -4,110 +4,41 @@
         <link rel="icon" type="image/gif" href="assets/images/icon.png"/>
         <meta charset="utf-8" />
         <title>RPG</title>
-        <meta name="description" content="RPG by marshmarlows">
+        <meta name="description" content="RPG by marshmarlows and rsninja">
         <style>
             html {background-color: #1e1e1e;color: #4de1f5;}
-            canvas {position:absolute;top:0;bottom:0;right:0;left:0;margin:auto;border: 1px solid rgb(63, 63, 63);box-shadow: 0px 5px 5px 0px black;image-rendering: pixelated;image-rendering: -moz-crisp-edges;text-rendering: geometricPrecision;}
+            body {margin: 0;}
+            canvas {image-rendering: pixelated;image-rendering: -moz-crisp-edges;text-rendering: geometricPrecision;position:absolute;top:0;left:0;}
             div {border: 1px solid rgb(63, 63, 63);box-shadow: 0px 5px 5px 0px black;padding: 2px; margin: 2px; font-family: monospace;}
             input, select{background-color: #181818;border: 1px solid #101010;border-top-color: #000000;border-bottom-color: #333333; border-radius: 2px;color: #4de1f5;width: 50px;}
-            button {background-color: #353535;border-color: #555555;color: #4de1f5; margin: 5px;border-style: outset;cursor: pointer;}
+            button {background-color: #353535;border-color: #555555;color: #4de1f5; margin: 2px;border-style: outset;cursor: pointer; padding: 0;border-width: 1px; width: 34px; height: 34px;}
             button:hover {background-color: #555555;}
             button:active {border-style: inset;}
+            img {image-rendering: pixelated;image-rendering: -moz-crisp-edges;}
+            #build {visibility: hidden; position: absolute; left: 10px; top: 10px; z-index: 100;}
+            #buildTable {background-color: #1e1e1e;}
         </style>
     </head>
     <body> 
-        <div style="position: absolute;bottom: 0px;left: 0px;width: 20%;">
-            <pre>
-controls:      
-
-build:
-\ - togglebuild mode
-arrow keys - select tile/type
-lmb - place tile
-rmb - select tile from world
-
-play:
-wasd - move
-
-TODO make better 
-xcontrols information
-            </pre>
-        </div>
-        <canvas width="1500" height="600" id="game"></canvas>
+        <canvas width="800" height="600" id="game"></canvas>
         <img src="assets/images/tempLoading.gif" style="display: none;position:absolute;top:0;bottom:0;right:0;left:0;margin:auto;" id="load"></img>
 
-        <div id="buildGUI" style="display: none;">
-            <div style="width: 15%;">
-                <p>add room</p>
-                <span>width: </span><input type="number" value="25" min="3" id="width"><br>
-                <span>height:</span><input type="number" value="19" min="3" id="height"><br>
-                <button onclick="addRoom()">create</button>
-            </div>
-            <div style="width: 15%;">
-                <p>download room</p>
-                <span>room name:</span><input type="text" id="name"><br>
-                <button onclick="downloadRoom()">download</button>
-            </div>
-            <div style="width: 30%;overflow-y: scroll; height: 125px;" id="linkIDs">
-            </div>
-            <div id="enemySelect" style="width: 20%;">
-                <p>enemy object type</p>
-                <select id="enemySelectList">
-                </select>
-                <div id="catalog" style="overflow-y: scroll; height: 500px;position: absolute;top: 400px;right: 0;">
-                    <p>catalog</p>
-                </div>
-            </div>
+        <div id="build">
+            <table id="buildVariations"></table>
+            <table id="buildTable"></table>
         </div>
         <!-- to get script sources, run copyScriptSrcsToClipBoard.jar, then paste here. Make sure to move index to the bottom -->
         <!-- when compressing code, copy all script tags, and use them in concatenateJavascript.jar-->
         <script src="scripts/game.js"></script>
-        <script src="scripts/actors/enemies/enemy.js"></script>
-        <script src="scripts/actors/enemies/basicEnemy.js"></script>
-        <script src="scripts/actors/enemies/enemyDefinitions.js"></script>
-        <script src="scripts/actors/npc.js"></script>
-        <script src="scripts/actors/player.js"></script>
-        <script src="scripts/attacks/enemyAttacks.js"></script>
-        <script src="scripts/attacks/playerAttacks.js"></script>
-        <script src="scripts/ui/component.js"></script>
-        <script src="scripts/ui/components/button.js"></script>
-        <script src="scripts/ui/components/horizontalLayout.js"></script>
-        <script src="scripts/ui/components/imageComponent.js"></script>
-        <script src="scripts/ui/components/textComponent.js"></script>
-        <script src="scripts/ui/components/verticalLayout.js"></script>
-        <script src="scripts/ui/titleScreen.js"></script>
-        <script src="scripts/ui/ui.js"></script>
-        <script src="scripts/managers/battleUI.js"></script>
-        <script src="scripts/managers/battle.js"></script>
-        <script src="scripts/items/baseClasses/baseItem.js"></script>   
-        <script src="scripts/items/baseClasses/equipableItem.js"></script>        
-        <script src="scripts/items/baseClasses/lootItem.js"></script>        
-        <script src="scripts/items/baseClasses/singleUseItem.js"></script>   
-        <script src="scripts/items/baseClasses/specialItem.js"></script>   
-        <script src="scripts/items/baseClasses/weaponItem.js"></script>
-        <script src="scripts/items/inventory/itemListComponent.js"></script>
-        <script src="scripts/items/inventory/equipmentSquare.js"></script>
-        <script src="scripts/items/inventory/inventory.js"></script>
-        <script src="scripts/managers/build.js"></script>
-        <script src="scripts/managers/titleScreen.js"></script>
-        <script src="scripts/managers/world.js"></script>
         <script src="scripts/utils.js"></script>
-        <script src="scripts/world/collision.js"></script>
-        <script src="scripts/world/layers.js"></script>
-        <script src="scripts/world/objects/baseObject.js"></script>
-        <script src="scripts/world/objects/objectTree.js"></script>
-        <script src="scripts/world/objects/objectHouseSmall.js"></script>
-        <script src="scripts/world/objects/objectRoomLink.js"></script>
-        <script src="scripts/world/objects/objectEnemy.js"></script>
-        <script src="scripts/world/objectDefinitions.js"></script>
-        <script src="scripts/world/rooms.js"></script>
-        <script src="scripts/world/tiles/baseTile.js"></script>
+        <script src="scripts/world/build.js"></script>
+        <script src="scripts/world/tiles/tiles.js"></script>
         <script src="scripts/world/tiles/baseWall.js"></script>
-        <script src="scripts/world/tiles/tileGrass.js"></script>
-        <script src="scripts/world/tiles/tilePath.js"></script>
-        <script src="scripts/world/tiles/tileBrickPath.js"></script>
-        <script src="scripts/world/tiles/wallBrick.js"></script>
-        <script src="scripts/world/tileDefinitions.js"></script>
+        <script src="scripts/world/tiles/definitions/tileBrickPath.js"></script>
+        <script src="scripts/world/tiles/definitions/tileGrass.js"></script>
+        <script src="scripts/world/tiles/definitions/tilePath.js"></script>
+        <script src="scripts/world/tiles/definitions/wallBrick.js"></script>
         <script src="scripts/index.js"></script>
+
     </body>
 </html>
