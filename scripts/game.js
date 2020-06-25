@@ -467,6 +467,8 @@ function resizeBuffers() {
         difx=0;
         dify=0;
     }
+    canvases.ctx.imageSmoothingEnabled = false;
+    canvases.buffer1ctx.imageSmoothingEnabled = false;
     canvases.buffer2ctx.imageSmoothingEnabled = false;
 }
 

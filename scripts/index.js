@@ -37,7 +37,9 @@ images = [
     ],
     "preview0.png",
     "tempPlayer.png",
-    "tempEnemy00.png"
+    "tempEnemy00.png",
+    "buildPen.png",
+    "buildBucket.png"
 ];
 
 // files paths of audio files
@@ -112,6 +114,23 @@ function draw() {
 }
 
 function absoluteDraw() {
+    switch(globalState) {
+        case states.TITLE:
+
+            break;
+        case states.OVERWORLD:
+
+            break;
+        case states.FIGHTING:
+
+            break;
+        case states.LOADING:
+
+            break;
+        case states.BUILDING:
+            absoluteDrawBuild();
+            break;
+    }
 }
 
 function onAssetsLoaded() {

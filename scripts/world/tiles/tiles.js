@@ -24,8 +24,8 @@ function newTile(name,x,y,variation,rotation=0) {
 
 class Tile {
     constructor(x,y,tileID,variation,rotation=0) {
-        this.x = x;
-        this.y = y;
+        this.x = x*16;
+        this.y = y*16;
         this.tileID  = tileID;
         this.variation = variation;
         this.rotation = rotation * Math.PI/2;
@@ -46,7 +46,7 @@ Tile.prototype.effect = effects.none; // what effect this tile does
 Tile.prototype.layer = layers.ground;
 
 Tile.prototype.draw = function() {
-    img(sprites[`${this.imageName}${this.variation}`],this.x,this.y,rotation);
+    img(sprites[`${this.imageName}${this.variation}`],this.x,this.y,this.rotation);
 }
 
 tileClasses.Tile = Tile;
