@@ -30,6 +30,11 @@ class Tile {
         this.variation = variation;
         this.rotation = rotation * Math.PI/2;
     }
+
+    get data() {
+        return `${this.tileID}.${this.variation}.${this.rotation}`;
+    }
+    
 }
 
 Tile.prototype.w = 16;
@@ -47,6 +52,6 @@ Tile.prototype.layer = layers.ground;
 
 Tile.prototype.draw = function() {
     img(sprites[`${this.imageName}${this.variation}`],this.x,this.y,this.rotation);
-}
+};
 
 tileClasses.Tile = Tile;

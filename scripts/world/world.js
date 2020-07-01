@@ -1,1 +1,5 @@
 var world = [];
+
+function getRoomJSON() {
+     
+}

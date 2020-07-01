@@ -24,12 +24,12 @@
         <img src="assets/images/tempLoading.gif" style="display: none;position:absolute;top:0;bottom:0;right:0;left:0;margin:auto;" id="load"></img>
 
         <div id="build">
-            w:<input type="number" value="30" id="roomW">h:<input type="number" value="20" id="roomH"><button style="width: 100px;" onclick="newRoom()">create room</button><br>
-            <button style="background-color: #029c94; width: 36px; height: 36px;" onclick="buildSelectPen()"><img src="assets/images/buildPen.png" style="width: 32px;height: 32px;"></button><button style="background-color: #029c94; width: 36px; height: 36px;" onclick="buildSelectBucket()"><img src="assets/images/buildBucket.png" style="width: 32px;height: 32px;"></button>
+            w:<input type="number" value="30" id="roomW">h:<input type="number" value="20" id="roomH"><button style="width: 100px;" id="newRoom">create room</button><br>
+            <button style="background-color: #029c94; width: 36px; height: 36px;" id="selectPen"><img src="assets/images/buildPen.png" style="width: 32px;height: 32px;"></button><button style="background-color: #029c94; width: 36px; height: 36px;" id="selectBucket"><img src="assets/images/buildBucket.png" style="width: 32px;height: 32px;"></button>
             <table id="buildVariations"></table>
             <table id="buildTable"></table>
         </div>
-        <!-- when compressing code, copy all script tags, and use them in concatenateJavascript.jar-->
+        <!-- when compressing code, copy all script tags, and use them in concatenateJavascript.jar an use https://xem.github.io/terser-online -->
         <script src="scripts/game.js"></script>
         <script src="scripts/utils.js"></script>
         <script src="scripts/world/world.js"></script>
@@ -41,6 +41,7 @@
         <script src="scripts/world/tiles/definitions/tilePath.js"></script>
         <script src="scripts/world/tiles/definitions/wallBrick.js"></script>
         <script src="scripts/index.js"></script>
+        <!-- <script src="mini.js"></script> -->
 
     </body>
-</html>
+</html>     

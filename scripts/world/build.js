@@ -4,7 +4,7 @@ var buildSelection = { type: "tile", ID: 0, variance: 0, rotation: 0 };
 
 var buildTool = "pen";
 
-var buildLastPos;
+var buildLastPos = { x: 0, y: 0 };
 
 function handleBuild(isNewState) {
     if (isNewState) {
@@ -20,7 +20,23 @@ function handleBuild(isNewState) {
     if (keyDown[k.d]) { moveCamera(5 / camera.zoom, 0); }
     if (keyDown[k.w]) { moveCamera(0, -5 / camera.zoom); }
     if (keyDown[k.s]) { moveCamera(0, 5 / camera.zoom); }
-    camera.zoom += scroll;
+
+
+    // scroll
+    if (scroll && (scroll < 0 ? camera.zoom > 1 : true)) {
+        var scrollAmount = 1;
+        if (scroll < 0) {
+            scrollAmount = -1;
+        }
+
+        var factor = 1 - camera.zoom / (camera.zoom + scrollAmount);
+
+        var mPos = mousePosition();
+        camera.x -= (mousePos.x - (cw / 2)) * factor;
+        camera.y -= (mousePos.y - (ch / 2)) * factor;
+
+        camera.zoom += scrollAmount;
+    }
 
     // rotate 
     if (keyPress[k.q]) {
@@ -35,10 +51,13 @@ function handleBuild(isNewState) {
     }
 
     // switch tools
-    if(keyPress[k.z]) {buildTool = "pen";}
-    if(keyPress[k.x]) {buildTool = "bucket";}
+    if (keyPress[k.z]) { buildTool = "pen"; }
+    if (keyPress[k.x]) { buildTool = "bucket"; }
 
     if (world.length > 0) {
+        // center
+        if (keyPress[k.SHIFT]) { centerCameraOn((world[0].length - 1) * 8, (world.length - 1) * 8); }
+
         var mPos = mousePosition();
         mPos.x = clamp(roundToGrid(mPos.x) / 16, 0, world[0].length - 1);
         mPos.y = clamp(roundToGrid(mPos.y) / 16, 0, world.length - 1);
@@ -66,11 +85,51 @@ function handleBuild(isNewState) {
                 place(mPos.x, mPos.y);
             } else {
                 // bucket
+                var ww = world[0].length;
+                var wh = world.length;
 
+                var target = world[mPos.y][mPos.x].data;
+                var replace = `${buildSelection.ID}.${buildSelection.variance}.${buildSelection.rotation}`;
+
+                if (target !== replace) {
+
+                    var q = [];
+                    q.push([mPos.x, mPos.y]);
+
+                    var haveGoneTo = [];
+                    var worldIDs = [];
+                    for (var y = 0; y < wh; y++) {
+                        var haveGoneToRow = [];
+                        var worldIDsRow = [];
+                        for (var x = 0; x < ww; x++) {
+                            haveGoneToRow.push(false);
+                            worldIDsRow.push(world[y][x].data);
+                        }
+                        haveGoneTo.push(haveGoneToRow);
+                        worldIDs.push(worldIDsRow);
+                    }
+
+                    ww--;
+                    wh--;
+
+                    while (q.length > 0) {
+                        var n = q.pop();
+                        if (haveGoneTo[n[1]][n[0]]) { continue; }
+                        worldIDs[n[1]][n[0]] = replace;
+                        place(n[0], n[1]);
+
+                        if (n[1] < wh) { if (worldIDs[n[1] + 1][n[0]] === target) { q.push([n[0], n[1] + 1]); } }
+                        if (n[0] < ww) { if (worldIDs[n[1]][n[0] + 1] === target) { q.push([n[0] + 1, n[1]]); } }
+                        if (n[1] > 0) { if (worldIDs[n[1] - 1][n[0]] === target) { q.push([n[0], n[1] - 1]); } }
+                        if (n[0] > 0) { if (worldIDs[n[1]][n[0] - 1] === target) { q.push([n[0] - 1, n[1]]); } }
+
+                        haveGoneTo[n[1]][n[0]] = true;
+                    }
+                }
             }
         }
         // pick
-        if (mousePress[1]) {
+        if (mousePress[2]) {
             var tile = world[mPos.y][mPos.x];
             buildSelection.type = "tile";
             selectTile(tile.tileID);
@@ -92,48 +151,17 @@ function place(x, y) {
     }
 }
 
-function buildSelectPen() {
+
+document.getElementById("selectPen").onclick = function () {
     buildTool = "pen";
-}
+};
 
-function buildSelectBucket() {
+document.getElementById("selectBucket").onclick = function () {
     buildTool = "bucket";
-}
-
-function drawBuild() {
-    // draw tiles
-    for (var y = 0, yl = world.length; y < yl; y++) {
-        for (var x = 0, xl = world[0].length; x < xl; x++) {
-            world[y][x].draw();
-        }
-    }
-    if (world.length > 0) {
-        var mPos = mousePosition();
-        mPos.x = clamp(roundToGrid(mPos.x) / 16, 0, world[0].length - 1);
-        mPos.y = clamp(roundToGrid(mPos.y) / 16, 0, world.length - 1);
-
-        // draw preview
-        switch (buildSelection.type) {
-            case "tile":
-                var previewTile = new tileClasses[tileIDs[buildSelection.ID]](mPos.x + Math.cos(drawCount / 10) / 10, mPos.y + Math.sin(drawCount / 10) / 10, buildSelection.ID, buildSelection.variance, buildSelection.rotation);
-                previewTile.draw();
-                break;
-        }
-
-    }
-
-}
-
-function absoluteDrawBuild() {
-    if (buildTool === "pen") {
-        img(sprites.buildPen, mousePos.x + 16, mousePos.y + 16, 0, 2, 2);
-    } else {
-        img(sprites.buildBucket, mousePos.x + 16, mousePos.y, 0, 2, 2);
-    }
-}
+};
 
 // creates a blank room of grass
-function newRoom() {
+document.getElementById("newRoom").onclick = function () {
     world = [];
     var w = parseInt(document.getElementById("roomW").value);
     var h = parseInt(document.getElementById("roomH").value);
@@ -145,7 +173,9 @@ function newRoom() {
         }
         world.push(row);
     }
-}
+
+    centerCameraOn(w * 8, h * 8);
+};
 
 // go trough everything to be added to build mode, and put it in the build table
 function generateBuildUI() {
@@ -164,7 +194,7 @@ function generateBuildUI() {
         // set the onclick to switch the active object to the right tile
         button.onclick = function () {
             selectTile(parseInt(this.id[1]));
-        }
+        };
 
         // add a preview of the tile to the button
         var img = document.createElement("img");
@@ -193,6 +223,7 @@ function selectTile(tileID) {
     buildSelection.type = "tile";
     buildSelection.ID = tileID;
     buildSelection.variance = 0;
+    buildSelection.rotation = 0;
 
     var tr = document.createElement("tr");
 
@@ -205,7 +236,7 @@ function selectTile(tileID) {
         button.id = "v" + i;
         button.onclick = function () {
             selectVariance(parseInt(this.id[1]));
-        }
+        };
 
         // add a preview of the variance
         var img = document.createElement("img");
@@ -260,4 +291,32 @@ function pDistance(x, y, x1, y1, x2, y2) {
     var dx = x - xx;
     var dy = y - yy;
     return Math.sqrt(dx * dx + dy * dy);
+}
+
+function drawBuild() {
+    // draw tiles
+    for (var y = 0, yl = world.length; y < yl; y++) {
+        for (var x = 0, xl = world[0].length; x < xl; x++) {
+            world[y][x].draw();
+        }
+    }
+    if (world.length > 0) {
+        // draw preview
+        switch (buildSelection.type) {
+            case "tile":
+                var previewTile = new tileClasses[tileIDs[buildSelection.ID]](buildLastPos.x + Math.cos(drawCount / 10) / 10, buildLastPos.y + Math.sin(drawCount / 10) / 10, buildSelection.ID, buildSelection.variance, buildSelection.rotation);
+                previewTile.draw();
+                break;
+        }
+
+    }
+
+}
+
+function absoluteDrawBuild() {
+    if (buildTool === "pen") {
+        img(sprites.buildPen, mousePos.x + 16, mousePos.y + 16, 0, 2, 2);
+    } else {
+        img(sprites.buildBucket, mousePos.x + 16, mousePos.y, 0, 2, 2);
+    }
 }

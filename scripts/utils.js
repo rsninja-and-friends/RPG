@@ -44,3 +44,8 @@ function turn(cur, target, speed) {
     if (cur < 0) { cur = tau + cur; }
     return cur;
 }
+
+// maps one range of values to another
+function mapRange( value,  valueLow,  valueHigh,  remappedLow, remappedHigh) {
+    return remappedLow + (remappedHigh - remappedLow) * (value - valueLow) / (valueHigh - valueLow);
+}
