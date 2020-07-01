@@ -15,6 +15,9 @@ function handleBuild(isNewState) {
         }
     }
 
+    // un focus buttons
+    if (mousePress[0]) { [].forEach.call(document.getElementsByTagName("button"), e => { e.blur(); }); }
+
     // camera
     if (keyDown[k.a]) { moveCamera(-5 / camera.zoom, 0); }
     if (keyDown[k.d]) { moveCamera(5 / camera.zoom, 0); }
@@ -54,13 +57,13 @@ function handleBuild(isNewState) {
     if (keyPress[k.z]) { buildTool = "pen"; }
     if (keyPress[k.x]) { buildTool = "bucket"; }
 
-    if (world.length > 0) {
+    if (worldTiles.length > 0) {
         // center
-        if (keyPress[k.SHIFT]) { centerCameraOn((world[0].length - 1) * 8, (world.length - 1) * 8); }
+        if (keyPress[k.SHIFT]) { centerCameraOn((worldTiles[0].length - 1) * 8, (worldTiles.length - 1) * 8); }
 
         var mPos = mousePosition();
-        mPos.x = clamp(roundToGrid(mPos.x) / 16, 0, world[0].length - 1);
-        mPos.y = clamp(roundToGrid(mPos.y) / 16, 0, world.length - 1);
+        mPos.x = clamp(roundToGrid(mPos.x) / 16, 0, worldTiles[0].length - 1);
+        mPos.y = clamp(roundToGrid(mPos.y) / 16, 0, worldTiles.length - 1);
 
         // place
         if (mouseDown[0]) {
@@ -85,10 +88,10 @@ function handleBuild(isNewState) {
                 place(mPos.x, mPos.y);
             } else {
                 // bucket
-                var ww = world[0].length;
-                var wh = world.length;
+                var ww = worldTiles[0].length;
+                var wh = worldTiles.length;
 
-                var target = world[mPos.y][mPos.x].data;
+                var target = worldTiles[mPos.y][mPos.x].data;
                 var replace = `${buildSelection.ID}.${buildSelection.variance}.${buildSelection.rotation}`;
 
                 if (target !== replace) {
@@ -103,7 +106,7 @@ function handleBuild(isNewState) {
                         var worldIDsRow = [];
                         for (var x = 0; x < ww; x++) {
                             haveGoneToRow.push(false);
-                            worldIDsRow.push(world[y][x].data);
+                            worldIDsRow.push(worldTiles[y][x].data);
                         }
                         haveGoneTo.push(haveGoneToRow);
                         worldIDs.push(worldIDsRow);
@@ -130,7 +133,7 @@ function handleBuild(isNewState) {
         }
         // pick
         if (mousePress[2]) {
-            var tile = world[mPos.y][mPos.x];
+            var tile = worldTiles[mPos.y][mPos.x];
             buildSelection.type = "tile";
             selectTile(tile.tileID);
             buildSelection.rotation = Math.round(tile.rotation / Math.PI * 2);
@@ -146,23 +149,24 @@ function handleBuild(isNewState) {
 function place(x, y) {
     switch (buildSelection.type) {
         case "tile":
-            world[y][x] = new tileClasses[tileIDs[buildSelection.ID]](x, y, buildSelection.ID, buildSelection.variance, buildSelection.rotation);
+            worldTiles[y][x] = new tileClasses[tileIDs[buildSelection.ID]](x, y, buildSelection.ID, buildSelection.variance, buildSelection.rotation);
             break;
     }
 }
 
-
+// pen
 document.getElementById("selectPen").onclick = function () {
     buildTool = "pen";
 };
 
+// bucket
 document.getElementById("selectBucket").onclick = function () {
     buildTool = "bucket";
 };
 
 // creates a blank room of grass
 document.getElementById("newRoom").onclick = function () {
-    world = [];
+    worldTiles = [];
     var w = parseInt(document.getElementById("roomW").value);
     var h = parseInt(document.getElementById("roomH").value);
 
@@ -171,10 +175,16 @@ document.getElementById("newRoom").onclick = function () {
         for (var x = 0; x < w; x++) {
             row.push(new TileGrass(x, y, 0, 0, 0));
         }
-        world.push(row);
+        worldTiles.push(row);
     }
 
     centerCameraOn(w * 8, h * 8);
+};
+
+// help
+document.getElementById("help").onclick = function () {
+    var stl = document.getElementById("helpDiv").style;
+    stl.display = (stl.display === "block" ? "none" : "block");
 };
 
 // go trough everything to be added to build mode, and put it in the build table
@@ -191,6 +201,7 @@ function generateBuildUI() {
         // create button and set the id to to the id of the tile
         var button = document.createElement("button");
         button.id = "t" + i;
+        button.style = "width: 34px; height: 34px; padding:0;";
         // set the onclick to switch the active object to the right tile
         button.onclick = function () {
             selectTile(parseInt(this.id[1]));
@@ -234,6 +245,7 @@ function selectTile(tileID) {
         // create button and set the on click to set the correct variance
         var button = document.createElement("button");
         button.id = "v" + i;
+        button.style = "width: 34px; height: 34px; padding:0;";
         button.onclick = function () {
             selectVariance(parseInt(this.id[1]));
         };
@@ -295,12 +307,12 @@ function pDistance(x, y, x1, y1, x2, y2) {
 
 function drawBuild() {
     // draw tiles
-    for (var y = 0, yl = world.length; y < yl; y++) {
-        for (var x = 0, xl = world[0].length; x < xl; x++) {
-            world[y][x].draw();
+    for (var y = 0, yl = worldTiles.length; y < yl; y++) {
+        for (var x = 0, xl = worldTiles[0].length; x < xl; x++) {
+            worldTiles[y][x].draw();
         }
     }
-    if (world.length > 0) {
+    if (worldTiles.length > 0) {
         // draw preview
         switch (buildSelection.type) {
             case "tile":

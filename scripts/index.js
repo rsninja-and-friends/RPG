@@ -65,14 +65,14 @@ var isNewGlobalState;
 
 function update() {
 
-    if(globalState != lastGlobalState) {
+    if (globalState != lastGlobalState) {
         isNewGlobalState = true;
     } else {
         isNewGlobalState = false;
     }
     lastGlobalState = globalState;
 
-    switch(globalState) {
+    switch (globalState) {
         case states.TITLE:
 
             break;
@@ -93,7 +93,7 @@ function update() {
 }
 
 function draw() {
-    switch(globalState) {
+    switch (globalState) {
         case states.TITLE:
 
             break;
@@ -114,7 +114,7 @@ function draw() {
 }
 
 function absoluteDraw() {
-    switch(globalState) {
+    switch (globalState) {
         case states.TITLE:
 
             break;

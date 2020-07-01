@@ -10,13 +10,16 @@
             body {margin: 0;}
             canvas {image-rendering: pixelated;image-rendering: -moz-crisp-edges;text-rendering: geometricPrecision;position:absolute;top:0;left:0;}
             div {border: 1px solid rgb(63, 63, 63);box-shadow: 0px 5px 5px 0px black;padding: 2px; margin: 2px; font-family: monospace;}
+            h2, p, pre{margin: 2px;}
             input, select{background-color: #181818;border: 1px solid #101010;border-top-color: #000000;border-bottom-color: #333333; border-radius: 2px;color: #4de1f5;width: 50px;}
-            button {background-color: #353535;border-color: #555555;color: #4de1f5; margin: 2px;border-style: outset;cursor: pointer; padding: 0;border-width: 1px; width: 34px; height: 34px;}
+            button {background-color: #353535;border-color: #555555;color: #4de1f5; margin: 2px;border-style: outset;cursor: pointer; padding: 0, 3px, 0, 3px;border-width: 1px;}
             button:hover {background-color: #555555;}
             button:active {border-style: inset;}
             img {image-rendering: pixelated;image-rendering: -moz-crisp-edges;}
             #build {visibility: hidden; position: absolute; left: 10px; top: 10px; z-index: 100;}
             #buildTable {background-color: #1e1e1e;}
+            input[type="file"] {display: none;}
+            .custom-file-upload {background-color: #353535;border-color: #555555;color: #4de1f5; margin: 2px;border-style: outset;cursor: pointer; padding: 5px;border-width: 1px;display: inline-block;}
         </style>
     </head>
     <body> 
@@ -24,8 +27,29 @@
         <img src="assets/images/tempLoading.gif" style="display: none;position:absolute;top:0;bottom:0;right:0;left:0;margin:auto;" id="load"></img>
 
         <div id="build">
-            w:<input type="number" value="30" id="roomW">h:<input type="number" value="20" id="roomH"><button style="width: 100px;" id="newRoom">create room</button><br>
-            <button style="background-color: #029c94; width: 36px; height: 36px;" id="selectPen"><img src="assets/images/buildPen.png" style="width: 32px;height: 32px;"></button><button style="background-color: #029c94; width: 36px; height: 36px;" id="selectBucket"><img src="assets/images/buildBucket.png" style="width: 32px;height: 32px;"></button>
+            w:<input type="number" value="30" id="roomW">h:<input type="number" value="20" id="roomH"><button style="width: 100px;" id="newRoom">create room</button><button id="help">help</button><br>
+            room name:<input value="unnamedRoom" style="width: 150px;" id="name"><button id="save">save</button><br>
+            <label for="fileUpload" class="custom-file-upload">load</label>
+            <input id="fileUpload" type="file"><br>
+            <div style="display: none;" id="helpDiv">
+                <h2>Help</h2>
+                <p><b>Controls</b></p>
+                <pre>
+w,a,s,d - movement
+q,e     - rotation
+z       - pencil
+x       - bucket
+lmb     - use tool
+rmb     - select tile
+                </pre>
+                <p><b>Usage</b></p>
+                <pre>
+create - set width and height in the w and h boxes, then press create room
+save   - name the room with the name box, then press save
+load   - press load and select the .json of the room
+                </pre>
+            </div>
+            <button style="background-color: #138681; width: 36px; height: 36px; padding: 0;" id="selectPen"><img src="assets/images/buildPen.png" style="width: 32px;height: 32px;"></button><button style="background-color: #138681; width: 36px; height: 36px; padding: 0;" id="selectBucket"><img src="assets/images/buildBucket.png" style="width: 32px;height: 32px;"></button>
             <table id="buildVariations"></table>
             <table id="buildTable"></table>
         </div>
@@ -34,6 +58,7 @@
         <script src="scripts/utils.js"></script>
         <script src="scripts/world/world.js"></script>
         <script src="scripts/world/build.js"></script>
+        <script src="scripts/world/saveLoad.js"></script>
         <script src="scripts/world/tiles/tiles.js"></script>
         <script src="scripts/world/tiles/baseWall.js"></script>
         <script src="scripts/world/tiles/definitions/tileBrickPath.js"></script>

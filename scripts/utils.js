@@ -19,8 +19,9 @@ function friction(value, amount) {
     return value;
 }
 
-var tau = Math.PI * 2;
-var pi = Math.PI;
+const tau = Math.PI * 2;
+const pi = Math.PI;
+const halfPI = pi/2;
 // returns a new angle that gets closer to the target angle
 function turn(cur, target, speed) {
     if (target < 0) { target = tau + target; }
@@ -46,6 +47,6 @@ function turn(cur, target, speed) {
 }
 
 // maps one range of values to another
-function mapRange( value,  valueLow,  valueHigh,  remappedLow, remappedHigh) {
+function mapRange(value, valueLow, valueHigh, remappedLow, remappedHigh) {
     return remappedLow + (remappedHigh - remappedLow) * (value - valueLow) / (valueHigh - valueLow);
 }

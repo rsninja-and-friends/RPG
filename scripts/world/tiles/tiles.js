@@ -32,7 +32,15 @@ class Tile {
     }
 
     get data() {
-        return `${this.tileID}.${this.variation}.${this.rotation}`;
+        var dataStr;
+        if(this.rotation !== 0) {
+            dataStr = `${this.tileID}.${this.variation}.${~~(this.rotation/halfPI)}`;
+        } else if(this.variation !== 0){
+            dataStr = `${this.tileID}.${this.variation}`;
+        } else {
+            dataStr = `${this.tileID}`;
+        }
+        return dataStr;
     }
     
 }
