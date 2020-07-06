@@ -1,6 +1,7 @@
 var worldTiles = [];
+var worldObjects = [];
 
-function getRoomJSON() {
+function getRoomObject() {
     var exportObj = {};
 
     // name
@@ -18,13 +19,21 @@ function getRoomJSON() {
             tiles += worldTiles[y][x].data + ",";
         }
     }
-    tiles.substring(0, tiles.length - 2);
+    tiles = tiles.substring(0, tiles.length - 1);
     exportObj.tiles = tiles;
+
+    // objects
+    var objects = "";
+    for (var i = 0, l = worldObjects.length; i < l; i++) {
+        objects += worldObjects[i].data + ",";
+    }
+    objects = objects.substring(0, objects.length - 1);
+    exportObj.objects = objects;
 
     return exportObj;
 }
 
-function loadRoomJSON(json) {
+function loadRoomObject(json) {
     // name
     document.getElementById("name").value = json.name;
 
@@ -47,5 +56,14 @@ function loadRoomJSON(json) {
         worldTiles.push(row);
     }
 
-    centerCameraOn(w * 8, h * 8);
+    worldObjects = [];
+    var jsonObjects = json.objects.split(",");
+    if(jsonObjects.length > 0) {
+        if(jsonObjects[0].length > 0) {
+            for (var i = 0, l = jsonObjects.length; i < l; i++) {
+                var data = jsonObjects[i].split(".");
+                worldObjects.push(new objectClasses[objectIDs[parseInt(data[2])]](parseInt(data[0]), parseInt(data[1]), parseInt(data[2]), parseInt(data[3]), parseInt(data[4]), JSON.parse(data[5])));
+            }
+        }
+    }
 }

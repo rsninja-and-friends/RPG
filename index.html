@@ -16,7 +16,7 @@
             button:hover {background-color: #555555;}
             button:active {border-style: inset;}
             img {image-rendering: pixelated;image-rendering: -moz-crisp-edges;}
-            #build {visibility: hidden; position: absolute; left: 10px; top: 10px; z-index: 100;}
+            #build {visibility: hidden; position: absolute; left: 10px; top: 10px; z-index: 10;}
             #buildTable {background-color: #1e1e1e;}
             input[type="file"] {display: none;}
             .custom-file-upload {background-color: #353535;border-color: #555555;color: #4de1f5; margin: 2px;border-style: outset;cursor: pointer; padding: 5px;border-width: 1px;display: inline-block;}
@@ -36,11 +36,16 @@
                 <p><b>Controls</b></p>
                 <pre>
 w,a,s,d - movement
+shift   - center view
 q,e     - rotation
-z       - pencil
-x       - bucket
+x       - pencil
+c       - bucket
 lmb     - use tool
 rmb     - select tile
+z       - undo
+y       - redo
+arrows  - select tile
+0-9     - select variation
                 </pre>
                 <p><b>Usage</b></p>
                 <pre>
@@ -51,7 +56,10 @@ load   - press load and select the .json of the room
             </div>
             <button style="background-color: #138681; width: 36px; height: 36px; padding: 0;" id="selectPen"><img src="assets/images/buildPen.png" style="width: 32px;height: 32px;"></button><button style="background-color: #138681; width: 36px; height: 36px; padding: 0;" id="selectBucket"><img src="assets/images/buildBucket.png" style="width: 32px;height: 32px;"></button>
             <table id="buildVariations"></table>
-            <table id="buildTable"></table>
+            <table><tbody id="buildTable"><tr style="height: 0px;"><td style="position: relative; width: 36px; height: 36px; background-color: #ffffff30; z-index: 100;" id="tableSelection"></td></tr></tbody></table>
+        </div>
+        <div id="object">
+
         </div>
         <!-- when compressing code, copy all script tags, and use them in concatenateJavascript.jar an use https://xem.github.io/terser-online -->
         <script src="scripts/game.js"></script>
@@ -65,8 +73,10 @@ load   - press load and select the .json of the room
         <script src="scripts/world/tiles/definitions/tileGrass.js"></script>
         <script src="scripts/world/tiles/definitions/tilePath.js"></script>
         <script src="scripts/world/tiles/definitions/wallBrick.js"></script>
+        <script src="scripts/world/tiles/definitions/WallHouse.js"></script>
+        <script src="scripts/world/objects/object.js"></script>
+        <script src="scripts/world/objects/definitions/objectHouseEntrance.js"></script>
         <script src="scripts/index.js"></script>
         <!-- <script src="mini.js"></script> -->
-
     </body>
 </html>     

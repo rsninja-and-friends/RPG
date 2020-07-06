@@ -2,7 +2,8 @@ var tileIDs = [
     "TileGrass",
     "TilePath",
     "TileBrickPath",
-    "WallBrick"
+    "WallBrick",
+    "WallHouse"
 ];
 
 var tileClasses = {};
@@ -17,10 +18,6 @@ const layers = {
     ground:0,
     wall:1
 };
-
-function newTile(name,x,y,variation,rotation=0) {
-    return new tileClasses[name](x,y,tileIDs.indexOf(name),variation,rotation);
-}
 
 class Tile {
     constructor(x,y,tileID,variation,rotation=0) {
@@ -48,7 +45,7 @@ class Tile {
 Tile.prototype.w = 16;
 Tile.prototype.h = 16;
 
-Tile.prototype.imageName = "debug";
+Tile.prototype.imageName = "debug"; // name of image without number at the end
 
 Tile.prototype.typesAmount = 1; // amount of tile visual variations
 

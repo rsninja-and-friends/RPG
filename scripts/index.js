@@ -13,7 +13,10 @@ images = [
         "brick3.png",
         "brickPath0.png",
         "brickPath1.png",
-        "brickPath2.png"
+        "brickPath2.png",
+        "house0.png",
+        "house1.png",
+        "house2.png"
     ],
     [
         "objects/",
@@ -21,7 +24,7 @@ images = [
         "tree1.png",
         "link0.png",
         "link1.png",
-        "houseSmall0.png"
+        "houseEntrance0.png"
     ],
     [
         "UI/slot",

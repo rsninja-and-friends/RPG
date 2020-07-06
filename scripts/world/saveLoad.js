@@ -1,6 +1,6 @@
 // save
 document.getElementById("save").onclick = function () {
-    var exportObj = getRoomJSON();
+    var exportObj = getRoomObject();
 
     // create download link
     var link = document.createElement("a");
@@ -17,6 +17,9 @@ document.getElementById("save").onclick = function () {
 // load
 document.getElementById("fileUpload").onchange = function () {
     if (document.getElementById("fileUpload").files[0] !== undefined) {
-        fetch(URL.createObjectURL(document.getElementById("fileUpload").files[0])).then((response) => response.json().then((data) => { loadRoomJSON(data); }));
+        if(worldTiles.length !== 0) {
+            trackUndo();
+        }
+        fetch(URL.createObjectURL(document.getElementById("fileUpload").files[0])).then((response) => response.json().then((data) => { loadRoomObject(data); centerCameraOn(0, 0);}));
     }
 };
