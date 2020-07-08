@@ -24,7 +24,8 @@ images = [
         "tree1.png",
         "link0.png",
         "link1.png",
-        "houseEntrance0.png"
+        "houseEntrance0.png",
+        "smokeStack0.png"
     ],
     [
         "UI/slot",
@@ -42,7 +43,8 @@ images = [
     "tempPlayer.png",
     "tempEnemy00.png",
     "buildPen.png",
-    "buildBucket.png"
+    "buildBucket.png",
+    "buildPointer.png"
 ];
 
 // files paths of audio files

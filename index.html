@@ -30,7 +30,11 @@
             w:<input type="number" value="30" id="roomW">h:<input type="number" value="20" id="roomH"><button style="width: 100px;" id="newRoom">create room</button><button id="help">help</button><br>
             room name:<input value="unnamedRoom" style="width: 150px;" id="name"><button id="save">save</button><br>
             <label for="fileUpload" class="custom-file-upload">load</label>
-            <input id="fileUpload" type="file"><br>
+            <input id="fileUpload" type="file"><br> 
+            <div>
+                random angle:<input type="checkbox" id="randAngle" style="width: 20px;"><br>
+                fill type:<select id="fillType" style="width: 75px;"><option value="exact">exact</option><option value="id">same ID</option></select>
+            </div>
             <div style="display: none;" id="helpDiv">
                 <h2>Help</h2>
                 <p><b>Controls</b></p>
@@ -40,12 +44,14 @@ shift   - center view
 q,e     - rotation
 x       - pencil
 c       - bucket
+v,esc   - pointer
 lmb     - use tool
 rmb     - select tile
 z       - undo
 y       - redo
 arrows  - select tile
 0-9     - select variation
+del,back- delete selected object
                 </pre>
                 <p><b>Usage</b></p>
                 <pre>
@@ -54,11 +60,11 @@ save   - name the room with the name box, then press save
 load   - press load and select the .json of the room
                 </pre>
             </div>
-            <button style="background-color: #138681; width: 36px; height: 36px; padding: 0;" id="selectPen"><img src="assets/images/buildPen.png" style="width: 32px;height: 32px;"></button><button style="background-color: #138681; width: 36px; height: 36px; padding: 0;" id="selectBucket"><img src="assets/images/buildBucket.png" style="width: 32px;height: 32px;"></button>
+            <button style="background-color: #138681; width: 36px; height: 36px; padding: 0;" id="selectPen"><img src="assets/images/buildPen.png" style="width: 32px;height: 32px;"></button><button style="background-color: #138681; width: 36px; height: 36px; padding: 0;" id="selectBucket"><img src="assets/images/buildBucket.png" style="width: 32px;height: 32px;"></button><button style="background-color: #138681; width: 36px; height: 36px; padding: 0;" id="selectPointer"><img src="assets/images/buildPointer.png" style="width: 32px;height: 32px;"></button>
             <table id="buildVariations"></table>
             <table><tbody id="buildTable"><tr style="height: 0px;"><td style="position: relative; width: 36px; height: 36px; background-color: #ffffff30; z-index: 100;" id="tableSelection"></td></tr></tbody></table>
         </div>
-        <div id="object">
+        <div id="object" style="position: absolute;right: 100px;">
 
         </div>
         <!-- when compressing code, copy all script tags, and use them in concatenateJavascript.jar an use https://xem.github.io/terser-online -->
@@ -66,6 +72,7 @@ load   - press load and select the .json of the room
         <script src="scripts/utils.js"></script>
         <script src="scripts/world/world.js"></script>
         <script src="scripts/world/build.js"></script>
+        <script src="scripts/world/buildUI.js"></script>
         <script src="scripts/world/saveLoad.js"></script>
         <script src="scripts/world/tiles/tiles.js"></script>
         <script src="scripts/world/tiles/baseWall.js"></script>
@@ -76,6 +83,7 @@ load   - press load and select the .json of the room
         <script src="scripts/world/tiles/definitions/WallHouse.js"></script>
         <script src="scripts/world/objects/object.js"></script>
         <script src="scripts/world/objects/definitions/objectHouseEntrance.js"></script>
+        <script src="scripts/world/objects/definitions/objectHouseSmokeStack.js"></script>
         <script src="scripts/index.js"></script>
         <!-- <script src="mini.js"></script> -->
     </body>

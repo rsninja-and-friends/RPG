@@ -1,5 +1,6 @@
 var objectIDs = [
-    "HouseEntrance"
+    "HouseEntrance",
+    "HouseSmokeStack"
 ];
 
 var objectClasses = {};
@@ -32,6 +33,9 @@ BaseObject.prototype.imageName = "debug"; // name of image without number at the
 BaseObject.prototype.typesAmount = 1; // amount of object visual variations
 
 BaseObject.prototype.metaArguments = {}; // what arguments the meta takes in build mode. Example of arguments: {warpID:metaFieldTypes.number, enemySpawn: metaFieldTypes.enemy};
+
+BaseObject.prototype.w = 16; // dimensions used only for building
+BaseObject.prototype.h = 16;
 
 BaseObject.prototype.draw = function() {
     img(sprites[`${this.imageName}${this.variation}`],this.x,this.y,this.rotation);

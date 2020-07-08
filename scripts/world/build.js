@@ -1,15 +1,18 @@
 var buildUIBuilt = false;
 
-var buildSelection = { type: "tile", ID: 0, variance: 0, rotation: 0, menuPos: { x: 0, y: 1 } };
+var buildSelection = { type: "tile", ID: 0, variance: 0, rotation: 0, menuPos: { x: 0, y: 1 }, objectIndex: -1 };
 
 var buildTool = "pen";
 
 var buildLastPos = { x: 0, y: 0 };
 
+var buildRandomizeAngle = false;
+
 var undo = { states: [], pos: -1, lastStep: "forward", lastActionWasEdit: false, bufferSize: 200 };
 
 function handleBuild(isNewState) {
     if (isNewState) {
+        canvases.cvs.style.cursor = "none";
         // generate build ui
         if (!buildUIBuilt) {
             generateBuildUI();
@@ -17,23 +20,25 @@ function handleBuild(isNewState) {
         }
     }
 
+    buildRandomizeAngle = document.getElementById("randAngle").checked;
+
     // position selector
     var tableSelStyle = document.getElementById("tableSelection").style;
     tableSelStyle.top = buildSelection.menuPos.y * 43 - 2 + "px";
     tableSelStyle.left = buildSelection.menuPos.x * 42 + "px";
 
     // select tiles 
-    if (keyPress[k.UP]) { if(tileTableValid(0, -1)) {buildSelection.menuPos.y--; pressSelectedTile();} }
-    if (keyPress[k.DOWN]) { if(tileTableValid(0, 1)) {buildSelection.menuPos.y++; pressSelectedTile();} }
-    if (keyPress[k.LEFT]) { if(tileTableValid(-1, 0)) {buildSelection.menuPos.x--; pressSelectedTile();} }
-    if (keyPress[k.RIGHT]) { if(tileTableValid(1, 0)) {buildSelection.menuPos.x++; pressSelectedTile();} }
+    if (keyPress[k.UP]) { if (tileTableValid(0, -1)) { buildSelection.menuPos.y--; pressSelectedTile(); } }
+    if (keyPress[k.DOWN]) { if (tileTableValid(0, 1)) { buildSelection.menuPos.y++; pressSelectedTile(); } }
+    if (keyPress[k.LEFT]) { if (tileTableValid(-1, 0)) { buildSelection.menuPos.x--; pressSelectedTile(); } }
+    if (keyPress[k.RIGHT]) { if (tileTableValid(1, 0)) { buildSelection.menuPos.x++; pressSelectedTile(); } }
 
     // select variance
     var variations = document.getElementById("buildVariations").children[0];
-    if(variations !== undefined) {
-        for(var i=1,l=variations.children.length;i<10 &&i<=l;i++) {
-            if(keyPress[k[i+""]]) {
-                variations.children[i-1].children[0].onclick();
+    if (variations !== undefined) {
+        for (var i = 1, l = variations.children.length; i < 10 && i <= l; i++) {
+            if (keyPress[k[i + ""]]) {
+                variations.children[i - 1].children[0].onclick();
             }
         }
     }
@@ -79,6 +84,13 @@ function handleBuild(isNewState) {
     // switch tools
     if (keyPress[k.x]) { buildTool = "pen"; }
     if (keyPress[k.c]) { buildTool = "bucket"; }
+    if (keyPress[k.v] || keyPress[k.ESCAPE]) { buildTool = "pointer"; }
+
+    // delete selected object
+    if (keyPress[k.BACKSPACE] || keyPress[k.DELETE] && buildSelection.objectIndex > -1) {
+        worldObjects.splice(buildSelection.objectIndex, 1);
+        buildSelection.objectIndex--;
+    }
 
     if (worldTiles.length > 0) {
         // center
@@ -121,84 +133,105 @@ function handleBuild(isNewState) {
             }
         }
 
-        // place
+        // tools
 
         // pen
-        if (buildTool === "pen") {
-            if (mouseDown[0] && (buildLastPos.x !== mPos.x || buildLastPos.y !== mPos.y) || mousePress[0]) {
-                // if the last mouse position is more than 1 away, make a line between the last and current position
-                if (dist(mPos, buildLastPos) > 1) {
-                    var sx = Math.min(buildLastPos.x, mPos.x);
-                    var ex = Math.max(buildLastPos.x, mPos.x);
-                    var sy = Math.min(buildLastPos.y, mPos.y);
-                    var ey = Math.max(buildLastPos.y, mPos.y);
+        switch (buildTool) {
+            case "pen":
+                if (mouseDown[0] && (buildLastPos.x !== mPos.x || buildLastPos.y !== mPos.y) || mousePress[0]) {
+                    // if the last mouse position is more than 1 away, make a line between the last and current position
+                    if (dist(mPos, buildLastPos) > 1) {
+                        var sx = Math.min(buildLastPos.x, mPos.x);
+                        var ex = Math.max(buildLastPos.x, mPos.x);
+                        var sy = Math.min(buildLastPos.y, mPos.y);
+                        var ey = Math.max(buildLastPos.y, mPos.y);
 
-                    for (var y = sy; y <= ey; y++) {
-                        for (var x = sx; x <= ex; x++) {
-                            if (pDistance(x, y, buildLastPos.x, buildLastPos.y, mPos.x, mPos.y) <= 0.5) {
-                                place(x, y);
+                        for (var y = sy; y <= ey; y++) {
+                            for (var x = sx; x <= ex; x++) {
+                                if (pDistance(x, y, buildLastPos.x, buildLastPos.y, mPos.x, mPos.y) <= 0.5) {
+                                    place(x, y);
+                                }
                             }
                         }
                     }
+                    // place at the moues position
+                    place(mPos.x, mPos.y);
                 }
-                // place at the moues position
-                place(mPos.x, mPos.y);
-            }
-        
-        } else { // bucket
-            if (mousePress[0]) {
-                // get world width and height
-                var ww = worldTiles[0].length;
-                var wh = worldTiles.length;
+                break;
+            case "bucket":
+                if (mousePress[0]) {
+                    // get world width and height
+                    var ww = worldTiles[0].length;
+                    var wh = worldTiles.length;
 
-                // get data string of what is to be targeted, and what will replace it;
-                var target = worldTiles[mPos.y][mPos.x].data;
-                var replace = `${buildSelection.ID}.${buildSelection.variance}.${buildSelection.rotation}`;
+                    // get data string of what is to be targeted, and what will replace it;
+                    var type = document.getElementById("fillType").value;
+                    var target = worldTiles[mPos.y][mPos.x].data;
+                    var replace = `${buildSelection.ID}.${buildSelection.variance}.${buildSelection.rotation}`;
 
-                // if the current tile is not what is hovered
-                if (target !== replace) {
+                    if (type === "id") {
+                        target = target.split(".")[0];
+                    }
 
-                    // create a list of positions to check
-                    var q = [];
-                    q.push([mPos.x, mPos.y]);
+                    // if the current tile is not what is hovered
+                    if (target !== replace) {
 
-                    // 2d array of booleans for if the tile has been visited
-                    var haveGoneTo = [];
-                    // 2d array of tile data
-                    var worldIDs = [];
-                    for (var y = 0; y < wh; y++) {
-                        var haveGoneToRow = [];
-                        var worldIDsRow = [];
-                        for (var x = 0; x < ww; x++) {
-                            haveGoneToRow.push(false);
-                            worldIDsRow.push(worldTiles[y][x].data);
+                        // create a list of positions to check
+                        var q = [];
+                        q.push([mPos.x, mPos.y]);
+
+                        // 2d array of booleans for if the tile has been visited
+                        var haveGoneTo = [];
+                        // 2d array of tile data
+                        var worldIDs = [];
+                        for (var y = 0; y < wh; y++) {
+                            var haveGoneToRow = [];
+                            var worldIDsRow = [];
+                            for (var x = 0; x < ww; x++) {
+                                haveGoneToRow.push(false);
+                                if (type === "id") {
+                                    worldIDsRow.push(worldTiles[y][x].data.split(".")[0]);
+                                } else {
+                                    worldIDsRow.push(worldTiles[y][x].data);
+                                }
+                            }
+                            haveGoneTo.push(haveGoneToRow);
+                            worldIDs.push(worldIDsRow);
                         }
-                        haveGoneTo.push(haveGoneToRow);
-                        worldIDs.push(worldIDsRow);
-                    }
 
-                    // decrease width and height so we don't have to the operation every loop
-                    ww--;
-                    wh--;
+                        // decrease width and height so we don't have to the operation every loop
+                        ww--;
+                        wh--;
 
-                    while (q.length > 0) {
-                        // get the last position
-                        var n = q.pop();
-                        // if it has been visited, go to the next in the list
-                        if (haveGoneTo[n[1]][n[0]]) { continue; }
-                        // replace the tile
-                        worldIDs[n[1]][n[0]] = replace;
-                        place(n[0], n[1]);
-                        haveGoneTo[n[1]][n[0]] = true;
+                        while (q.length > 0) {
+                            // get the last position
+                            var n = q.pop();
+                            // if it has been visited, go to the next in the list
+                            if (haveGoneTo[n[1]][n[0]]) { continue; }
+                            // replace the tile
+                            worldIDs[n[1]][n[0]] = replace;
+                            place(n[0], n[1]);
+                            haveGoneTo[n[1]][n[0]] = true;
 
-                        // if any tiles around this one are the target, add them to the list to check
-                        if (n[1] < wh) { if (worldIDs[n[1] + 1][n[0]] === target) { q.push([n[0], n[1] + 1]); } }
-                        if (n[0] < ww) { if (worldIDs[n[1]][n[0] + 1] === target) { q.push([n[0] + 1, n[1]]); } }
-                        if (n[1] > 0) { if (worldIDs[n[1] - 1][n[0]] === target) { q.push([n[0], n[1] - 1]); } }
-                        if (n[0] > 0) { if (worldIDs[n[1]][n[0] - 1] === target) { q.push([n[0] - 1, n[1]]); } }
+                            // if any tiles around this one are the target, add them to the list to check
+                            if (n[1] < wh) { if (worldIDs[n[1] + 1][n[0]] === target) { q.push([n[0], n[1] + 1]); } }
+                            if (n[0] < ww) { if (worldIDs[n[1]][n[0] + 1] === target) { q.push([n[0] + 1, n[1]]); } }
+                            if (n[1] > 0) { if (worldIDs[n[1] - 1][n[0]] === target) { q.push([n[0], n[1] - 1]); } }
+                            if (n[0] > 0) { if (worldIDs[n[1]][n[0] - 1] === target) { q.push([n[0] - 1, n[1]]); } }
+                        }
                     }
                 }
-            }
+                break;
+            case "pointer":
+                if (mousePress[0]) {
+                    var pos = mousePosition();
+                    for (var i = 0, l = worldObjects.length; i < l; i++) {
+                        if (rectpoint(worldObjects[i], pos)) {
+                            buildSelection.objectIndex = i;
+                        }
+                    }
+                }
+                break;
         }
 
         // pick
@@ -217,12 +250,17 @@ function handleBuild(isNewState) {
 }
 
 function place(x, y) {
+    var rotCache = buildSelection.rotation;
+    if (buildRandomizeAngle) {
+        rotCache = rand(0, 3);
+    }
     switch (buildSelection.type) {
         case "tile":
-            worldTiles[y][x] = new tileClasses[tileIDs[buildSelection.ID]](x, y, buildSelection.ID, buildSelection.variance, buildSelection.rotation);
+            worldTiles[y][x] = new tileClasses[tileIDs[buildSelection.ID]](x, y, buildSelection.ID, buildSelection.variance, rotCache);
             break;
         case "object":
-            worldObjects.push(new objectClasses[objectIDs[buildSelection.ID]](x, y, buildSelection.ID, buildSelection.variance, buildSelection.rotation));
+            buildSelection.objectIndex = worldObjects.length;
+            worldObjects.push(new objectClasses[objectIDs[buildSelection.ID]](x, y, buildSelection.ID, buildSelection.variance, rotCache));
             break;
     }
 }
@@ -243,202 +281,18 @@ function trackUndo() {
 }
 
 function tileTableValid(xChange, yChange) {
-    if(buildSelection.menuPos.y + yChange === 0) {
+    if (buildSelection.menuPos.y + yChange === 0) {
         return false;
     }
     var row = document.getElementById("buildTable").children[buildSelection.menuPos.y + yChange];
-    if( row !== undefined) {
-        if(row.children[buildSelection.menuPos.x + xChange] === undefined) {
+    if (row !== undefined) {
+        if (row.children[buildSelection.menuPos.x + xChange] === undefined) {
             return false;
         }
     } else {
         return false;
     }
     return true;
-}
-
-function pressSelectedTile() {
-    document.getElementById("buildTable").children[buildSelection.menuPos.y].children[buildSelection.menuPos.x].children[0].onclick();
-}
-
-// pen
-document.getElementById("selectPen").onclick = function () {
-    buildTool = "pen";
-};
-
-// bucket
-document.getElementById("selectBucket").onclick = function () {
-    buildTool = "bucket";
-};
-
-// creates a blank room of grass
-document.getElementById("newRoom").onclick = function () {
-    if (worldTiles.length !== 0) {
-        trackUndo();
-    }
-
-    worldTiles = [];
-    var w = parseInt(document.getElementById("roomW").value);
-    var h = parseInt(document.getElementById("roomH").value);
-
-    for (var y = 0; y < h; y++) {
-        var row = [];
-        for (var x = 0; x < w; x++) {
-            row.push(new TileGrass(x, y, 0, 0, 0));
-        }
-        worldTiles.push(row);
-    }
-
-    centerCameraOn(w * 8, h * 8);
-};
-
-// help
-document.getElementById("help").onclick = function () {
-    var stl = document.getElementById("helpDiv").style;
-    stl.display = (stl.display === "block" ? "none" : "block");
-};
-
-// go trough everything to be added to build mode, and put it in the build table
-function generateBuildUI() {
-    var rowLength = 0;
-    var tr = document.createElement("tr");
-
-    // tiles
-    for (var i = 0; i < tileIDs.length; i++) {
-
-        // create button and set the id to to the id of the tile
-        var button = document.createElement("button");
-        button.id = "t" + i;
-        button.xPos = rowLength
-        button.yPos = document.getElementById("buildTable").childNodes.length;
-        // set the onclick to switch the active object to the right tile
-        button.onclick = function () {
-            selectTile(parseInt(this.id[1]));
-            buildSelection.menuPos.x = this.xPos;
-            buildSelection.menuPos.y = this.yPos;
-        };
-
-        // add cell
-        tr.appendChild(makeTableCell(button, sprites[tileClasses[tileIDs[i]].prototype.imageName + "0"].spr.src, (tileClasses[tileIDs[i]].prototype.layer ? "#320738" : "#08403a")));
-
-        // once there are 10 cells, create a new row
-        rowLength++;
-        if (rowLength === 10) {
-            document.getElementById("buildTable").appendChild(tr);
-            tr = document.createElement("tr");
-            rowLength = 0;
-        }
-    }
-
-    // objects
-    for (var i = 0; i < objectIDs.length; i++) {
-
-        // create button and set the id to to the id of the tile
-        var button = document.createElement("button");
-        button.id = "o" + i;
-        button.xPos = rowLength
-        button.yPos = document.getElementById("buildTable").childNodes.length;
-        // set the onclick to switch the active object to the right tile
-        button.onclick = function () {
-            selectObject(parseInt(this.id[1]));
-            buildSelection.menuPos.x = this.xPos;
-            buildSelection.menuPos.y = this.yPos;
-        };
-
-        // add cell
-        tr.appendChild(makeTableCell(button, sprites[objectClasses[objectIDs[i]].prototype.imageName + "0"].spr.src, "#265917"));
-
-        // once there are 10 cells, create a new row
-        rowLength++;
-        if (rowLength === 10) {
-            document.getElementById("buildTable").appendChild(tr);
-            tr = document.createElement("tr");
-            rowLength = 0;
-        }
-    }
-
-    document.getElementById("buildTable").appendChild(tr);
-
-    document.getElementById("build").style.visibility = "visible";
-}
-
-function selectTile(tileID) {
-    buildSelection.type = "tile";
-    buildSelection.ID = tileID;
-    buildSelection.variance = 0;
-    buildSelection.rotation = 0;
-
-    var tr = document.createElement("tr");
-
-    for (var i = 0, l = tileClasses[tileIDs[tileID]].prototype.typesAmount; i < l; i++) {
-
-        // create button and set the on click to set the correct variance
-        var button = document.createElement("button");
-        button.id = "v" + i;
-        button.style = "width: 34px; height: 34px; padding:0;";
-        button.onclick = function () {
-            buildSelection.variance = parseInt(this.id[1]);
-        };
-
-        // add cell
-        tr.appendChild(makeTableCell(button, sprites[tileClasses[tileIDs[tileID]].prototype.imageName + i].spr.src));
-    }
-
-    document.getElementById("buildVariations").innerHTML = "";
-    document.getElementById("buildVariations").appendChild(tr);
-}
-
-function selectObject(objectID) {
-    buildSelection.type = "object";
-    buildSelection.ID = objectID;
-    buildSelection.variance = 0;
-    buildSelection.rotation = 0;
-
-    var tr = document.createElement("tr");
-
-    for (var i = 0, l = objectClasses[objectIDs[objectID]].prototype.typesAmount; i < l; i++) {
-
-        // create button and set the on click to set the correct variance
-        var button = document.createElement("button");
-        button.id = "v" + i;
-        button.style = "width: 34px; height: 34px; padding:0;";
-        button.onclick = function () {
-            buildSelection.variance = parseInt(this.id[1]);
-        };
-
-        // add cell
-        tr.appendChild(makeTableCell(button, sprites[objectClasses[objectIDs[objectID]].prototype.imageName + i].spr.src));
-    }
-
-    document.getElementById("buildVariations").innerHTML = "";
-    document.getElementById("buildVariations").appendChild(tr);
-
-
-}
-
-function makeObjectInput(id, label, type) {
-    
-}
-
-function makeTableCell(button, image, color="#00000000") {
-    // create cell and set background color based on layer
-    var td = document.createElement("td");
-    td.style.backgroundColor = color;
-
-    // set button style
-    button.style = "width: 34px; height: 34px; padding:0;";
-
-    // add image to the button
-    var img = document.createElement("img");
-    img.style.width = "32px";
-    img.style.height = "32px";
-    img.src = image;
-
-    // append everything
-    button.appendChild(img);
-    td.appendChild(button);
-    
-    return td;
 }
 
 // distance from a line to a point
@@ -490,25 +344,36 @@ function drawBuild() {
 
     if (worldTiles.length > 0) {
         // draw preview
-        switch (buildSelection.type) {
-            case "tile":
+
+        if (buildTool === "pointer") {
+            if (buildSelection.objectIndex > -1) {
+                var o = worldObjects[buildSelection.objectIndex];
+                var previewObject = new objectClasses[objectIDs[o.objectID]](o.x/16, o.y/16, o.objectID, o.variation, o.rotation+ Math.cos(drawCount / 10) / 5);
+                previewObject.draw();
+            }
+        } else {
+            if (buildSelection.type === "tile") {
                 var previewTile = new tileClasses[tileIDs[buildSelection.ID]](buildLastPos.x + Math.cos(drawCount / 10) / 10, buildLastPos.y + Math.sin(drawCount / 10) / 10, buildSelection.ID, buildSelection.variance, buildSelection.rotation);
                 previewTile.draw();
-                break;
-            case "object":
+            } else {
                 var previewObject = new objectClasses[objectIDs[buildSelection.ID]](buildLastPos.x + Math.cos(drawCount / 10) / 10, buildLastPos.y + Math.sin(drawCount / 10) / 10, buildSelection.ID, buildSelection.variance, buildSelection.rotation);
                 previewObject.draw();
-                break;
+            }
         }
-
     }
 
 }
 
 function absoluteDrawBuild() {
-    if (buildTool === "pen") {
-        img(sprites.buildPen, mousePos.x + 16, mousePos.y + 16, 0, 2, 2);
-    } else {
-        img(sprites.buildBucket, mousePos.x + 16, mousePos.y, 0, 2, 2);
+    switch (buildTool) {
+        case "pen":
+            img(sprites.buildPen, mousePos.x + 16, mousePos.y + 16, 0, 2, 2);
+            break;
+        case "bucket":
+            img(sprites.buildBucket, mousePos.x + 16, mousePos.y + 16, 0, 2, 2);
+            break;
+        case "pointer":
+            img(sprites.buildPointer, mousePos.x + 16, mousePos.y + 16, 0, 2, 2);
+            break;
     }
 }
