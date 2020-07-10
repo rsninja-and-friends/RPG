@@ -139,5 +139,6 @@ function absoluteDraw() {
 }
 
 function onAssetsLoaded() {
+    generateObjectUITemplates();
 }
 setup(60);

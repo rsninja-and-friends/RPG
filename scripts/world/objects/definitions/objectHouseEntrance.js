@@ -6,7 +6,7 @@ class HouseEntrance extends BaseObject {
 
 HouseEntrance.prototype.imageName = "houseEntrance";
 
-HouseEntrance.prototype.metaArguments = {roomName: metaFieldTypes.string};
+HouseEntrance.prototype.metaArguments = {room: metaFieldTypes.room};
 
 HouseEntrance.prototype.update = function() {
     // change room here

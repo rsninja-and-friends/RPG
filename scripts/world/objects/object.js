@@ -9,7 +9,8 @@ var objectClasses = {};
 var metaFieldTypes = {
     number: 0,
     string: 1,
-    enemy: 2
+    enemy: 2,
+    room: 3
 };
 
 class BaseObject {

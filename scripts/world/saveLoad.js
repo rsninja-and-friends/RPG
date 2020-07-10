@@ -20,6 +20,6 @@ document.getElementById("fileUpload").onchange = function () {
         if(worldTiles.length !== 0) {
             trackUndo();
         }
-        fetch(URL.createObjectURL(document.getElementById("fileUpload").files[0])).then((response) => response.json().then((data) => { loadRoomObject(data); centerCameraOn(0, 0);}));
+        fetch(URL.createObjectURL(document.getElementById("fileUpload").files[0])).then((response) => response.json().then((data) => { loadRoomObject(data); buildSelection.objectIndex = -1; generateObjectUI(); centerCameraOn(0, 0);}));
     }
 };

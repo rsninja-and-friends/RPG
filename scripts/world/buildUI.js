@@ -36,6 +36,8 @@ document.getElementById("newRoom").onclick = function () {
         worldTiles.push(row);
     }
 
+    buildSelection.objectIndex = -1;
+
     centerCameraOn(w * 8, h * 8);
 };
 
@@ -165,8 +167,75 @@ function selectObject(objectID) {
 
 }
 
-function makeObjectInput(id, label, type) {
+var objectUIDiv = document.getElementById("object");
+var objectUIRoomSelect;
+var objectUIEnemySelect;
+
+function generateObjectUITemplates() {
+    // TODO make options for everything
+    objectUIRoomSelect = document.createElement("select");
+    objectUIEnemySelect = document.createElement("select");
+
+    var example = document.createElement("option");
+    example.innerText = "aa";
+    objectUIRoomSelect.appendChild(example);
+    example = document.createElement("option");
+    example.innerText = "213sdvbvc";
+    objectUIRoomSelect.appendChild(example);
+}
+
+function generateObjectUI() {
+    if(buildSelection.objectIndex !== -1) {
+        objectUIDiv.innerHTML = "";
+
+        var metaArgs = (new objectClasses[objectIDs[worldObjects[buildSelection.objectIndex].objectID]]).metaArguments;
+        var keys = Object.keys(metaArgs);
+
+        for(var i=0;i<keys.length;i++) {
+            makeObjectInput(keys[i], metaArgs[keys[i]], i);
+        }
+    }
+}
+
+function makeObjectInput(label, type, id) {
+    var span = document.createElement("span");
+    span.innerText = label;
+    span.style.paddingRight = "20px";
+    objectUIDiv.appendChild(span);
     
+    switch(type) {
+        case metaFieldTypes.string:
+            var input = document.createElement("input");            
+            input.type = "text";
+            input.id = "objectMeta" + id;
+            input.labelName = label;
+            objectUIDiv.appendChild(input);
+            break;
+        case metaFieldTypes.number:
+            var input = document.createElement("input");            
+            input.type = "number";
+            input.id = "objectMeta" + id;
+            input.labelName = label;
+            objectUIDiv.appendChild(input);
+            break;
+        case metaFieldTypes.room:
+            var select = document.createElement("select");         
+            select.innerHTML = objectUIRoomSelect.innerHTML;
+            select.id = "objectMeta" + id;
+            select.labelName = label;
+            objectUIDiv.appendChild(select);
+            break;
+        case metaFieldTypes.enemy:
+            var select = document.createElement("select");            
+            select.innerHTML = objectUIEnemySelect.innerHTML;
+            select.id = "objectMeta" + id;
+            select.labelName = label;
+            objectUIDiv.appendChild(select);
+            break;
+    }
+
+    var brrrrrrrrrrr = document.createElement("br");
+    objectUIDiv.appendChild(brrrrrrrrrrr);
 }
 
 function makeTableCell(button, image, color="#00000000") {

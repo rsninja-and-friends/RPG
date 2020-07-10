@@ -19,6 +19,17 @@ function handleBuild(isNewState) {
             buildUIBuilt = true;
         }
     }
+    if (buildSelection.objectIndex === -1) {
+        objectUIDiv.innerHTML = "";
+    } else {
+        if (updateCount % 10 == 0) {
+            var argsLength = Object.keys((new objectClasses[objectIDs[worldObjects[buildSelection.objectIndex].objectID]]).metaArguments).length;
+            for (var i = 0; i < argsLength; i++) {
+                var elem = document.getElementById("objectMeta" + i);
+                worldObjects[buildSelection.objectIndex].meta[elem.labelName] = (elem.type === "number" ? parseInt(elem.value) : elem.value);
+            }
+        }
+    }
 
     buildRandomizeAngle = document.getElementById("randAngle").checked;
 
@@ -43,8 +54,8 @@ function handleBuild(isNewState) {
         }
     }
 
-    // un focus buttons
-    if (mousePress[0]) { [].forEach.call(document.getElementsByTagName("button"), e => { e.blur(); }); }
+    // un focus html ui
+    if (mousePress[0] || keyPress[k.ESCAPE]) { [].forEach.call(document.getElementsByTagName("button"), e => { e.blur(); });[].forEach.call(document.getElementsByTagName("select"), e => { e.blur(); });[].forEach.call(document.getElementsByTagName("input"), e => { e.blur(); }); }
 
     // camera
     if (keyDown[k.a]) { moveCamera(-5 / camera.zoom, 0); }
@@ -117,6 +128,9 @@ function handleBuild(isNewState) {
                 undo.pos--;
                 undo.lastStep = "back";
                 undo.lastActionWasEdit = false;
+
+                buildSelection.objectIndex = worldObjects.length - 1;
+                generateObjectUI();
             }
         }
 
@@ -130,12 +144,13 @@ function handleBuild(isNewState) {
                 loadRoomObject(JSON.parse(undo.states[undo.pos]));
                 undo.lastStep = "forward";
                 undo.lastActionWasEdit = false;
+
+                buildSelection.objectIndex = worldObjects.length - 1;
+                generateObjectUI();
             }
         }
 
         // tools
-
-        // pen
         switch (buildTool) {
             case "pen":
                 if (mouseDown[0] && (buildLastPos.x !== mPos.x || buildLastPos.y !== mPos.y) || mousePress[0]) {
@@ -228,6 +243,7 @@ function handleBuild(isNewState) {
                     for (var i = 0, l = worldObjects.length; i < l; i++) {
                         if (rectpoint(worldObjects[i], pos)) {
                             buildSelection.objectIndex = i;
+                            generateObjectUI();
                         }
                     }
                 }
@@ -261,6 +277,7 @@ function place(x, y) {
         case "object":
             buildSelection.objectIndex = worldObjects.length;
             worldObjects.push(new objectClasses[objectIDs[buildSelection.ID]](x, y, buildSelection.ID, buildSelection.variance, rotCache));
+            generateObjectUI();
             break;
     }
 }
@@ -348,7 +365,7 @@ function drawBuild() {
         if (buildTool === "pointer") {
             if (buildSelection.objectIndex > -1) {
                 var o = worldObjects[buildSelection.objectIndex];
-                var previewObject = new objectClasses[objectIDs[o.objectID]](o.x/16, o.y/16, o.objectID, o.variation, o.rotation+ Math.cos(drawCount / 10) / 5);
+                var previewObject = new objectClasses[objectIDs[o.objectID]](o.x / 16, o.y / 16, o.objectID, o.variation, o.rotation + Math.cos(drawCount / 10) / 5);
                 previewObject.draw();
             }
         } else {
