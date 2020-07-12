@@ -16,6 +16,10 @@
             button:hover {background-color: #555555;}
             button:active {border-style: inset;}
             img {image-rendering: pixelated;image-rendering: -moz-crisp-edges;}
+            ::-webkit-scrollbar {width: 5px;}
+            ::-webkit-scrollbar-track {background: #1e1e1e; }
+            ::-webkit-scrollbar-thumb {background: #444444; }
+            ::-webkit-scrollbar-thumb:hover {background: #666666; }
             #build {visibility: hidden; position: absolute; left: 10px; top: 10px; z-index: 10;}
             #buildTable {background-color: #1e1e1e;}
             input[type="file"] {display: none;}
@@ -26,7 +30,7 @@
         <canvas width="800" height="600" id="game"></canvas>
         <img src="assets/images/tempLoading.gif" style="display: none;position:absolute;top:0;bottom:0;right:0;left:0;margin:auto;" id="load"></img>
 
-        <div id="build">
+        <div id="build" style="width: 450px;">
             w:<input type="number" value="30" id="roomW">h:<input type="number" value="20" id="roomH"><button style="width: 100px;" id="newRoom">create room</button><button id="help">help</button><br>
             room name:<input value="unnamedRoom" style="width: 150px;" id="name"><button id="save">save</button><br>
             <label for="fileUpload" class="custom-file-upload">load</label>
@@ -59,11 +63,19 @@ create - set width and height in the w and h boxes, then press create room
 save   - name the room with the name box, then press save
 load   - press load and select the .json of the room
                 </pre>
+                <p><b>Tools</b></p>
+                <pre>
+pen     - hold lmb to draw
+bucket  - click to fill area with a tile
+pointer - click an object to select it 
+                </pre>
             </div>
-            <button style="background-color: #138681; width: 36px; height: 36px; padding: 0;" id="selectPen"><img src="assets/images/buildPen.png" style="width: 32px;height: 32px;"></button><button style="background-color: #138681; width: 36px; height: 36px; padding: 0;" id="selectBucket"><img src="assets/images/buildBucket.png" style="width: 32px;height: 32px;"></button><button style="background-color: #138681; width: 36px; height: 36px; padding: 0;" id="selectPointer"><img src="assets/images/buildPointer.png" style="width: 32px;height: 32px;"></button>
+            <button style="background-color: #138681; width: 36px; height: 36px; padding: 0;" id="selectPen"><img src="assets/images/buildPen.png" style="width: 32px;height: 32px;"></button><button style="background-color: #138681; width: 36px; height: 36px; padding: 0;" id="selectBucket"><img src="assets/images/buildBucket.png" style="width: 32px;height: 32px;"></button><button style="background-color: #138681; width: 36px; height: 36px; padding: 0;" id="selectPointer"><img src="assets/images/buildPointer.png" style="width: 32px;height: 32px;"></button><br>
+            <span id="buildInfo"></span>
             <table id="buildVariations"></table>
-            <table><tbody id="buildTable"><tr style="height: 0px;"><td style="position: relative; width: 36px; height: 36px; background-color: #ffffff30; z-index: 100;" id="tableSelection"></td></tr></tbody></table>
+            <div style="height: 500px; overflow-y: scroll;"><table><tbody id="buildTable"><tr style="height: 0px;"><td style="position: relative; width: 36px; height: 36px; background-color: #ffffff30; z-index: 100;" id="tableSelection"></td></tr></tbody></table></div>
         </div>
+        <button id="hideShow" style="position: relative;left: 475px;top: 10px;">hide</button>
         <div id="object" style="position: absolute;right: 100px;">
 
         </div>

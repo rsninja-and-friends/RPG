@@ -1,32 +1,44 @@
 
 function pressSelectedTile() {
-    document.getElementById("buildTable").children[buildSelection.menuPos.y].children[buildSelection.menuPos.x].children[0].onclick();
+    dGet("buildTable").children[buildSelection.menuPos.y].children[buildSelection.menuPos.x].children[0].onclick();
 }
 
 // pen
-document.getElementById("selectPen").onclick = function () {
+dGet("selectPen").onclick = function () {
     buildTool = "pen";
 };
 
 // bucket
-document.getElementById("selectBucket").onclick = function () {
+dGet("selectBucket").onclick = function () {
     buildTool = "bucket";
 };
 
 // pointer
-document.getElementById("selectPointer").onclick = function () {
+dGet("selectPointer").onclick = function () {
     buildTool = "pointer";
 };
 
+dGet("hideShow").onclick = function() {
+    if(this.innerText === "hide") {
+        dGet("build").style.display = "none";
+        this.innerText = "show";
+        this.style.left = "10px";
+    } else {
+        dGet("build").style.display = "block";
+        this.innerText = "hide";
+        this.style.left = "475px";
+    }
+}
+
 // creates a blank room of grass
-document.getElementById("newRoom").onclick = function () {
+dGet("newRoom").onclick = function () {
     if (worldTiles.length !== 0) {
         trackUndo();
     }
 
     worldTiles = [];
-    var w = parseInt(document.getElementById("roomW").value);
-    var h = parseInt(document.getElementById("roomH").value);
+    var w = parseInt(dGet("roomW").value);
+    var h = parseInt(dGet("roomH").value);
 
     for (var y = 0; y < h; y++) {
         var row = [];
@@ -42,24 +54,24 @@ document.getElementById("newRoom").onclick = function () {
 };
 
 // help
-document.getElementById("help").onclick = function () {
-    var stl = document.getElementById("helpDiv").style;
+dGet("help").onclick = function () {
+    var stl = dGet("helpDiv").style;
     stl.display = (stl.display === "block" ? "none" : "block");
 };
 
 // go trough everything to be added to build mode, and put it in the build table
 function generateBuildUI() {
     var rowLength = 0;
-    var tr = document.createElement("tr");
+    var tr = dMake("tr");
 
     // tiles
     for (var i = 0; i < tileIDs.length; i++) {
 
         // create button and set the id to to the id of the tile
-        var button = document.createElement("button");
+        var button = dMake("button");
         button.id = "t" + i;
         button.xPos = rowLength;
-        button.yPos = document.getElementById("buildTable").childNodes.length;
+        button.yPos = dGet("buildTable").childNodes.length;
         // set the onclick to switch the active object to the right tile
         button.onclick = function () {
             buildSelection.menuPos.x = this.xPos;
@@ -73,8 +85,8 @@ function generateBuildUI() {
         // once there are 10 cells, create a new row
         rowLength++;
         if (rowLength === 10) {
-            document.getElementById("buildTable").appendChild(tr);
-            tr = document.createElement("tr");
+            dGet("buildTable").appendChild(tr);
+            tr = dMake("tr");
             rowLength = 0;
         }
     }
@@ -83,10 +95,10 @@ function generateBuildUI() {
     for (var i = 0; i < objectIDs.length; i++) {
 
         // create button and set the id to to the id of the tile
-        var button = document.createElement("button");
+        var button = dMake("button");
         button.id = "o" + i;
         button.xPos = rowLength;
-        button.yPos = document.getElementById("buildTable").childNodes.length;
+        button.yPos = dGet("buildTable").childNodes.length;
         // set the onclick to switch the active object to the right tile
         button.onclick = function () {
             buildSelection.menuPos.x = this.xPos;
@@ -100,15 +112,15 @@ function generateBuildUI() {
         // once there are 10 cells, create a new row
         rowLength++;
         if (rowLength === 10) {
-            document.getElementById("buildTable").appendChild(tr);
-            tr = document.createElement("tr");
+            dGet("buildTable").appendChild(tr);
+            tr = dMake("tr");
             rowLength = 0;
         }
     }
 
-    document.getElementById("buildTable").appendChild(tr);
+    dGet("buildTable").appendChild(tr);
 
-    document.getElementById("build").style.visibility = "visible";
+    dGet("build").style.visibility = "visible";
 }
 
 function selectTile(tileID) {
@@ -116,15 +128,17 @@ function selectTile(tileID) {
     buildSelection.ID = tileID;
     buildSelection.variance = 0;
     buildSelection.rotation = 0;
-    buildSelection.menuPos.x = tileID%10; 
-    buildSelection.menuPos.y = Math.floor(tileID/10) + 1; 
+    buildSelection.menuPos.x = tileID % 10;
+    buildSelection.menuPos.y = Math.floor(tileID / 10) + 1;
 
-    var tr = document.createElement("tr");
+    var tr = dMake("tr");
 
-    for (var i = 0, l = tileClasses[tileIDs[tileID]].prototype.typesAmount; i < l; i++) {
+    var tileClass = tileClasses[tileIDs[tileID]];
+
+    for (var i = 0, l = tileClass.prototype.typesAmount; i < l; i++) {
 
         // create button and set the on click to set the correct variance
-        var button = document.createElement("button");
+        var button = dMake("button");
         button.id = "v" + i;
         button.style = "width: 34px; height: 34px; padding:0;";
         button.onclick = function () {
@@ -132,11 +146,19 @@ function selectTile(tileID) {
         };
 
         // add cell
-        tr.appendChild(makeTableCell(button, sprites[tileClasses[tileIDs[tileID]].prototype.imageName + i].spr.src));
+        tr.appendChild(makeTableCell(button, sprites[tileClass.prototype.imageName + i].spr.src));
     }
 
-    document.getElementById("buildVariations").innerHTML = "";
-    document.getElementById("buildVariations").appendChild(tr);
+    dGet("buildVariations").innerHTML = "";
+    dGet("buildVariations").appendChild(tr);
+
+    var tileName = tileIDs[tileID];
+    var buildInfoString = `id: ${tileID}\n type: tile\n layer: ${tileClass.prototype.layer}\n name: ${tileName}\n merges with: `;
+    var tileMerges = tileClass.prototype.mergesWith;
+    for (var m = 0; m < tileMerges.length; m++) {
+        buildInfoString += tileIDs[tileMerges[m]] + ", ";
+    }
+    dGet("buildInfo").innerText = buildInfoString;
 }
 
 function selectObject(objectID) {
@@ -145,12 +167,14 @@ function selectObject(objectID) {
     buildSelection.variance = 0;
     buildSelection.rotation = 0;
 
-    var tr = document.createElement("tr");
+    var tr = dMake("tr");
 
-    for (var i = 0, l = objectClasses[objectIDs[objectID]].prototype.typesAmount; i < l; i++) {
+    var objectClass = objectClasses[objectIDs[objectID]];
+
+    for (var i = 0, l = objectClass.prototype.typesAmount; i < l; i++) {
 
         // create button and set the on click to set the correct variance
-        var button = document.createElement("button");
+        var button = dMake("button");
         button.id = "v" + i;
         button.style = "width: 34px; height: 34px; padding:0;";
         button.onclick = function () {
@@ -158,75 +182,80 @@ function selectObject(objectID) {
         };
 
         // add cell
-        tr.appendChild(makeTableCell(button, sprites[objectClasses[objectIDs[objectID]].prototype.imageName + i].spr.src));
+        tr.appendChild(makeTableCell(button, sprites[objectClass.prototype.imageName + i].spr.src));
     }
 
-    document.getElementById("buildVariations").innerHTML = "";
-    document.getElementById("buildVariations").appendChild(tr);
+    dGet("buildVariations").innerHTML = "";
+    dGet("buildVariations").appendChild(tr);
 
-
+    var buildInfoString = `id: ${objectID}\n type: object\n name: ${objectIDs[objectID]}\n arguments: `;
+    var keys = Object.keys(objectClass.prototype.metaArguments);
+    for (var m = 0; m < keys.length; m++) {
+        buildInfoString += keys[m] + ", ";
+    }
+    dGet("buildInfo").innerText = buildInfoString;
 }
 
-var objectUIDiv = document.getElementById("object");
+var objectUIDiv = dGet("object");
 var objectUIRoomSelect;
 var objectUIEnemySelect;
 
 function generateObjectUITemplates() {
     // TODO make options for everything
-    objectUIRoomSelect = document.createElement("select");
-    objectUIEnemySelect = document.createElement("select");
+    objectUIRoomSelect = dMake("select");
+    objectUIEnemySelect = dMake("select");
 
-    var example = document.createElement("option");
+    var example = dMake("option");
     example.innerText = "aa";
     objectUIRoomSelect.appendChild(example);
-    example = document.createElement("option");
+    example = dMake("option");
     example.innerText = "213sdvbvc";
     objectUIRoomSelect.appendChild(example);
 }
 
 function generateObjectUI() {
-    if(buildSelection.objectIndex !== -1) {
+    if (buildSelection.objectIndex !== -1) {
         objectUIDiv.innerHTML = "";
 
         var metaArgs = (new objectClasses[objectIDs[worldObjects[buildSelection.objectIndex].objectID]]).metaArguments;
         var keys = Object.keys(metaArgs);
 
-        for(var i=0;i<keys.length;i++) {
+        for (var i = 0; i < keys.length; i++) {
             makeObjectInput(keys[i], metaArgs[keys[i]], i);
         }
     }
 }
 
 function makeObjectInput(label, type, id) {
-    var span = document.createElement("span");
+    var span = dMake("span");
     span.innerText = label;
     span.style.paddingRight = "20px";
     objectUIDiv.appendChild(span);
-    
-    switch(type) {
+
+    switch (type) {
         case metaFieldTypes.string:
-            var input = document.createElement("input");            
+            var input = dMake("input");
             input.type = "text";
             input.id = "objectMeta" + id;
             input.labelName = label;
             objectUIDiv.appendChild(input);
             break;
         case metaFieldTypes.number:
-            var input = document.createElement("input");            
+            var input = dMake("input");
             input.type = "number";
             input.id = "objectMeta" + id;
             input.labelName = label;
             objectUIDiv.appendChild(input);
             break;
         case metaFieldTypes.room:
-            var select = document.createElement("select");         
+            var select = dMake("select");
             select.innerHTML = objectUIRoomSelect.innerHTML;
             select.id = "objectMeta" + id;
             select.labelName = label;
             objectUIDiv.appendChild(select);
             break;
         case metaFieldTypes.enemy:
-            var select = document.createElement("select");            
+            var select = dMake("select");
             select.innerHTML = objectUIEnemySelect.innerHTML;
             select.id = "objectMeta" + id;
             select.labelName = label;
@@ -234,20 +263,20 @@ function makeObjectInput(label, type, id) {
             break;
     }
 
-    var brrrrrrrrrrr = document.createElement("br");
+    var brrrrrrrrrrr = dMake("br");
     objectUIDiv.appendChild(brrrrrrrrrrr);
 }
 
-function makeTableCell(button, image, color="#00000000") {
+function makeTableCell(button, image, color = "#00000000") {
     // create cell and set background color based on layer
-    var td = document.createElement("td");
+    var td = dMake("td");
     td.style.backgroundColor = color;
 
     // set button style
     button.style = "width: 34px; height: 34px; padding:0;";
 
     // add image to the button
-    var img = document.createElement("img");
+    var img = dMake("img");
     img.style.width = "32px";
     img.style.height = "32px";
     img.src = image;
@@ -255,6 +284,6 @@ function makeTableCell(button, image, color="#00000000") {
     // append everything
     button.appendChild(img);
     td.appendChild(button);
-    
+
     return td;
 }

@@ -1,10 +1,10 @@
 // save
-document.getElementById("save").onclick = function () {
+dGet("save").onclick = function () {
     var exportObj = getRoomObject();
 
     // create download link
-    var link = document.createElement("a");
-    link.download = document.getElementById("name").value;
+    var link = dMake("a");
+    link.download = dGet("name").value;
     var blob = new Blob([JSON.stringify(exportObj)], { type: "application/json" });
     link.href = URL.createObjectURL(blob);
 
@@ -15,11 +15,11 @@ document.getElementById("save").onclick = function () {
 };
 
 // load
-document.getElementById("fileUpload").onchange = function () {
-    if (document.getElementById("fileUpload").files[0] !== undefined) {
+dGet("fileUpload").onchange = function () {
+    if (dGet("fileUpload").files[0] !== undefined) {
         if(worldTiles.length !== 0) {
             trackUndo();
         }
-        fetch(URL.createObjectURL(document.getElementById("fileUpload").files[0])).then((response) => response.json().then((data) => { loadRoomObject(data); buildSelection.objectIndex = -1; generateObjectUI(); centerCameraOn(0, 0);}));
+        fetch(URL.createObjectURL(dGet("fileUpload").files[0])).then((response) => response.json().then((data) => { loadRoomObject(data); buildSelection.objectIndex = -1; generateObjectUI(); centerCameraOn(0, 0);}));
     }
 };

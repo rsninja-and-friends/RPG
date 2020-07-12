@@ -5,7 +5,7 @@ function getRoomObject() {
     var exportObj = {};
 
     // name
-    exportObj.name = document.getElementById("name").value;
+    exportObj.name = dGet("name").value;
 
     // dimensions
     exportObj.w = worldTiles[0].length;
@@ -35,13 +35,13 @@ function getRoomObject() {
 
 function loadRoomObject(json) {
     // name
-    document.getElementById("name").value = json.name;
+    dGet("name").value = json.name;
 
     // dimensions
     var w = json.w;
-    document.getElementById("roomW").value = json.w;
+    dGet("roomW").value = json.w;
     var h = json.h;
-    document.getElementById("roomH").value = json.h;
+    dGet("roomH").value = json.h;
 
     // tiles
     worldTiles = [];

@@ -25,16 +25,16 @@ function handleBuild(isNewState) {
         if (updateCount % 10 == 0) {
             var argsLength = Object.keys((new objectClasses[objectIDs[worldObjects[buildSelection.objectIndex].objectID]]).metaArguments).length;
             for (var i = 0; i < argsLength; i++) {
-                var elem = document.getElementById("objectMeta" + i);
+                var elem = dGet("objectMeta" + i);
                 worldObjects[buildSelection.objectIndex].meta[elem.labelName] = (elem.type === "number" ? parseInt(elem.value) : elem.value);
             }
         }
     }
 
-    buildRandomizeAngle = document.getElementById("randAngle").checked;
+    buildRandomizeAngle = dGet("randAngle").checked;
 
     // position selector
-    var tableSelStyle = document.getElementById("tableSelection").style;
+    var tableSelStyle = dGet("tableSelection").style;
     tableSelStyle.top = buildSelection.menuPos.y * 43 - 2 + "px";
     tableSelStyle.left = buildSelection.menuPos.x * 42 + "px";
 
@@ -45,7 +45,7 @@ function handleBuild(isNewState) {
     if (keyPress[k.RIGHT]) { if (tileTableValid(1, 0)) { buildSelection.menuPos.x++; pressSelectedTile(); } }
 
     // select variance
-    var variations = document.getElementById("buildVariations").children[0];
+    var variations = dGet("buildVariations").children[0];
     if (variations !== undefined) {
         for (var i = 1, l = variations.children.length; i < 10 && i <= l; i++) {
             if (keyPress[k[i + ""]]) {
@@ -58,10 +58,10 @@ function handleBuild(isNewState) {
     if (mousePress[0] || keyPress[k.ESCAPE]) { [].forEach.call(document.getElementsByTagName("button"), e => { e.blur(); });[].forEach.call(document.getElementsByTagName("select"), e => { e.blur(); });[].forEach.call(document.getElementsByTagName("input"), e => { e.blur(); }); }
 
     // camera
-    if (keyDown[k.a]) { moveCamera(-5 / camera.zoom, 0); }
-    if (keyDown[k.d]) { moveCamera(5 / camera.zoom, 0); }
-    if (keyDown[k.w]) { moveCamera(0, -5 / camera.zoom); }
-    if (keyDown[k.s]) { moveCamera(0, 5 / camera.zoom); }
+    if (keyDown[k.a]) { moveCamera(-10 / camera.zoom, 0); }
+    if (keyDown[k.d]) { moveCamera(10 / camera.zoom, 0); }
+    if (keyDown[k.w]) { moveCamera(0, -10 / camera.zoom); }
+    if (keyDown[k.s]) { moveCamera(0, 10 / camera.zoom); }
 
 
     // scroll
@@ -180,7 +180,7 @@ function handleBuild(isNewState) {
                     var wh = worldTiles.length;
 
                     // get data string of what is to be targeted, and what will replace it;
-                    var type = document.getElementById("fillType").value;
+                    var type = dGet("fillType").value;
                     var target = worldTiles[mPos.y][mPos.x].data;
                     var replace = `${buildSelection.ID}.${buildSelection.variance}.${buildSelection.rotation}`;
 
@@ -301,7 +301,7 @@ function tileTableValid(xChange, yChange) {
     if (buildSelection.menuPos.y + yChange === 0) {
         return false;
     }
-    var row = document.getElementById("buildTable").children[buildSelection.menuPos.y + yChange];
+    var row = dGet("buildTable").children[buildSelection.menuPos.y + yChange];
     if (row !== undefined) {
         if (row.children[buildSelection.menuPos.x + xChange] === undefined) {
             return false;

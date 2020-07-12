@@ -1,5 +1,7 @@
+function dGet(id) {return document.getElementById(id);}
+function dMake(tag) {return document.createElement(tag);}
 function createCanvas(id) {
-    var tempCanvas = document.createElement("canvas");
+    var tempCanvas = dMake("canvas");
     tempCanvas.id = id;
     tempCanvas.width = canvases.cvs.width;
     tempCanvas.height = canvases.cvs.height;
@@ -7,7 +9,7 @@ function createCanvas(id) {
 
     document.body.appendChild(tempCanvas);
 
-    canvases[`${id}cvs`] = document.getElementById(id);
+    canvases[`${id}cvs`] = dGet(id);
     canvases[`${id}ctx`] = canvases[`${id}cvs`].getContext("2d");
 }
 
@@ -46,10 +48,10 @@ function mousePosition() {
 }
 
 function addStyle() {
-    var tempStyle = document.createElement("style");
+    var tempStyle = dMake("style");
     tempStyle.id="gamejsstyle";
     document.head.appendChild(tempStyle);
-    var tempMeta = document.createElement("meta");
+    var tempMeta = dMake("meta");
     tempMeta.setAttribute("charset","utf-8");
     document.head.appendChild(tempMeta);
 }
@@ -165,8 +167,8 @@ function newSound(src) {
         console.warn(bug+" "+ src + " was not found");
     };
     loadingSound.src = src;
-    loadingSound.preload='auto';
-    loadingSound.addEventListener('canplaythrough', function() { 
+    loadingSound.preload="auto";
+    loadingSound.addEventListener("canplaythrough", function() { 
         audioLoadedLength++;
      }, false);
     sounds[soundName].nodes.push(loadingSound);
@@ -185,7 +187,7 @@ function newSound(src) {
 function addSound(sound) {
     let loadingSound = new Audio();
     loadingSound.src = sound.src;
-    loadingSound.preload='auto';
+    loadingSound.preload="auto";
     sound.nodes.splice(sound.nodes[0],0,loadingSound);
 
     let soundNode = context.createMediaElementSource(loadingSound);
@@ -278,15 +280,15 @@ function handleOptionsInput() {
     
 }
 function addFont() {
-    var tempStyle = document.createElement("style");
+    var tempStyle = dMake("style");
     tempStyle.innerHTML = `
     @font-face {
-        font-family: 'pixelmix';
-        src: url(assets/pixelmix.ttf) format('truetype');
+        font-family: "pixelmix";
+        src: url(assets/pixelmix.ttf) format("truetype");
         font-weight: 900;
         font-style: normal;
     }
-    html {font-family: 'pixelmix' !important; font-size: 16px;}
+    html {font-family: "pixelmix" !important; font-size: 16px;}
     `;
     document.head.appendChild(tempStyle);
     canvases.ctx.textBaseline = "hanging";
@@ -691,14 +693,14 @@ var context;
 var sfxVolumeNode;
 var bmgVolumeNode;
 
-document.getElementById("game").onmouseout = function()   {mouseOnCanvas = false;};
-document.getElementById("game").onmouseover = function()   {mouseOnCanvas = true;};
+dGet("game").onmouseout = function()   {mouseOnCanvas = false;};
+dGet("game").onmouseover = function()   {mouseOnCanvas = true;};
 
 //setup canvases and input
 function setup(physicsFPS) {
     updateFPS = physicsFPS;
     
-    canvases.cvs = document.getElementById("game");
+    canvases.cvs = dGet("game");
     canvases.cvs.width = document.body.clientWidth;
     canvases.cvs.height = document.body.offsetHeight < window.innerHeight ? window.innerHeight : document.body.offsetHeight;
     cw = canvases.cvs.width;
