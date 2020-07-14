@@ -1,6 +1,12 @@
 var worldTiles = [];
 var worldObjects = [];
 
+var worldLayers = {
+    ground: null,
+    walls: null,
+    objects: null
+};
+
 function getRoomObject() {
     var exportObj = {};
 
@@ -33,6 +39,12 @@ function getRoomObject() {
     return exportObj;
 }
 
+// loads a room, and pre renders
+function loadRoom(roomIndex) {
+    fetch(roomBaseDir + rooms[roomIndex]).then((response) => response.json().then((data) => { loadRoomObject(data); renderLayers();}));
+}
+
+// parses an object to load a room
 function loadRoomObject(json) {
     // name
     dGet("name").value = json.name;

@@ -44,7 +44,9 @@ images = [
     "tempEnemy00.png",
     "buildPen.png",
     "buildBucket.png",
-    "buildPointer.png"
+    "buildPointer.png",
+    "shadowSide.png",
+    "shadowCorner.png"
 ];
 
 // files paths of audio files
@@ -55,6 +57,8 @@ audio = [
 var drawCount = 0;
 var updateCount = 0;
 
+var globalLoading = true;
+
 const states = {
     TITLE: 0,
     LOADING: 1,
@@ -63,8 +67,10 @@ const states = {
     BUILDING: 4
 };
 
-var globalState = states.BUILDING;
+var globalState = states.LOADING;
 var lastGlobalState;
+
+var desiredState = states.OVERWORLD;
 
 var isNewGlobalState;
 
@@ -82,13 +88,19 @@ function update() {
 
             break;
         case states.OVERWORLD:
-
+            handleOverWorld(isNewGlobalState);
             break;
         case states.FIGHTING:
 
             break;
         case states.LOADING:
-
+            if(isNewGlobalState) {
+                dGet("load").style.display = "block";
+            }
+            if(!globalLoading) {
+                dGet("load").style.display = "none";
+                globalState = desiredState;
+            }
             break;
         case states.BUILDING:
             handleBuild(isNewGlobalState);
@@ -103,7 +115,7 @@ function draw() {
 
             break;
         case states.OVERWORLD:
-
+            drawOverWorld();
             break;
         case states.FIGHTING:
 
@@ -138,7 +150,15 @@ function absoluteDraw() {
     }
 }
 
+function load() {
+    globalLoading = true;
+    globalState = states.LOADING;
+}
+
 function onAssetsLoaded() {
     generateObjectUITemplates();
+    generateTileDataCaches();
+    preRenderShadows();
+    loadRoom(0);
 }
 setup(60);

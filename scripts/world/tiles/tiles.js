@@ -19,6 +19,8 @@ const layers = {
     wall:1
 };
 
+var tileDataCaches = [];
+
 class Tile {
     constructor(x,y,tileID,variation,rotation=0) {
         this.x = x*16;
@@ -60,3 +62,28 @@ Tile.prototype.draw = function() {
 };
 
 tileClasses.Tile = Tile;
+
+// gets the image data for each variation of each tile
+function generateTileDataCaches() {
+    camera.x = 0;
+    camera.y = 0
+    camera.angle = 0;
+    camera.zoom = 1;
+    difx = 0;
+    dify = 0;
+    absDraw = true;
+    for(var i=0;i<tileIDs.length;i++) {
+        var arr = [];
+        for(var j=0,jl=tileClasses[tileIDs[i]].prototype.typesAmount;j<jl;j++) {
+            var t  = new tileClasses[tileIDs[i]](0.5, 0.5, i, j, 0);
+            var tileCanvas = dMake("canvas");
+            tileCanvas.width = 16;
+            tileCanvas.height = 16;
+            var tileCtx = tileCanvas.getContext("2d");
+            curCtx = tileCtx;
+            t.draw();
+            arr.push(tileCtx.getImageData(0,0,16,16));
+        }
+        tileDataCaches.push(arr);
+    }
+}

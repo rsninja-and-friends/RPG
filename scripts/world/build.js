@@ -18,7 +18,23 @@ function handleBuild(isNewState) {
             generateBuildUI();
             buildUIBuilt = true;
         }
+        dGet("build").style.display = "block";
+        dGet("hideShow").style.display = "block";
+        dGet("object").style.display = "block";
     }
+
+    // exit build
+    if(keyPress[k.BACKSLASH]) {
+        canvases.cvs.style.cursor = "crosshair";
+        dGet("build").style.display = "none";
+        dGet("hideShow").style.display = "none";
+        dGet("object").style.display = "none";
+        desiredState = states.OVERWORLD;
+        load();
+        renderLayers();
+    }
+
+    // get args for selected object
     if (buildSelection.objectIndex === -1) {
         objectUIDiv.innerHTML = "";
     } else {

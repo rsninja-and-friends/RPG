@@ -37,6 +37,7 @@ dGet("newRoom").onclick = function () {
     }
 
     worldTiles = [];
+    worldObjects = [];
     var w = parseInt(dGet("roomW").value);
     var h = parseInt(dGet("roomH").value);
 
@@ -205,12 +206,13 @@ function generateObjectUITemplates() {
     objectUIRoomSelect = dMake("select");
     objectUIEnemySelect = dMake("select");
 
-    var example = dMake("option");
-    example.innerText = "aa";
-    objectUIRoomSelect.appendChild(example);
-    example = dMake("option");
-    example.innerText = "213sdvbvc";
-    objectUIRoomSelect.appendChild(example);
+    // generate list of rooms
+    for(var i=0;i<rooms.length;i++) {
+        var option = dMake("option");
+        var lastSlash = rooms[i].lastIndexOf("/");
+        option.innerText = lastSlash === -1 ? rooms[i] : rooms[i].substring(lastSlash+1);
+        objectUIRoomSelect.appendChild(option);
+    }
 }
 
 function generateObjectUI() {

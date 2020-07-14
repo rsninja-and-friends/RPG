@@ -27,7 +27,7 @@
         </style>
     </head>
     <body> 
-        <canvas width="800" height="600" id="game"></canvas>
+        <canvas width="800" height="600" id="game" style="cursor: crosshair;"></canvas>
         <img src="assets/images/tempLoading.gif" style="display: none;position:absolute;top:0;bottom:0;right:0;left:0;margin:auto;" id="load"></img>
 
         <div id="build" style="width: 450px;">
@@ -75,17 +75,20 @@ pointer - click an object to select it
             <table id="buildVariations"></table>
             <div style="height: 500px; overflow-y: scroll;"><table><tbody id="buildTable"><tr style="height: 0px;"><td style="position: relative; width: 36px; height: 36px; background-color: #ffffff30; z-index: 100;" id="tableSelection"></td></tr></tbody></table></div>
         </div>
-        <button id="hideShow" style="position: relative;left: 475px;top: 10px;">hide</button>
-        <div id="object" style="position: absolute;right: 100px;">
+        <button id="hideShow" style="position: relative;left: 475px;top: 10px;display: none;">hide</button>
+        <div id="object" style="position: absolute;right: 100px;display: none;">
 
         </div>
         <!-- when compressing code, copy all script tags, and use them in concatenateJavascript.jar an use https://xem.github.io/terser-online -->
         <script src="scripts/game.js"></script>
         <script src="scripts/utils.js"></script>
+        <script src="scripts/overworld/overworld.js"></script>
         <script src="scripts/world/world.js"></script>
         <script src="scripts/world/build.js"></script>
         <script src="scripts/world/buildUI.js"></script>
         <script src="scripts/world/saveLoad.js"></script>
+        <script src="scripts/world/rooms.js"></script>
+        <script src="scripts/world/render.js"></script>
         <script src="scripts/world/tiles/tiles.js"></script>
         <script src="scripts/world/tiles/baseWall.js"></script>
         <script src="scripts/world/tiles/definitions/tileBrickPath.js"></script>
