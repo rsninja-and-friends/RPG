@@ -191,8 +191,13 @@ function preRenderShadows() {
         var ctx = canvas.getContext("2d");
 
         // corners
-        for (var j = 0; j < 8; j += 2) {
-            if (str[j] === "0") {
+        if(str[0] === "0" && str[7] !== "1" && str[1] !== "1") {
+            ctx.setTransform(1, 0, 0, 1, 11, 11);
+            ctx.drawImage(sprites.shadowCorner.spr, -11, -11);
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+        }
+        for (var j = 2; j < 8; j += 2) {
+            if (check = str[j] === "0" && str[j-1] !== "1" && str[j+1] !== "1") {
                 ctx.setTransform(1, 0, 0, 1, 11, 11);
                 ctx.rotate(j * halfPI / 2);
                 ctx.drawImage(sprites.shadowCorner.spr, -11, -11);

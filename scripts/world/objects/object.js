@@ -24,7 +24,7 @@ class BaseObject {
     }
 
     get data() {
-        return `${this.x/16}.${this.y/16}.${this.objectID}.${this.variation}.${~~(this.rotation/halfPI)}.${JSON.stringify(this.meta)}`;   
+        return `${this.x/16}█${this.y/16}█${this.objectID}█${this.variation}█${~~(this.rotation/halfPI)}█${JSON.stringify(this.meta)}`;   
     }
     
 }

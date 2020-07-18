@@ -73,7 +73,7 @@ function loadRoomObject(json) {
     if(jsonObjects.length > 0) {
         if(jsonObjects[0].length > 0) {
             for (var i = 0, l = jsonObjects.length; i < l; i++) {
-                var data = jsonObjects[i].split(".");
+                var data = jsonObjects[i].split("█");
                 worldObjects.push(new objectClasses[objectIDs[parseInt(data[2])]](parseInt(data[0]), parseInt(data[1]), parseInt(data[2]), parseInt(data[3]), parseInt(data[4]), JSON.parse(data[5])));
             }
         }

@@ -39,6 +39,17 @@ images = [
         "Boots.png",
         "Hand.png"
     ],
+    [
+        "entities/",
+        [
+            "player",
+            "1.png",
+            "2.png",
+            "3.png",
+            "4.png",
+            "5.png"
+        ],
+    ],
     "preview0.png",
     "tempPlayer.png",
     "tempEnemy00.png",
@@ -94,10 +105,10 @@ function update() {
 
             break;
         case states.LOADING:
-            if(isNewGlobalState) {
+            if (isNewGlobalState) {
                 dGet("load").style.display = "block";
             }
-            if(!globalLoading) {
+            if (!globalLoading) {
                 dGet("load").style.display = "none";
                 globalState = desiredState;
             }
@@ -159,6 +170,7 @@ function onAssetsLoaded() {
     generateObjectUITemplates();
     generateTileDataCaches();
     preRenderShadows();
-    loadRoom(0);
+    loadRoom(2);
 }
+
 setup(60);
