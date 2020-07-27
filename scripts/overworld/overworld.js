@@ -19,6 +19,7 @@ function handleOverWorld(isNewState) {
             worldObjects[i].update();
         }
         player.update();
+        updateEnemies();
     }
 }
 
@@ -27,6 +28,7 @@ function drawOverWorld() {
     var y = worldTiles.length * 8;
     imgIgnoreCutoff({spr:worldLayers.ground,drawLimitSize:0},x,y);
     player.draw();
+    drawEnemies();
     imgIgnoreCutoff({spr:worldLayers.walls,drawLimitSize:0},x,y);
     imgIgnoreCutoff({spr:worldLayers.objects,drawLimitSize:0},x,y);
 

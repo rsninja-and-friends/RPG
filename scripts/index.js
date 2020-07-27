@@ -184,6 +184,11 @@ function onAssetsLoaded() {
     generateTileDataCaches();
     preRenderShadows();
     loadRoom(2);
+
+    for(var i=0;i<1000;i++) {
+        worldEnemies.push(new Enemy(rand(0,600),rand(0,600),14,14,rand(0,63)/10));
+        worldEnemies[i].updateCount = rand(0,50);
+    }
 }
 
 setup(60);

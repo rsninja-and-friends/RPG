@@ -20,7 +20,7 @@ class BaseObject {
         this.objectID  = objectID;
         this.variation = variation;
         this.rotation = rotation * Math.PI/2;
-        this.meta = {};debugger
+        this.meta = {};
         var metaInfo = meta.split("@");
         for(var i=0;i<this.metaArguments.length;i++) {
             var mLength = metaInfo[i].length;
