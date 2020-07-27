@@ -6,10 +6,14 @@ class HouseEntrance extends BaseObject {
 
 HouseEntrance.prototype.imageName = "houseEntrance";
 
-HouseEntrance.prototype.metaArguments = {room: metaFieldTypes.room};
+HouseEntrance.prototype.metaArguments = [["room",metaFieldTypes.room]];
 
 HouseEntrance.prototype.update = function() {
-    // change room here
+    if(dist(this,player) < 20) {
+        player.angle = -pointTo(player,this)+halfPI;
+        cutSceneData = this.meta.room;
+        playCutscene(0);
+    }
     return false;
 };
 

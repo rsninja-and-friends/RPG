@@ -1,8 +1,10 @@
 var player = new Player();
 
+var overworldCollisions = [];
+
 function handleOverWorld(isNewState) {
     if(isNewState) {
-        player.x = 100;
+        player.x = 50;
         player.y = 100;
     }
 
@@ -12,7 +14,12 @@ function handleOverWorld(isNewState) {
         globalLoading = false;
     }
     
-    player.update();
+    if(!cutScene) {
+        for(var i=0,l=worldObjects.length;i<l;i++) {
+            worldObjects[i].update();
+        }
+        player.update();
+    }
 }
 
 function drawOverWorld() {
@@ -22,5 +29,11 @@ function drawOverWorld() {
     player.draw();
     imgIgnoreCutoff({spr:worldLayers.walls,drawLimitSize:0},x,y);
     imgIgnoreCutoff({spr:worldLayers.objects,drawLimitSize:0},x,y);
+
+    // show collision
+    // for(var i=0;i<overworldCollisions.length;i++) {
+    //     var c = overworldCollisions[i];
+    //     rectOutline(c.x,c.y,c.w,c.h);
+    // }
 
 }

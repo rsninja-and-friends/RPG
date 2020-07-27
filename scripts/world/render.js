@@ -7,17 +7,14 @@ function renderLayers() {
     dify = 8;
     absDraw = true;
 
-    var xl = worldTiles[0].length;
-    var yl = worldTiles.length;
-
     // positions around a tile that should be checked
     var shadowCheckOffsets = [[1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1]];
 
     var keys = Object.keys(worldLayers);
     for (var i = 0; i < keys.length; i++) {
         worldLayers[keys[i]] = dMake("canvas");
-        worldLayers[keys[i]].width = xl * 16;
-        worldLayers[keys[i]].height = yl * 16;
+        worldLayers[keys[i]].width = worldW * 16;
+        worldLayers[keys[i]].height = worldH * 16;
     }
 
     // ground
@@ -25,22 +22,22 @@ function renderLayers() {
     var groundCtx = worldLayers.ground.getContext("2d");
     curCtx = groundCtx;
     // draw ground tiles
-    for (var y = 0; y < yl; y++) {
-        for (var x = 0; x < xl; x++) {
+    for (var y = 0; y < worldH; y++) {
+        for (var x = 0; x < worldW; x++) {
             if (worldTiles[y][x].layer === layers.ground) {
                 worldTiles[y][x].draw();
             }
         }
     }
 
-    var groundImageData = groundCtx.getImageData(0, 0, xl * 16, yl * 16);
+    var groundImageData = groundCtx.getImageData(0, 0, worldW * 16, worldH * 16);
     // draw transitions between tiles
-    for (var y = 0; y < yl; y++) {
-        for (var x = 0; x < xl; x++) {
+    for (var y = 0; y < worldH; y++) {
+        for (var x = 0; x < worldW; x++) {
             var merges = worldTiles[y][x].mergesWith;
 
             // bottom
-            if (y + 1 < yl) {
+            if (y + 1 < worldH) {
                 if (merges.includes(worldTiles[y + 1][x].tileID)) {
                     drawMerge(groundImageData, worldTiles[y][x], x * 16, (y + 1) * 16, "bottom");
                 }
@@ -53,7 +50,7 @@ function renderLayers() {
                 }
             }
             // right
-            if (x + 1 < xl) {
+            if (x + 1 < worldW) {
                 if (merges.includes(worldTiles[y][x + 1].tileID)) {
                     drawMerge(groundImageData, worldTiles[y][x], (x + 1) * 16, y * 16, "right");
                 }
@@ -76,8 +73,8 @@ function renderLayers() {
     var wallCtx = worldLayers.walls.getContext("2d");
     curCtx = wallCtx;
     // draw ground tiles
-    for (var y = 0; y < yl; y++) {
-        for (var x = 0; x < xl; x++) {
+    for (var y = 0; y < worldH; y++) {
+        for (var x = 0; x < worldW; x++) {
             if (worldTiles[y][x].layer === layers.wall) {
                 worldTiles[y][x].draw();
             }
@@ -86,10 +83,10 @@ function renderLayers() {
 
     // shadows
     function validPosition(x, y) {
-        return x < xl && x > -1 && y < yl && y > -1;
+        return x < worldW && x > -1 && y < worldH && y > -1;
     }
-    for (var y = 0; y < yl; y++) {
-        for (var x = 0; x < xl; x++) {
+    for (var y = 0; y < worldH; y++) {
+        for (var x = 0; x < worldW; x++) {
             if (worldTiles[y][x].layer === layers.wall) {
                 var str = "";
                 for (var i = 0; i < 8; i++) {
@@ -106,6 +103,8 @@ function renderLayers() {
     }
 
     // objects
+    difx = 0;
+    dify = 0;
     var objectCtx = worldLayers.objects.getContext("2d");
     curCtx = objectCtx;
     for (var i = 0, l = worldObjects.length; i < l; i++) {

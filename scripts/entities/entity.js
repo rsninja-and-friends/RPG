@@ -13,6 +13,6 @@ class Entity {
 
     // returns array of all potential collisions
     get collisions() {
-        return [];
+        return overworldCollisions;
     }
 }

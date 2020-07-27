@@ -14,17 +14,33 @@ var metaFieldTypes = {
 };
 
 class BaseObject {
-    constructor(x,y,objectID,variation,rotation=0,meta={}) {
+    constructor(x,y,objectID,variation,rotation=0,meta="") {
         this.x = x*16;
         this.y = y*16;
         this.objectID  = objectID;
         this.variation = variation;
         this.rotation = rotation * Math.PI/2;
-        this.meta = meta;
+        this.meta = {};debugger
+        var metaInfo = meta.split("@");
+        for(var i=0;i<this.metaArguments.length;i++) {
+            var mLength = metaInfo[i].length;
+            if(mLength > 0) {
+                if(parseInt(metaInfo[i]).toString().length === mLength) {
+                    this.meta[this.metaArguments[i][0]] = parseInt(metaInfo[i]);
+                } else {
+                    this.meta[this.metaArguments[i][0]] = metaInfo[i];
+                }
+            }
+        }
     }
 
     get data() {
-        return `${this.x/16}█${this.y/16}█${this.objectID}█${this.variation}█${~~(this.rotation/halfPI)}█${JSON.stringify(this.meta)}`;   
+        var metaStr = "";
+        for(var i=0;i<this.metaArguments.length;i++) {
+            metaStr += `${this.meta[this.metaArguments[i][0]]}@`;
+        }
+        metaStr = metaStr.substring(0,metaStr.length-1);
+        return `${this.x/16-0.5}~${this.y/16-0.5}~${this.objectID}~${this.variation}~${~~(this.rotation/halfPI)}~${metaStr}`;
     }
     
 }
@@ -33,7 +49,7 @@ BaseObject.prototype.imageName = "debug"; // name of image without number at the
 
 BaseObject.prototype.typesAmount = 1; // amount of object visual variations
 
-BaseObject.prototype.metaArguments = {}; // what arguments the meta takes in build mode. Example of arguments: {warpID:metaFieldTypes.number, enemySpawn: metaFieldTypes.enemy};
+BaseObject.prototype.metaArguments = []; // what arguments the meta takes in build mode. Example of arguments: [["warpID",metaFieldTypes.number],[" enemySpawn", metaFieldTypes.enemy]];
 
 BaseObject.prototype.w = 16; // dimensions used only for building
 BaseObject.prototype.h = 16;

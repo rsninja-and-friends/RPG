@@ -21,6 +21,7 @@ function handleBuild(isNewState) {
         dGet("build").style.display = "block";
         dGet("hideShow").style.display = "block";
         dGet("object").style.display = "block";
+        trackUndo();
     }
 
     // exit build
@@ -29,9 +30,9 @@ function handleBuild(isNewState) {
         dGet("build").style.display = "none";
         dGet("hideShow").style.display = "none";
         dGet("object").style.display = "none";
-        desiredState = states.OVERWORLD;
-        load();
+        load(states.OVERWORLD);
         renderLayers();
+        makeRoomCollisions();
     }
 
     // get args for selected object
@@ -117,15 +118,16 @@ function handleBuild(isNewState) {
     if (keyPress[k.BACKSPACE] || keyPress[k.DELETE] && buildSelection.objectIndex > -1) {
         worldObjects.splice(buildSelection.objectIndex, 1);
         buildSelection.objectIndex--;
+        generateObjectUI();
     }
 
     if (worldTiles.length > 0) {
         // center
-        if (keyPress[k.SHIFT]) { centerCameraOn((worldTiles[0].length - 1) * 8, (worldTiles.length - 1) * 8); }
+        if (keyPress[k.SHIFT]) { centerCameraOn((worldW - 1) * 8, (worldH - 1) * 8); }
 
         var mPos = mousePosition();
-        mPos.x = clamp(roundToGrid(mPos.x) / 16, 0, worldTiles[0].length - 1);
-        mPos.y = clamp(roundToGrid(mPos.y) / 16, 0, worldTiles.length - 1);
+        mPos.x = clamp(roundToGrid(mPos.x) / 16, 0, worldW - 1);
+        mPos.y = clamp(roundToGrid(mPos.y) / 16, 0, worldH - 1);
 
         // track undo
         if (mousePress[0]) {
@@ -192,8 +194,8 @@ function handleBuild(isNewState) {
             case "bucket":
                 if (mousePress[0]) {
                     // get world width and height
-                    var ww = worldTiles[0].length;
-                    var wh = worldTiles.length;
+                    var ww = worldW;
+                    var wh = worldH;
 
                     // get data string of what is to be targeted, and what will replace it;
                     var type = dGet("fillType").value;
@@ -256,6 +258,8 @@ function handleBuild(isNewState) {
             case "pointer":
                 if (mousePress[0]) {
                     var pos = mousePosition();
+                    pos.x += 8;
+                    pos.y += 8;
                     for (var i = 0, l = worldObjects.length; i < l; i++) {
                         if (rectpoint(worldObjects[i], pos)) {
                             buildSelection.objectIndex = i;
@@ -292,7 +296,7 @@ function place(x, y) {
             break;
         case "object":
             buildSelection.objectIndex = worldObjects.length;
-            worldObjects.push(new objectClasses[objectIDs[buildSelection.ID]](x, y, buildSelection.ID, buildSelection.variance, rotCache));
+            worldObjects.push(new objectClasses[objectIDs[buildSelection.ID]](x + 0.5, y + 0.5, buildSelection.ID, buildSelection.variance, rotCache));
             generateObjectUI();
             break;
     }
@@ -365,15 +369,20 @@ function pDistance(x, y, x1, y1, x2, y2) {
 
 function drawBuild() {
     // draw tiles
-    for (var y = 0, yl = worldTiles.length; y < yl; y++) {
-        for (var x = 0, xl = worldTiles[0].length; x < xl; x++) {
+    for (var y = 0; y < worldH; y++) {
+        for (var x = 0; x < worldW; x++) {
             worldTiles[y][x].draw();
         }
     }
 
+    // objects
+    difx = -8; 
+    dify = -8; 
     for (var i = 0, l = worldObjects.length; i < l; i++) {
         worldObjects[i].draw();
     }
+    difx = 0; 
+    dify = 0;
 
     if (worldTiles.length > 0) {
         // draw preview
@@ -381,7 +390,7 @@ function drawBuild() {
         if (buildTool === "pointer") {
             if (buildSelection.objectIndex > -1) {
                 var o = worldObjects[buildSelection.objectIndex];
-                var previewObject = new objectClasses[objectIDs[o.objectID]](o.x / 16, o.y / 16, o.objectID, o.variation, o.rotation + Math.cos(drawCount / 10) / 5);
+                var previewObject = new objectClasses[objectIDs[o.objectID]](o.x / 16 - 0.5, o.y / 16 - 0.5, o.objectID, o.variation, -o.rotation + Math.cos(drawCount / 10) / 5);
                 previewObject.draw();
             }
         } else {

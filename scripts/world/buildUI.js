@@ -211,6 +211,7 @@ function generateObjectUITemplates() {
         var option = dMake("option");
         var lastSlash = rooms[i].lastIndexOf("/");
         option.innerText = lastSlash === -1 ? rooms[i] : rooms[i].substring(lastSlash+1);
+        option.value = i;
         objectUIRoomSelect.appendChild(option);
     }
 }

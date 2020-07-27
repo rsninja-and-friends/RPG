@@ -4,7 +4,7 @@ const PLAYER_MAX_VEL = 1;
 
 class Player extends Entity {
     constructor() {
-        super(0, 0, 16, 16);
+        super(0, 0, 14, 14);
         this.angle = 0;
         this.vel = 0;
         this.walkCycle = 1;
@@ -65,15 +65,17 @@ Player.prototype.update = function () {
     // move x
     this.x += Math.sin(this.angle) * this.vel;
     for (var i = 0, l = cols.length; i < l; i++) {
-        if (rectrect(this, cols)) {
+        if (rectrect(this, cols[i])) {
             this.x -= Math.sin(this.angle) * this.vel;
         }
     }
 
     // move y
     this.y += Math.cos(this.angle) * this.vel;
-    if (rectrect(this, cols)) {
-        this.y -= Math.cos(this.angle) * this.vel;
+    for (var i = 0, l = cols.length; i < l; i++) {
+        if (rectrect(this, cols[i])) {
+            this.y -= Math.cos(this.angle) * this.vel;
+        }
     }
 
     // increase walk cycle

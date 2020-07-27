@@ -75,7 +75,8 @@ const states = {
     LOADING: 1,
     OVERWORLD: 2,
     FIGHTING: 3,
-    BUILDING: 4
+    CUTSCENE: 4,
+    BUILDING: 5
 };
 
 var globalState = states.LOADING;
@@ -84,6 +85,8 @@ var lastGlobalState;
 var desiredState = states.OVERWORLD;
 
 var isNewGlobalState;
+
+var cutScene = false;
 
 function update() {
 
@@ -113,6 +116,9 @@ function update() {
                 globalState = desiredState;
             }
             break;
+        case states.CUTSCENE:
+            handleCutScene(isNewGlobalState);
+            break;
         case states.BUILDING:
             handleBuild(isNewGlobalState);
             break;
@@ -133,6 +139,9 @@ function draw() {
             break;
         case states.LOADING:
 
+            break;
+        case states.CUTSCENE:
+            drawCutScene();
             break;
         case states.BUILDING:
             drawBuild();
@@ -155,13 +164,17 @@ function absoluteDraw() {
         case states.LOADING:
 
             break;
+        case states.CUTSCENE:
+
+            break;
         case states.BUILDING:
             absoluteDrawBuild();
             break;
     }
 }
 
-function load() {
+function load(state) {
+    desiredState = state;
     globalLoading = true;
     globalState = states.LOADING;
 }

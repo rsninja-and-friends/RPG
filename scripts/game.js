@@ -327,6 +327,12 @@ function rect(x,y,w,h,color) {
     curCtx.fillRect(x-(w/2)+camera.x+difx,y-(h/2)+camera.y+dify,w,h);
 }
 
+function rectOutline(x,y,w,h,color) {
+    curCtx.strokeStyle = color;
+    curCtx.rect(x-(w/2)+camera.x+difx,y-(h/2)+camera.y+dify,w,h);
+    curCtx.stroke();
+}
+
 function circle(x,y,r,color) {
     curCtx.beginPath();
     curCtx.arc(x+camera.x+difx, y+camera.y+dify, r, 0, 2 * Math.PI, false);
