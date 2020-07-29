@@ -3,11 +3,6 @@ var player = new Player();
 var overworldCollisions = [];
 
 function handleOverWorld(isNewState) {
-    if(isNewState) {
-        player.x = 50;
-        player.y = 100;
-    }
-
     if(keyPress[k.BACKSLASH]) {
         desiredState = states.BUILDING;
         globalState = states.LOADING;

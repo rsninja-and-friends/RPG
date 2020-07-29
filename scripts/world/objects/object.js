@@ -23,6 +23,7 @@ class BaseObject {
         this.meta = {};
         var metaInfo = meta.split("@");
         for(var i=0;i<this.metaArguments.length;i++) {
+            if(metaInfo[i] === undefined) { metaInfo[i] = 0; }
             var mLength = metaInfo[i].length;
             if(mLength > 0) {
                 if(parseInt(metaInfo[i]).toString().length === mLength) {

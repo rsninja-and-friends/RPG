@@ -220,51 +220,47 @@ function generateObjectUI() {
     if (buildSelection.objectIndex !== -1) {
         objectUIDiv.innerHTML = "";
 
-        var metaArgs = (new objectClasses[objectIDs[worldObjects[buildSelection.objectIndex].objectID]]).metaArguments;
-        var keys = Object.keys(metaArgs);
+        var metaArgs = (new objectClasses[objectIDs[worldObjects[buildSelection.objectIndex].objectID]](0,0,0,0,0,"")).metaArguments;
 
-        for (var i = 0; i < keys.length; i++) {
-            makeObjectInput(keys[i], metaArgs[keys[i]], i);
+        for (var i = 0; i < metaArgs.length; i++) {
+            makeObjectInput(metaArgs[i][0], metaArgs[i][1], i, worldObjects[buildSelection.objectIndex].meta[metaArgs[i][0]]);
         }
     }
 }
 
-function makeObjectInput(label, type, id) {
+function makeObjectInput(label, type, id, value) {
     var span = dMake("span");
     span.innerText = label;
     span.style.paddingRight = "20px";
     objectUIDiv.appendChild(span);
 
+    var element;
+
     switch (type) {
         case metaFieldTypes.string:
-            var input = dMake("input");
-            input.type = "text";
-            input.id = "objectMeta" + id;
-            input.labelName = label;
-            objectUIDiv.appendChild(input);
+            element = dMake("input");
+            element.type = "text";
             break;
         case metaFieldTypes.number:
-            var input = dMake("input");
-            input.type = "number";
-            input.id = "objectMeta" + id;
-            input.labelName = label;
-            objectUIDiv.appendChild(input);
+            element = dMake("input");
+            element.type = "number";
             break;
         case metaFieldTypes.room:
-            var select = dMake("select");
-            select.innerHTML = objectUIRoomSelect.innerHTML;
-            select.id = "objectMeta" + id;
-            select.labelName = label;
-            objectUIDiv.appendChild(select);
+            element = dMake("select");
+            element.innerHTML = objectUIRoomSelect.innerHTML;
             break;
         case metaFieldTypes.enemy:
-            var select = dMake("select");
-            select.innerHTML = objectUIEnemySelect.innerHTML;
-            select.id = "objectMeta" + id;
-            select.labelName = label;
-            objectUIDiv.appendChild(select);
+            element = dMake("select");
+            element.innerHTML = objectUIEnemySelect.innerHTML;
             break;
     }
+
+    element.id = "objectMeta" + id;
+    element.labelName = label;
+    element.value = value;
+    element.onfocus = function() {typing = true;}
+    element.onblur = function() {typing = false;}
+    objectUIDiv.appendChild(element);
 
     var brrrrrrrrrrr = dMake("br");
     objectUIDiv.appendChild(brrrrrrrrrrr);

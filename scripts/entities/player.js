@@ -19,7 +19,7 @@ Player.prototype.update = function () {
     // up
     if (keyDown[k.w]) {
         this.vel += PLAYER_ACCELERATION;
-        angle -= Math.PI * (keyDown[k.d] ? -1 : 1);
+        angle -= Math.PI / 2;
         wasInput = true;
         divisor++;
     }
@@ -27,20 +27,21 @@ Player.prototype.update = function () {
     if (keyDown[k.s]) {
         this.vel += PLAYER_ACCELERATION;
         wasInput = true;
+        angle += Math.PI / 2;
         divisor++;
     }
     // left
     if (keyDown[k.a]) {
         this.vel += PLAYER_ACCELERATION;
         wasInput = true;
-        angle -= Math.PI / 2;
+        angle -= Math.PI * (keyDown[k.s] ? -1 : 1);
         divisor++;
     }
     // right
     if (keyDown[k.d]) {
         this.vel += PLAYER_ACCELERATION;
         wasInput = true;
-        angle += Math.PI / 2;
+        
         divisor++;
     }
     // determine angle
@@ -63,18 +64,18 @@ Player.prototype.update = function () {
     var cols = this.collisions;
 
     // move x
-    this.x += Math.sin(this.angle) * this.vel;
+    this.x += Math.cos(this.angle) * this.vel;
     for (var i = 0, l = cols.length; i < l; i++) {
         if (rectrect(this, cols[i])) {
-            this.x -= Math.sin(this.angle) * this.vel;
+            this.x -= Math.cos(this.angle) * this.vel;
         }
     }
 
     // move y
-    this.y += Math.cos(this.angle) * this.vel;
+    this.y += Math.sin(this.angle) * this.vel;
     for (var i = 0, l = cols.length; i < l; i++) {
         if (rectrect(this, cols[i])) {
-            this.y -= Math.cos(this.angle) * this.vel;
+            this.y -= Math.sin(this.angle) * this.vel;
         }
     }
 
@@ -130,5 +131,5 @@ Player.prototype.moveCamera = function () {
 Player.prototype.draw = function () {
     var cycle = Math.floor(this.walkCycle);
     cycle = cycle > 5 ? 11 - cycle : cycle;
-    img(sprites[`player${cycle}`], this.x, this.y, -this.angle + halfPI);
+    img(sprites[`player${cycle}`], this.x, this.y, this.angle);
 }

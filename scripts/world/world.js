@@ -42,11 +42,28 @@ function getRoomObject() {
 }
 
 // loads a room, pre renders, and makes collisions
-function loadRoom(roomIndex) {
+function loadRoom(roomIndex,entranceID="") {
+    globalLoading = true;
     fetch(roomBaseDir + rooms[roomIndex]).then((response) => response.json().then((data) => { 
         loadRoomObject(data); 
         renderLayers(); 
         makeRoomCollisions();
+        for(var i=0,l=worldObjects.length;i<l;i++) {
+            var o = worldObjects[i];
+            if(i+1===l) {
+                player.x = 100;
+                player.y = 100;
+            }
+            if(o.meta.entranceID === entranceID) {
+                player.x = o.x;
+                player.y = o.y;
+                player.angle = o.rotation;
+                player.x += Math.cos(player.angle) * 10;
+                player.y += Math.sin(player.angle) * 10;
+                break;
+            }
+        }
+        globalLoading = false;
     }));
 }
 

@@ -120,7 +120,11 @@ function update() {
             handleCutScene(isNewGlobalState);
             break;
         case states.BUILDING:
-            handleBuild(isNewGlobalState);
+            if(!typing) {
+                handleBuild(isNewGlobalState);
+            }
+            // un focus html ui
+            if (mousePress[0] || keyPress[k.ESCAPE]) { [].forEach.call(document.getElementsByTagName("button"), e => { e.blur(); });[].forEach.call(document.getElementsByTagName("select"), e => { e.blur(); });[].forEach.call(document.getElementsByTagName("input"), e => { e.blur(); }); }
             break;
     }
     updateCount++;
@@ -184,11 +188,6 @@ function onAssetsLoaded() {
     generateTileDataCaches();
     preRenderShadows();
     loadRoom(2);
-
-    for(var i=0;i<1000;i++) {
-        worldEnemies.push(new Enemy(rand(0,600),rand(0,600),14,14,rand(0,63)/10));
-        worldEnemies[i].updateCount = rand(0,50);
-    }
 }
 
 setup(60);

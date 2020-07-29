@@ -10,6 +10,8 @@ var buildRandomizeAngle = false;
 
 var undo = { states: [], pos: -1, lastStep: "forward", lastActionWasEdit: false, bufferSize: 200 };
 
+var typing = false;
+
 function handleBuild(isNewState) {
     if (isNewState) {
         canvases.cvs.style.cursor = "none";
@@ -21,6 +23,7 @@ function handleBuild(isNewState) {
         dGet("build").style.display = "block";
         dGet("hideShow").style.display = "block";
         dGet("object").style.display = "block";
+        buildSelection.objectIndex = -1;
         trackUndo();
     }
 
@@ -40,10 +43,10 @@ function handleBuild(isNewState) {
         objectUIDiv.innerHTML = "";
     } else {
         if (updateCount % 10 == 0) {
-            var argsLength = Object.keys((new objectClasses[objectIDs[worldObjects[buildSelection.objectIndex].objectID]]).metaArguments).length;
+            var argsLength = (new objectClasses[objectIDs[worldObjects[buildSelection.objectIndex].objectID]](0,0,0,0,0,"")).metaArguments.length;
             for (var i = 0; i < argsLength; i++) {
                 var elem = dGet("objectMeta" + i);
-                worldObjects[buildSelection.objectIndex].meta[elem.labelName] = (elem.type === "number" ? parseInt(elem.value) : elem.value);
+                worldObjects[buildSelection.objectIndex].meta[elem.labelName] = (parseInt(elem.value).toString().length === elem.value.length ? parseInt(elem.value) : elem.value);
             }
         }
     }
@@ -70,9 +73,6 @@ function handleBuild(isNewState) {
             }
         }
     }
-
-    // un focus html ui
-    if (mousePress[0] || keyPress[k.ESCAPE]) { [].forEach.call(document.getElementsByTagName("button"), e => { e.blur(); });[].forEach.call(document.getElementsByTagName("select"), e => { e.blur(); });[].forEach.call(document.getElementsByTagName("input"), e => { e.blur(); }); }
 
     // camera
     if (keyDown[k.a]) { moveCamera(-10 / camera.zoom, 0); }
@@ -264,6 +264,7 @@ function handleBuild(isNewState) {
                         if (rectpoint(worldObjects[i], pos)) {
                             buildSelection.objectIndex = i;
                             generateObjectUI();
+                            break;
                         }
                     }
                 }
@@ -388,7 +389,7 @@ function drawBuild() {
         // draw preview
 
         if (buildTool === "pointer") {
-            if (buildSelection.objectIndex > -1) {
+            if (buildSelection.objectIndex > -1 && buildSelection.objectIndex < worldObjects.length) {
                 var o = worldObjects[buildSelection.objectIndex];
                 var previewObject = new objectClasses[objectIDs[o.objectID]](o.x / 16 - 0.5, o.y / 16 - 0.5, o.objectID, o.variation, -o.rotation + Math.cos(drawCount / 10) / 5);
                 previewObject.draw();
