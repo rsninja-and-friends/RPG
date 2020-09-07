@@ -1,7 +1,3 @@
-const PLAYER_ACCELERATION = 0.05;
-const PLAYER_FRICTION = 0.3;
-const PLAYER_MAX_VEL = 1;
-
 class Player extends Entity {
     constructor() {
         super(0, 0, 14, 14);
@@ -41,7 +37,7 @@ Player.prototype.update = function () {
     if (keyDown[k.d]) {
         this.vel += PLAYER_ACCELERATION;
         wasInput = true;
-        
+
         divisor++;
     }
     // determine angle
@@ -91,11 +87,22 @@ Player.prototype.update = function () {
     }
 
     this.moveCamera();
-}
+
+    this.w = 18;
+    this.h = 18;
+    for(var i=0,l=worldEnemies.length;i<l;i++) {
+        if(rectrect(this, worldEnemies[i])) {
+            cutSceneData = i;
+            playCutscene(2);
+        }
+    }
+    this.w = 14;
+    this.h = 14;
+};
 
 Player.prototype.moveCamera = function () {
     camera.zoom = 3;
-    var cameraTargetPosition = {x: this.x, y: this.y};
+    var cameraTargetPosition = { x: this.x, y: this.y };
 
     var w = worldTiles[0].length;
     var h = worldTiles.length;
@@ -122,14 +129,13 @@ Player.prototype.moveCamera = function () {
         if (cameraTargetPosition.x > w * 16 - cw / 2 / camera.zoom) {
             cameraTargetPosition.x = w * 16 - cw / 2 / camera.zoom;
         }
-
     }
 
     centerCameraOn(cameraTargetPosition.x, cameraTargetPosition.y);
-}
+};
 
 Player.prototype.draw = function () {
     var cycle = Math.floor(this.walkCycle);
     cycle = cycle > 5 ? 11 - cycle : cycle;
-    img(sprites[`player${cycle}`], this.x, this.y, this.angle);
-}
+    imgIgnoreCutoff(sprites[`player${cycle}`], this.x, this.y, this.angle);
+};

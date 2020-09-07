@@ -25,7 +25,9 @@ images = [
         "link0.png",
         "link1.png",
         "houseEntrance0.png",
-        "smokeStack0.png"
+        "smokeStack0.png",
+        "spawner0.png",
+        "spawnerSingle0.png"
     ],
     [
         "UI/slot",
@@ -49,6 +51,11 @@ images = [
             "4.png",
             "5.png"
         ],
+        [
+            "enemies/",
+            "slime0.png",
+            "angryHedge0.png"
+        ]
     ],
     "preview0.png",
     "tempPlayer.png",
@@ -74,7 +81,7 @@ const states = {
     TITLE: 0,
     LOADING: 1,
     OVERWORLD: 2,
-    FIGHTING: 3,
+    BATTLE: 3,
     CUTSCENE: 4,
     BUILDING: 5
 };
@@ -104,8 +111,8 @@ function update() {
         case states.OVERWORLD:
             handleOverWorld(isNewGlobalState);
             break;
-        case states.FIGHTING:
-
+        case states.BATTLE:
+            handleBattle();
             break;
         case states.LOADING:
             if (isNewGlobalState) {
@@ -138,8 +145,8 @@ function draw() {
         case states.OVERWORLD:
             drawOverWorld();
             break;
-        case states.FIGHTING:
-
+        case states.BATTLE:
+            drawBattle();
             break;
         case states.LOADING:
 
@@ -162,7 +169,7 @@ function absoluteDraw() {
         case states.OVERWORLD:
 
             break;
-        case states.FIGHTING:
+        case states.BATTLE:
 
             break;
         case states.LOADING:

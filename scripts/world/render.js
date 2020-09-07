@@ -1,6 +1,6 @@
 function renderLayers() {
     camera.x = 0;
-    camera.y = 0
+    camera.y = 0;
     camera.angle = 0;
     camera.zoom = 1;
     difx = 8;
@@ -8,7 +8,16 @@ function renderLayers() {
     absDraw = true;
 
     // positions around a tile that should be checked
-    var shadowCheckOffsets = [[1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1]];
+    var shadowCheckOffsets = [
+        [1, -1],
+        [1, 0],
+        [1, 1],
+        [0, 1],
+        [-1, 1],
+        [-1, 0],
+        [-1, -1],
+        [0, -1]
+    ];
 
     var keys = Object.keys(worldLayers);
     for (var i = 0; i < keys.length; i++) {
@@ -62,7 +71,6 @@ function renderLayers() {
                     drawMerge(groundImageData, worldTiles[y][x], (x - 1) * 16, y * 16, "left");
                 }
             }
-
         }
     }
 
@@ -92,7 +100,7 @@ function renderLayers() {
                 for (var i = 0; i < 8; i++) {
                     var pos = shadowCheckOffsets[i];
                     if (validPosition(x + pos[0], y + pos[1])) {
-                        str += (worldTiles[y + pos[1]][x + pos[0]].layer === layers.wall ? "1" : "0");
+                        str += worldTiles[y + pos[1]][x + pos[0]].layer === layers.wall ? "1" : "0";
                     } else {
                         str += "1";
                     }
@@ -175,7 +183,7 @@ function drawMerge(data, sourceTile, xPos, yPos, direction) {
     }
 }
 
-// image of each possible shadow arrangement 
+// image of each possible shadow arrangement
 var shadows = {};
 
 // pre renders every possible shadow arrangement
@@ -190,15 +198,15 @@ function preRenderShadows() {
         var ctx = canvas.getContext("2d");
 
         // corners
-        if(str[0] === "0" && str[7] !== "1" && str[1] !== "1") {
+        if (str[0] === "0" && str[7] !== "1" && str[1] !== "1") {
             ctx.setTransform(1, 0, 0, 1, 11, 11);
             ctx.drawImage(sprites.shadowCorner.spr, -11, -11);
             ctx.setTransform(1, 0, 0, 1, 0, 0);
         }
         for (var j = 2; j < 8; j += 2) {
-            if (check = str[j] === "0" && str[j-1] !== "1" && str[j+1] !== "1") {
+            if ((check = str[j] === "0" && str[j - 1] !== "1" && str[j + 1] !== "1")) {
                 ctx.setTransform(1, 0, 0, 1, 11, 11);
-                ctx.rotate(j * halfPI / 2);
+                ctx.rotate((j * halfPI) / 2);
                 ctx.drawImage(sprites.shadowCorner.spr, -11, -11);
                 ctx.setTransform(1, 0, 0, 1, 0, 0);
             }
@@ -208,7 +216,7 @@ function preRenderShadows() {
         for (var j = 1; j < 8; j += 2) {
             if (str[j] === "0") {
                 ctx.setTransform(1, 0, 0, 1, 11, 11);
-                ctx.rotate((j - 1) * halfPI / 2);
+                ctx.rotate(((j - 1) * halfPI) / 2);
                 ctx.drawImage(sprites.shadowSide.spr, -11, -11);
                 ctx.setTransform(1, 0, 0, 1, 0, 0);
             }

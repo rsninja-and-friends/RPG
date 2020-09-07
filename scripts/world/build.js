@@ -28,7 +28,7 @@ function handleBuild(isNewState) {
     }
 
     // exit build
-    if(keyPress[k.BACKSLASH]) {
+    if (keyPress[k.BACKSLASH]) {
         canvases.cvs.style.cursor = "crosshair";
         dGet("build").style.display = "none";
         dGet("hideShow").style.display = "none";
@@ -43,13 +43,15 @@ function handleBuild(isNewState) {
         objectUIDiv.innerHTML = "";
     } else {
         if (updateCount % 10 == 0) {
-            var argsLength = (new objectClasses[objectIDs[worldObjects[buildSelection.objectIndex].objectID]](0,0,0,0,0,"")).metaArguments.length;
+            var argsLength = new objectClasses[objectIDs[worldObjects[buildSelection.objectIndex].objectID]](0, 0, 0, 0, 0, "").metaArguments.length;
             for (var i = 0; i < argsLength; i++) {
                 var elem = dGet("objectMeta" + i);
-                worldObjects[buildSelection.objectIndex].meta[elem.labelName] = (parseInt(elem.value).toString().length === elem.value.length ? parseInt(elem.value) : elem.value);
+                worldObjects[buildSelection.objectIndex].meta[elem.labelName] = parseInt(elem.value).toString().length === elem.value.length ? parseInt(elem.value) : elem.value;
             }
         }
     }
+
+    worldBiome = parseInt(dGet("biome").value);
 
     buildRandomizeAngle = dGet("randAngle").checked;
 
@@ -58,11 +60,31 @@ function handleBuild(isNewState) {
     tableSelStyle.top = buildSelection.menuPos.y * 43 - 2 + "px";
     tableSelStyle.left = buildSelection.menuPos.x * 42 + "px";
 
-    // select tiles 
-    if (keyPress[k.UP]) { if (tileTableValid(0, -1)) { buildSelection.menuPos.y--; pressSelectedTile(); } }
-    if (keyPress[k.DOWN]) { if (tileTableValid(0, 1)) { buildSelection.menuPos.y++; pressSelectedTile(); } }
-    if (keyPress[k.LEFT]) { if (tileTableValid(-1, 0)) { buildSelection.menuPos.x--; pressSelectedTile(); } }
-    if (keyPress[k.RIGHT]) { if (tileTableValid(1, 0)) { buildSelection.menuPos.x++; pressSelectedTile(); } }
+    // select tiles
+    if (keyPress[k.UP]) {
+        if (tileTableValid(0, -1)) {
+            buildSelection.menuPos.y--;
+            pressSelectedTile();
+        }
+    }
+    if (keyPress[k.DOWN]) {
+        if (tileTableValid(0, 1)) {
+            buildSelection.menuPos.y++;
+            pressSelectedTile();
+        }
+    }
+    if (keyPress[k.LEFT]) {
+        if (tileTableValid(-1, 0)) {
+            buildSelection.menuPos.x--;
+            pressSelectedTile();
+        }
+    }
+    if (keyPress[k.RIGHT]) {
+        if (tileTableValid(1, 0)) {
+            buildSelection.menuPos.x++;
+            pressSelectedTile();
+        }
+    }
 
     // select variance
     var variations = dGet("buildVariations").children[0];
@@ -75,11 +97,18 @@ function handleBuild(isNewState) {
     }
 
     // camera
-    if (keyDown[k.a]) { moveCamera(-10 / camera.zoom, 0); }
-    if (keyDown[k.d]) { moveCamera(10 / camera.zoom, 0); }
-    if (keyDown[k.w]) { moveCamera(0, -10 / camera.zoom); }
-    if (keyDown[k.s]) { moveCamera(0, 10 / camera.zoom); }
-
+    if (keyDown[k.a]) {
+        moveCamera(-10 / camera.zoom, 0);
+    }
+    if (keyDown[k.d]) {
+        moveCamera(10 / camera.zoom, 0);
+    }
+    if (keyDown[k.w]) {
+        moveCamera(0, -10 / camera.zoom);
+    }
+    if (keyDown[k.s]) {
+        moveCamera(0, 10 / camera.zoom);
+    }
 
     // scroll
     if (scroll && (scroll < 0 ? camera.zoom > 1 : true)) {
@@ -91,13 +120,13 @@ function handleBuild(isNewState) {
         var factor = 1 - camera.zoom / (camera.zoom + scrollAmount);
 
         var mPos = mousePosition();
-        camera.x -= (mousePos.x - (cw / 2)) * factor;
-        camera.y -= (mousePos.y - (ch / 2)) * factor;
+        camera.x -= (mousePos.x - cw / 2) * factor;
+        camera.y -= (mousePos.y - ch / 2) * factor;
 
         camera.zoom += scrollAmount;
     }
 
-    // rotate 
+    // rotate
     if (keyPress[k.q]) {
         if (--buildSelection.rotation < 0) {
             buildSelection.rotation = 3;
@@ -110,12 +139,25 @@ function handleBuild(isNewState) {
     }
 
     // switch tools
-    if (keyPress[k.x]) { buildTool = "pen"; }
-    if (keyPress[k.c]) { buildTool = "bucket"; }
-    if (keyPress[k.v] || keyPress[k.ESCAPE]) { buildTool = "pointer"; }
+    if (keyPress[k.x]) {
+        buildTool = "pen";
+    }
+    if (keyPress[k.c]) {
+        buildTool = "bucket";
+    }
+    if (keyPress[k.v] || keyPress[k.ESCAPE]) {
+        buildTool = "pointer";
+    }
+
+    // hide object UI
+    if (keyPress[k.ESCAPE]) {
+        dGet("enemyTable").style.display = "none";
+        buildSelection.objectIndex = -1;
+        objectUIDiv.innerHTML = "";
+    }
 
     // delete selected object
-    if (keyPress[k.BACKSPACE] || keyPress[k.DELETE] && buildSelection.objectIndex > -1) {
+    if (keyPress[k.BACKSPACE] || (keyPress[k.DELETE] && buildSelection.objectIndex > -1)) {
         worldObjects.splice(buildSelection.objectIndex, 1);
         buildSelection.objectIndex--;
         generateObjectUI();
@@ -123,7 +165,9 @@ function handleBuild(isNewState) {
 
     if (worldTiles.length > 0) {
         // center
-        if (keyPress[k.SHIFT]) { centerCameraOn((worldW - 1) * 8, (worldH - 1) * 8); }
+        if (keyPress[k.SHIFT]) {
+            centerCameraOn((worldW - 1) * 8, (worldH - 1) * 8);
+        }
 
         var mPos = mousePosition();
         mPos.x = clamp(roundToGrid(mPos.x) / 16, 0, worldW - 1);
@@ -171,7 +215,7 @@ function handleBuild(isNewState) {
         // tools
         switch (buildTool) {
             case "pen":
-                if (mouseDown[0] && (buildLastPos.x !== mPos.x || buildLastPos.y !== mPos.y) || mousePress[0]) {
+                if ((mouseDown[0] && (buildLastPos.x !== mPos.x || buildLastPos.y !== mPos.y)) || mousePress[0]) {
                     // if the last mouse position is more than 1 away, make a line between the last and current position
                     if (dist(mPos, buildLastPos) > 1) {
                         var sx = Math.min(buildLastPos.x, mPos.x);
@@ -208,7 +252,6 @@ function handleBuild(isNewState) {
 
                     // if the current tile is not what is hovered
                     if (target !== replace) {
-
                         // create a list of positions to check
                         var q = [];
                         q.push([mPos.x, mPos.y]);
@@ -240,17 +283,35 @@ function handleBuild(isNewState) {
                             // get the last position
                             var n = q.pop();
                             // if it has been visited, go to the next in the list
-                            if (haveGoneTo[n[1]][n[0]]) { continue; }
+                            if (haveGoneTo[n[1]][n[0]]) {
+                                continue;
+                            }
                             // replace the tile
                             worldIDs[n[1]][n[0]] = replace;
                             place(n[0], n[1]);
                             haveGoneTo[n[1]][n[0]] = true;
 
                             // if any tiles around this one are the target, add them to the list to check
-                            if (n[1] < wh) { if (worldIDs[n[1] + 1][n[0]] === target) { q.push([n[0], n[1] + 1]); } }
-                            if (n[0] < ww) { if (worldIDs[n[1]][n[0] + 1] === target) { q.push([n[0] + 1, n[1]]); } }
-                            if (n[1] > 0) { if (worldIDs[n[1] - 1][n[0]] === target) { q.push([n[0], n[1] - 1]); } }
-                            if (n[0] > 0) { if (worldIDs[n[1]][n[0] - 1] === target) { q.push([n[0] - 1, n[1]]); } }
+                            if (n[1] < wh) {
+                                if (worldIDs[n[1] + 1][n[0]] === target) {
+                                    q.push([n[0], n[1] + 1]);
+                                }
+                            }
+                            if (n[0] < ww) {
+                                if (worldIDs[n[1]][n[0] + 1] === target) {
+                                    q.push([n[0] + 1, n[1]]);
+                                }
+                            }
+                            if (n[1] > 0) {
+                                if (worldIDs[n[1] - 1][n[0]] === target) {
+                                    q.push([n[0], n[1] - 1]);
+                                }
+                            }
+                            if (n[0] > 0) {
+                                if (worldIDs[n[1]][n[0] - 1] === target) {
+                                    q.push([n[0] - 1, n[1]]);
+                                }
+                            }
                         }
                     }
                 }
@@ -276,14 +337,12 @@ function handleBuild(isNewState) {
             var tile = worldTiles[mPos.y][mPos.x];
             buildSelection.type = "tile";
             selectTile(tile.tileID);
-            buildSelection.rotation = Math.round(tile.rotation / Math.PI * 2);
+            buildSelection.rotation = Math.round((tile.rotation / Math.PI) * 2);
             buildSelection.variance = tile.variation;
         }
 
         buildLastPos = mPos;
     }
-
-
 }
 
 function place(x, y) {
@@ -335,7 +394,6 @@ function tileTableValid(xChange, yChange) {
 
 // distance from a line to a point
 function pDistance(x, y, x1, y1, x2, y2) {
-
     var A = x - x1;
     var B = y - y1;
     var C = x2 - x1;
@@ -353,12 +411,10 @@ function pDistance(x, y, x1, y1, x2, y2) {
     if (param < 0) {
         xx = x1;
         yy = y1;
-    }
-    else if (param > 1) {
+    } else if (param > 1) {
         xx = x2;
         yy = y2;
-    }
-    else {
+    } else {
         xx = x1 + param * C;
         yy = y1 + param * D;
     }
@@ -377,12 +433,12 @@ function drawBuild() {
     }
 
     // objects
-    difx = -8; 
-    dify = -8; 
+    difx = -8;
+    dify = -8;
     for (var i = 0, l = worldObjects.length; i < l; i++) {
         worldObjects[i].draw();
     }
-    difx = 0; 
+    difx = 0;
     dify = 0;
 
     if (worldTiles.length > 0) {
@@ -404,7 +460,6 @@ function drawBuild() {
             }
         }
     }
-
 }
 
 function absoluteDrawBuild() {

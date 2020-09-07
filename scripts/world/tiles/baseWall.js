@@ -1,7 +1,7 @@
-class BaseWall extends Tile { 
-    constructor(x,y,tileID,variation,rotation=0) {
-        super(x,y,tileID,variation,rotation);
-    } 
+class BaseWall extends Tile {
+    constructor(x, y, tileID, variation, rotation = 0) {
+        super(x, y, tileID, variation, rotation);
+    }
 }
 
 BaseWall.prototype.effect = effects.colliding;

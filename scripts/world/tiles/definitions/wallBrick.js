@@ -1,6 +1,6 @@
 class WallBrick extends BaseWall {
-    constructor(x,y,tileID,variation,rotation=0) {
-        super(x,y,tileID,variation,rotation);
+    constructor(x, y, tileID, variation, rotation = 0) {
+        super(x, y, tileID, variation, rotation);
     }
 }
 

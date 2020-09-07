@@ -1,7 +1,7 @@
 class TileBrickPath extends Tile {
-    constructor(x,y,tileID,variation,rotation=0) {
-        super(x,y,tileID,variation,rotation);
-    } 
+    constructor(x, y, tileID, variation, rotation = 0) {
+        super(x, y, tileID, variation, rotation);
+    }
 }
 
 TileBrickPath.prototype.imageName = "brickPath";

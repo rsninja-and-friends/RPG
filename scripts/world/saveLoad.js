@@ -17,9 +17,16 @@ dGet("save").onclick = function () {
 // load
 dGet("fileUpload").onchange = function () {
     if (dGet("fileUpload").files[0] !== undefined) {
-        if(worldTiles.length !== 0) {
+        if (worldTiles.length !== 0) {
             trackUndo();
         }
-        fetch(URL.createObjectURL(dGet("fileUpload").files[0])).then((response) => response.json().then((data) => { loadRoomObject(data); buildSelection.objectIndex = -1; generateObjectUI(); centerCameraOn(0, 0);}));
+        fetch(URL.createObjectURL(dGet("fileUpload").files[0])).then((response) =>
+            response.json().then((data) => {
+                loadRoomObject(data);
+                buildSelection.objectIndex = -1;
+                generateObjectUI();
+                centerCameraOn(0, 0);
+            })
+        );
     }
 };

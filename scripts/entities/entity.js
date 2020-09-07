@@ -1,5 +1,5 @@
 class Entity {
-    constructor(x,y,w,h) {
+    constructor(x, y, w, h) {
         this.x = x;
         this.y = y;
         this.w = w;
@@ -9,8 +9,8 @@ class Entity {
     // if the entity has collided
     get colliding() {
         var cols = this.collisions;
-        for(var i=0,l=cols.length;i<l;i++) {
-            if(rectrect(this,cols[i])) {
+        for (var i = 0, l = cols.length; i < l; i++) {
+            if (rectrect(this, cols[i])) {
                 return true;
             }
         }
@@ -20,9 +20,9 @@ class Entity {
     // returns array of all potential collisions
     get collisions() {
         var cols = [...overworldCollisions, player, ...worldEnemies];
-        for(var i=0,l=cols.length;i<l;i++) {
-            if(cols[i].x === this.x && cols[i].y === this.y) {
-                cols.splice(i,1);
+        for (var i = 0, l = cols.length; i < l; i++) {
+            if (cols[i].x === this.x && cols[i].y === this.y) {
+                cols.splice(i, 1);
                 break;
             }
         }

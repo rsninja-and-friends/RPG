@@ -23,7 +23,8 @@
             #build {visibility: hidden; position: absolute; left: 10px; top: 10px; z-index: 10;}
             #buildTable {background-color: #1e1e1e;}
             input[type="file"] {display: none;}
-            .custom-file-upload {background-color: #353535;border-color: #555555;color: #4de1f5; margin: 2px;border-style: outset;cursor: pointer; padding: 5px;border-width: 1px;display: inline-block;}
+            .custom-file-upload {background-color: #353535;border-color: #555555;color: #4de1f5; margin: 2px;border-style: outset;cursor: pointer; padding: 2px;font-size: 13.33px; border-width: 1px;display: inline-block;}
+            .custom-file-upload:hover {background-color: #555555;}
         </style>
     </head>
     <body> 
@@ -32,8 +33,9 @@
 
         <div id="build" style="width: 450px;">
             w:<input type="number" value="30" id="roomW">h:<input type="number" value="20" id="roomH"><button style="width: 100px;" id="newRoom">create room</button><button id="help">help</button><br>
-            room name:<input value="unnamedRoom" style="width: 150px;" id="name"><button id="save">save</button><br>
-            <label for="fileUpload" class="custom-file-upload">load</label>
+            room name:<input value="unnamedRoom" style="width: 150px;" id="name"><br>
+            room biome:<select style="width:150px;" id="biome"></select><br>
+            <button id="save">save</button><label for="fileUpload" class="custom-file-upload">load</label>
             <input id="fileUpload" type="file"><br> 
             <div>
                 random angle:<input type="checkbox" id="randAngle" style="width: 20px;"><br>
@@ -76,17 +78,22 @@ pointer - click an object to select it
             <div style="height: 500px; overflow-y: scroll;"><table><tbody id="buildTable"><tr style="height: 0px;"><td style="position: relative; width: 36px; height: 36px; background-color: #ffffff30; z-index: 100;" id="tableSelection"></td></tr></tbody></table></div>
         </div>
         <button id="hideShow" style="position: relative;left: 475px;top: 10px;display: none;">hide</button>
-        <div id="object" style="position: absolute;right: 100px;display: none;">
-
+        <div id="object" style="position: absolute;right: 100px;display: none;"></div>
+        <div id="enemyTable" style="position: absolute;left: 10px;top:10px;display: none;width: 450px;height: 600px;overflow-y: scroll;z-index: 100;background-color: #1e1e1e;padding: 10px;">
+            <button onclick="this.parentElement.style.display = 'none';" style="position: absolute;right: 10px;background-color: #a22828;color: #d6d6d6;">x</button>
         </div>
         <!-- when compressing code, copy all script tags, and use them in concatenateJavascript.jar an use https://xem.github.io/terser-online -->
         <script src="scripts/game.js"></script>
+        <script src="scripts/constants.js"></script>
         <script src="scripts/utils.js"></script>
         <script src="scripts/cutScene.js"></script>
         <script src="scripts/entities/entity.js"></script>
         <script src="scripts/entities/player.js"></script>
         <script src="scripts/entities/enemies/enemy.js"></script>
+        <script src="scripts/entities/enemies/definitions/enemySlime.js"></script>
+        <script src="scripts/entities/enemies/definitions/enemyAngryHedge.js"></script>
         <script src="scripts/overworld/overworld.js"></script>
+        <script src="scripts/battle/battle.js"></script>
         <script src="scripts/world/world.js"></script>
         <script src="scripts/world/build.js"></script>
         <script src="scripts/world/buildUI.js"></script>
@@ -102,6 +109,8 @@ pointer - click an object to select it
         <script src="scripts/world/tiles/definitions/WallHouse.js"></script>
         <script src="scripts/world/objects/object.js"></script>
         <script src="scripts/world/objects/definitions/objectHouseEntrance.js"></script>
+        <script src="scripts/world/objects/definitions/objectSpawner.js"></script>
+        <script src="scripts/world/objects/definitions/objectSpawnerSingle.js"></script>
         <script src="scripts/world/objects/definitions/objectHouseSmokeStack.js"></script>
         <script src="scripts/index.js"></script>
         <!-- <script src="mini.js"></script> -->
