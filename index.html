@@ -2,13 +2,14 @@
 <html lang="en">
     <head>
         <link rel="icon" type="image/gif" href="assets/images/icon.png"/>
-        <meta charset="utf-8" />
+        <link rel="stylesheet" href="ui.css"/>
+        <meta charset="utf-8"/>
         <title>RPG</title>
         <meta name="description" content="RPG by marshmarlows and rsninja">
         <style>
             html {background-color: #1e1e1e;color: #4de1f5;}
             body {margin: 0;}
-            canvas {image-rendering: pixelated;image-rendering: -moz-crisp-edges;text-rendering: geometricPrecision;position:absolute;top:0;left:0;}
+            canvas {image-rendering: pixelated;image-rendering: -moz-crisp-edges;text-rendering: geometricPrecision;position:absolute;top:0;left:0;z-index: -10;}
             div {border: 1px solid rgb(63, 63, 63);box-shadow: 0px 5px 5px 0px black;padding: 2px; margin: 2px; font-family: monospace;}
             h2, p, pre{margin: 2px;}
             input, select{background-color: #181818;border: 1px solid #101010;border-top-color: #000000;border-bottom-color: #333333; border-radius: 2px;color: #4de1f5;width: 50px;}
@@ -31,6 +32,7 @@
         <canvas width="800" height="600" id="game" style="cursor: crosshair;"></canvas>
         <img src="assets/images/tempLoading.gif" style="display: none;position:absolute;top:0;bottom:0;right:0;left:0;margin:auto;" id="load"></img>
 
+        <!-- build -->
         <div id="build" style="width: 450px;">
             w:<input type="number" value="30" id="roomW">h:<input type="number" value="20" id="roomH"><button style="width: 100px;" id="newRoom">create room</button><button id="help">help</button><br>
             room name:<input value="unnamedRoom" style="width: 150px;" id="name"><br>
@@ -82,6 +84,7 @@ pointer - click an object to select it
         <div id="enemyTable" style="position: absolute;left: 10px;top:10px;display: none;width: 450px;height: 600px;overflow-y: scroll;z-index: 100;background-color: #1e1e1e;padding: 10px;">
             <button onclick="this.parentElement.style.display = 'none';" style="position: absolute;right: 10px;background-color: #a22828;color: #d6d6d6;">x</button>
         </div>
+
         <!-- when compressing code, copy all script tags, and use them in concatenateJavascript.jar an use https://xem.github.io/terser-online -->
         <script src="scripts/game.js"></script>
         <script src="scripts/constants.js"></script>
@@ -112,6 +115,7 @@ pointer - click an object to select it
         <script src="scripts/world/objects/definitions/objectSpawner.js"></script>
         <script src="scripts/world/objects/definitions/objectSpawnerSingle.js"></script>
         <script src="scripts/world/objects/definitions/objectHouseSmokeStack.js"></script>
+        <script src="scripts/ui/baseComponent.js"></script>
         <script src="scripts/index.js"></script>
         <!-- <script src="mini.js"></script> -->
     </body>

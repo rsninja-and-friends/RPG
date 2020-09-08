@@ -134,6 +134,7 @@ function update() {
             if (mousePress[0] || keyPress[k.ESCAPE]) { [].forEach.call(document.getElementsByTagName("button"), e => { e.blur(); });[].forEach.call(document.getElementsByTagName("select"), e => { e.blur(); });[].forEach.call(document.getElementsByTagName("input"), e => { e.blur(); }); }
             break;
     }
+    updateUIComponents();
     updateCount++;
 }
 

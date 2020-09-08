@@ -807,7 +807,7 @@ function setup(physicsFPS) {
     addFont();
     addStyle();
 
-    addListenersTo(canvases.cvs);
+    addListenersTo(UIBase.element);
 
     curCtx = canvases.ctx;
     requestAnimationFrame(startButton);
