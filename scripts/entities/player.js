@@ -4,6 +4,22 @@ class Player extends Entity {
         this.angle = 0;
         this.vel = 0;
         this.walkCycle = 1;
+        
+        this.baseStats = {
+            hp:20,
+            mp:5,
+            atk:3,
+            int:1,
+            def:1
+        };
+
+        this.stats = {
+            hp:this.baseStats.hp,
+            mp:this.baseStats.mp,
+            atk:this.baseStats.atk,
+            int:this.baseStats.int,
+            def:this.baseStats.def
+        };
     }
 }
 
