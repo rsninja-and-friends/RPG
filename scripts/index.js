@@ -96,7 +96,6 @@ var isNewGlobalState;
 var cutScene = false;
 
 function update() {
-
     if (globalState != lastGlobalState) {
         isNewGlobalState = true;
     } else {
@@ -196,6 +195,15 @@ function onAssetsLoaded() {
     generateTileDataCaches();
     preRenderShadows();
     loadRoom(2);
+
+    var a = new BaseComponent("button");
+    a.element.innerText = "asdasd";
+    UIBase.add(new BaseComponent());
+    UIBase.add(a);
+    a.add(new BaseComponent("button"));
+    UIBase.add(new ComponentItemSlot());
+    UIItemHeld = UIBase.add(new ComponentItem(new WeaponItem("a","asdsad",rarities.common)));
+
 }
 
 setup(60);

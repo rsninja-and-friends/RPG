@@ -10,6 +10,13 @@
     background-color: none;
 }
 
+.UITop {
+    z-index: 1000000;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 /* Battle UI */
 .battleBarBottom {
     width: 100%;
@@ -17,4 +24,8 @@
     position: absolute;
     bottom: 0px;
     left: 0px;
+}
+
+.UIItem {
+    position: absolute;
 }

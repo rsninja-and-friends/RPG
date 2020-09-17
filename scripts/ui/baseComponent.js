@@ -5,6 +5,7 @@
 class BaseComponent {
     constructor(elementName = "div", updateFunc = function () {}) {
         this.element = dMake(elementName);
+        // this.element.style.pointerEvents = "none";
         this.update = updateFunc;
         this.children = [];
     }
@@ -14,6 +15,13 @@ class BaseComponent {
     }
     get class() {
         return this.element.className;
+    }
+
+    set width(w) {
+        this.element.style.width = `${w}px`;
+    }
+    set height(h) {
+        this.element.style.height = `${h}px`;
     }
 }
 
@@ -28,6 +36,7 @@ BaseComponent.prototype.add = function (component) {
     component.parent = this;
     this.element.appendChild(component.element);
     this.children.push(component);
+    return component;
 };
 
 BaseComponent.prototype.hide = function () {
@@ -55,6 +64,9 @@ document.body.appendChild(UIBase.element);
 
 function updateUIComponents() {
     UIBase.update();
+    if(UIItemHeld !== undefined) {
+        UIItemHeld.update();
+    }
     updateChildren(UIBase);
 }
 
@@ -65,9 +77,3 @@ function updateChildren(component) {
         updateChildren(children[i]);
     }
 }
-
-var a = new BaseComponent("button");
-a.element.innerText = "asdasd";
-UIBase.add(new BaseComponent());
-UIBase.add(a);
-a.add(new BaseComponent("button"));
